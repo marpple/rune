@@ -1,12 +1,12 @@
 {
-  "name": "@rune/core",
+  "name": "runejs",
   "version": "0.0.1",
   "description": "Rune Core Library",
   "engines": {
     "node": ">=14.0.0"
   },
   "scripts": {
-    "postinstall": "pnpm run build",
+    "prepare": "pnpm run build",
     "dev": "taskr",
     "types:dev": "tsc --watch",
     "build": "taskr build",
