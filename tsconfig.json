@@ -18,7 +18,6 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "typeRoots": ["node_modules/@types", "packages/types"],
     "noImplicitOverride": true,
     "preserveSymlinks": true,
     "noImplicitAny": false,
