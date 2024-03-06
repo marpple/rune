@@ -9,8 +9,7 @@
     "prepare": "pnpm run build",
     "dev": "taskr",
     "types:dev": "tsc --watch",
-    "build": "taskr build",
-    "postbuild": "tsc",
+    "build": "taskr build && tsc",
     "release": "pnpm publish --access public"
   },
   "main": "dist/index.js",
