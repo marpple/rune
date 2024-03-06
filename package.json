@@ -1,5 +1,5 @@
 {
-  "name": "runejs",
+  "name": "rune.js",
   "version": "0.0.1",
   "description": "Rune Core Library",
   "engines": {
@@ -11,7 +11,7 @@
     "types:dev": "tsc --watch",
     "build": "taskr build",
     "postbuild": "tsc",
-    "release": "pnpm publish --access public"
+    "release": "pnpm publish --access public --no-git-checks"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
