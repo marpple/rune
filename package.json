@@ -1,0 +1,48 @@
+{
+  "name": "@rune/core",
+  "version": "0.0.1",
+  "description": "Rune Core Library",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "postinstall": "pnpm run build",
+    "dev": "taskr",
+    "types:dev": "tsc --watch",
+    "build": "taskr build",
+    "postbuild": "tsc",
+    "release": "pnpm publish --access restricted"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "unpkg": "dist/",
+  "jsdelivr": "dist/",
+  "license": "Apache-2.0",
+  "files": [
+    "tsconfig.json",
+    "docs/",
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "taskr": {
+    "requires": [
+      "./taskfile-swc.js",
+      "./taskfile-watch.js"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "devDependencies": {
+    "@swc/core": "^1.4.2",
+    "@taskr/clear": "^1.1.0",
+    "@taskr/esnext": "^1.1.0",
+    "@types/watchpack": "^2.4.4",
+    "taskr": "^1.1.0",
+    "typescript": "^5.3.3",
+    "watchpack": "^2.4.0"
+  },
+  "dependencies": {
+    "@fxts/core": "^0.24.0"
+  }
+}
