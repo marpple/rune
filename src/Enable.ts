@@ -131,13 +131,13 @@ export abstract class BaseEnable {
   }
 }
 
-type ExtraViewInterface<T, E> = E extends null ? T : T & E;
+type ViewExtraInterface<T, E> = E extends null ? T : T & E;
 
 export abstract class Enable<T, E = null> extends BaseEnable {
-  view: ExtraViewInterface<View<T>, E>;
+  view: ViewExtraInterface<View<T>, E>;
   data: T;
 
-  constructor(view: ExtraViewInterface<View<T>, E>) {
+  constructor(view: ViewExtraInterface<View<T>, E>) {
     super();
     this.view = view;
     this.data = view.data;

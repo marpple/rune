@@ -1,4 +1,4 @@
-import { VirtualView } from './VirtualView';
+import { html, VirtualView } from './VirtualView';
 import { Page } from './Page';
 
 export class Layout<T> extends VirtualView<T> {
@@ -12,11 +12,11 @@ export class Layout<T> extends VirtualView<T> {
   }
 
   override template(data: T) {
-    return this.html`
+    return html`
       <html>
         <head>
           <title>${data}</title>
-          <meta name="description" content="rune">
+          <meta name="description" content="rune" />
         </head>
         <body>
           ${this.page}

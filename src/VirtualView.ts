@@ -1,11 +1,15 @@
 import { _escape } from './escape';
 
-export const html = (
+function html(
   templateStrs: TemplateStringsArray,
   ...templateVals: unknown[]
-) => {
+): Html {
   return new Html(null, templateStrs, templateVals);
-};
+}
+
+html.preventEscape = (htmlStr: string): UnsafeHtml => new UnsafeHtml(htmlStr);
+
+export { html };
 
 export class Html {
   _virtualView: VirtualView<unknown> | null;
@@ -56,33 +60,33 @@ export class Html {
   }
 
   make(): string {
-    let html = this._templateStrs[0].replace(/ {2}|\n/g, ' ');
+    let htmlStr = this._templateStrs[0].replace(/ {2}|\n/g, ' ');
     for (let i = 0; i < this._templateVals.length; i++) {
       const templateVals: unknown[] = this._wrapArray(this._templateVals[i]);
       for (const item of templateVals) {
         const templateVal = this._addSubViewsFromTemplate(item);
-        html += this._isSubView(templateVal)
+        htmlStr += this._isSubView(templateVal)
           ? templateVal.toHtml()
           : this._fromTemplateVal(templateVal);
       }
-      html += this._templateStrs[i + 1].replace(/ {2}|\n/g, ' ');
+      htmlStr += this._templateStrs[i + 1].replace(/ {2}|\n/g, ' ');
     }
-    return html;
+    return htmlStr;
   }
 
   async makeAsync() {
-    let html = this._templateStrs[0];
+    let htmlStr = this._templateStrs[0];
     for (let i = 0; i < this._templateVals.length; i++) {
       const templateVals: unknown[] = this._wrapArray(this._templateVals[i]);
       for (const item of templateVals) {
         const templateVal = this._addSubViewsFromTemplate(item);
-        html += this._isSubView(templateVal)
+        htmlStr += this._isSubView(templateVal)
           ? await templateVal.toHtmlAsync()
           : this._fromTemplateVal(templateVal);
       }
-      html += this._templateStrs[i + 1];
+      htmlStr += this._templateStrs[i + 1];
     }
-    return html;
+    return htmlStr;
   }
 }
 
@@ -137,17 +141,9 @@ export class VirtualView<T> {
     return this;
   }
 
-  html(templateStrs: TemplateStringsArray, ...templateVals: unknown[]): Html {
-    return new Html(this, templateStrs, templateVals);
-  }
-
-  preventEscape(htmlStr: string): UnsafeHtml {
-    return new UnsafeHtml(htmlStr);
-  }
-
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   template(data: T): TemplateReturnType<this> {
-    return this.html``;
+    return html``;
   }
 
   async templateAsync(data: T): Promise<TemplateReturnType<this>> {
@@ -202,11 +198,9 @@ export class VirtualView<T> {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
     this.subViewsFromTemplate = [];
     const html = this.template(this.data);
-
-    if (html instanceof Html && !html._virtualView) {
+    if (html instanceof Html) {
       html.setVirtualView(this);
     }
-
     return this._resetCurrentHtml(
       html === this ? '' : html instanceof Html ? html.make() : `${html}`,
     );
