@@ -1,6 +1,6 @@
 import { _escape } from './escape';
 
-function html(
+export function html(
   templateStrs: TemplateStringsArray,
   ...templateVals: unknown[]
 ): Html {
@@ -8,8 +8,6 @@ function html(
 }
 
 html.preventEscape = (htmlStr: string): UnsafeHtml => new UnsafeHtml(htmlStr);
-
-export { html };
 
 export class Html {
   _virtualView: VirtualView<unknown> | null;
