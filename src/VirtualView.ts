@@ -2,8 +2,6 @@ import { _escape } from './escape';
 import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
 
-export type TemplateReturnType<T> = Html | UnsafeHtml | string | T;
-
 export class VirtualView<T> extends Base {
   root = false;
   data: T;
@@ -25,11 +23,11 @@ export class VirtualView<T> extends Base {
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  template(data: T): TemplateReturnType<this> {
+  template(data: T): Html | string {
     return html``;
   }
 
-  async templateAsync(data: T): Promise<TemplateReturnType<this>> {
+  async templateAsync(data: T): Promise<Html | string> {
     return Promise.resolve(this.template(data));
   }
 
@@ -81,7 +79,7 @@ export class VirtualView<T> extends Base {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
     const html = this.template(this.data);
     return this._resetCurrentHtml(
-      html === this ? '' : html instanceof Html ? html.make(this) : `${html}`,
+      html instanceof Html ? html.make(this) : html,
     );
   }
 
@@ -89,11 +87,7 @@ export class VirtualView<T> extends Base {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
     const html = await this.templateAsync(this.data);
     return this._resetCurrentHtml(
-      html === this
-        ? ''
-        : html instanceof Html
-          ? await html.makeAsync(this)
-          : `${html}`,
+      html instanceof Html ? await html.makeAsync(this) : html,
     );
   }
 
