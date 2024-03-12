@@ -21,7 +21,8 @@
     "noImplicitOverride": true,
     "preserveSymlinks": true,
     "noImplicitAny": false,
-    "verbatimModuleSyntax": true
+    "verbatimModuleSyntax": true,
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules",

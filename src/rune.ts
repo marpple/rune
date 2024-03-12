@@ -1,67 +1,45 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-class RuneMap {
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+type Constructor = new (...args: any) => any;
+
+class Rune {
   weakMap = new WeakMap();
-  set(element: HTMLElement | EventTarget, instance: any) {
+  set(
+    element: HTMLElement | EventTarget,
+    instance: any,
+    Constructor?: Constructor,
+  ) {
     return this.weakMap.set(
       element,
-      this.getMap(element).set(instance.constructor, instance),
+      this._getMap(element).set(Constructor ?? instance.constructor, instance),
     );
   }
 
-  getMap(element: HTMLElement | EventTarget) {
+  get<T extends Constructor>(
+    element: HTMLElement | EventTarget,
+    Constructor: T,
+  ): InstanceType<typeof Constructor> | undefined {
+    const instance = this._getMap(element).get(Constructor);
+    return instance === undefined
+      ? instance
+      : (instance as InstanceType<typeof Constructor>);
+  }
+
+  private _getMap(element: HTMLElement | EventTarget) {
     return (
       this.weakMap.get(element) ||
       this.weakMap.set(element, new Map()).get(element)
     );
   }
 
-  get<T extends abstract new (...args: any) => any>(
+  getView<T extends Constructor>(
     element: HTMLElement | EventTarget,
     Constructor: T,
   ): InstanceType<typeof Constructor> | undefined {
-    const instance = this.getMap(element).get(Constructor);
-    return instance === undefined
-      ? instance
-      : (instance as InstanceType<typeof Constructor>);
+    return this.get(element, Constructor);
   }
 }
 
-export class rune {
-  private static viewMap = new RuneMap();
-  private static enableMap = new RuneMap();
-
-  static getView(element: HTMLElement | EventTarget): unknown;
-  static getView<T extends abstract new (...args: any) => any>(
-    element: HTMLElement | EventTarget,
-    Constructor: T,
-  ): InstanceType<typeof Constructor> | undefined;
-  static getView<T extends abstract new (...args: any) => any>(
-    element: HTMLElement | EventTarget,
-    Constructor?: T | undefined,
-  ) {
-    if (Constructor === undefined) {
-      const [view] = this.viewMap.getMap(element).values();
-      return view === undefined ? view : (view as unknown);
-    } else {
-      return this.viewMap.get(element, Constructor);
-    }
-  }
-
-  static setView(element: HTMLElement | EventTarget, instance: any) {
-    this.viewMap.set(element, instance);
-    return this;
-  }
-
-  static getEnable<T extends abstract new (...args: any) => any>(
-    element: HTMLElement | EventTarget,
-    Constructor: T,
-  ): InstanceType<typeof Constructor> | undefined {
-    return this.enableMap.get(element, Constructor);
-  }
-
-  static setEnable(element: HTMLElement | EventTarget, instance: any) {
-    this.enableMap.set(element, instance);
-    return this;
-  }
-}
-/* eslint-enable @typescript-eslint/no-explicit-any */
+export const rune = new Rune();

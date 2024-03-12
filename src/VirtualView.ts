@@ -1,108 +1,10 @@
 import { _escape } from './escape';
-
-export function html(
-  templateStrs: TemplateStringsArray,
-  ...templateVals: unknown[]
-): Html {
-  return new Html(null, templateStrs, templateVals);
-}
-
-html.preventEscape = (htmlStr: string): UnsafeHtml => new UnsafeHtml(htmlStr);
-
-export class Html {
-  _virtualView: VirtualView<unknown> | null;
-  _templateStrs: TemplateStringsArray;
-  _templateVals: unknown[];
-
-  constructor(
-    virtualView: VirtualView<unknown> | null,
-    templateStrs: TemplateStringsArray,
-    templateVals: unknown[],
-  ) {
-    this._virtualView = virtualView;
-    this._templateStrs = templateStrs;
-    this._templateVals = templateVals;
-  }
-
-  _wrapArray(templateVals: unknown): unknown[] {
-    return Array.isArray(templateVals) ? templateVals : [templateVals];
-  }
-
-  _isSubView(templateVal: unknown): templateVal is VirtualView<unknown> {
-    return (
-      this._virtualView !== templateVal &&
-      this._virtualView?.parentView !== templateVal &&
-      templateVal instanceof VirtualView
-    );
-  }
-
-  _addSubViewsFromTemplate(templateVal: unknown): unknown {
-    if (this._isSubView(templateVal)) {
-      templateVal.parentView = this._virtualView;
-      this._virtualView?.subViewsFromTemplate.push(templateVal);
-    }
-    return templateVal;
-  }
-
-  _fromTemplateVal(templateVal: unknown): string {
-    return templateVal instanceof Html
-      ? templateVal.make()
-      : templateVal instanceof UnsafeHtml
-        ? templateVal.toString()
-        : _escape(templateVal as string);
-  }
-
-  setVirtualView(virtualView: VirtualView<unknown>): this {
-    this._virtualView = virtualView;
-    return this;
-  }
-
-  make(): string {
-    let htmlStr = this._templateStrs[0].replace(/ {2}|\n/g, ' ');
-    for (let i = 0; i < this._templateVals.length; i++) {
-      const templateVals: unknown[] = this._wrapArray(this._templateVals[i]);
-      for (const item of templateVals) {
-        const templateVal = this._addSubViewsFromTemplate(item);
-        htmlStr += this._isSubView(templateVal)
-          ? templateVal.toHtml()
-          : this._fromTemplateVal(templateVal);
-      }
-      htmlStr += this._templateStrs[i + 1].replace(/ {2}|\n/g, ' ');
-    }
-    return htmlStr;
-  }
-
-  async makeAsync() {
-    let htmlStr = this._templateStrs[0];
-    for (let i = 0; i < this._templateVals.length; i++) {
-      const templateVals: unknown[] = this._wrapArray(this._templateVals[i]);
-      for (const item of templateVals) {
-        const templateVal = this._addSubViewsFromTemplate(item);
-        htmlStr += this._isSubView(templateVal)
-          ? await templateVal.toHtmlAsync()
-          : this._fromTemplateVal(templateVal);
-      }
-      htmlStr += this._templateStrs[i + 1];
-    }
-    return htmlStr;
-  }
-}
-
-export class UnsafeHtml {
-  private _htmlStr: string;
-
-  constructor(_htmlStr: string) {
-    this._htmlStr = _htmlStr;
-  }
-
-  toString() {
-    return this._htmlStr;
-  }
-}
+import { Base } from './Base';
+import { join, pipe, toAsync } from '@fxts/core';
 
 export type TemplateReturnType<T> = Html | UnsafeHtml | string | T;
 
-export class VirtualView<T> {
+export class VirtualView<T> extends Base {
   root = false;
   data: T;
 
@@ -113,29 +15,12 @@ export class VirtualView<T> {
   protected _currentHtml: string | null = null;
 
   constructor(data: T) {
+    super();
     this.data = data;
   }
 
   setData(data: T): this {
     this.data = data;
-    return this;
-  }
-
-  applyData(f: (data: T) => T): this {
-    return this.setData(f(this.data));
-  }
-
-  async applyDataAsync(f: (data: T) => T): Promise<this> {
-    return this.setData(await f(this.data));
-  }
-
-  apply(f: (view: this) => void): this {
-    f(this);
-    return this;
-  }
-
-  async applyAsync(f: (view: this) => Promise<void>): Promise<this> {
-    await f(this);
     return this;
   }
 
@@ -145,7 +30,7 @@ export class VirtualView<T> {
   }
 
   async templateAsync(data: T): Promise<TemplateReturnType<this>> {
-    return await this.template(data);
+    return Promise.resolve(this.template(data));
   }
 
   protected _matchStartTag(html: string): {
@@ -194,30 +79,20 @@ export class VirtualView<T> {
 
   protected _makeHtml(): this {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
-    this.subViewsFromTemplate = [];
     const html = this.template(this.data);
-    if (html instanceof Html) {
-      html.setVirtualView(this);
-    }
     return this._resetCurrentHtml(
-      html === this ? '' : html instanceof Html ? html.make() : `${html}`,
+      html === this ? '' : html instanceof Html ? html.make(this) : `${html}`,
     );
   }
 
   protected async _makeHtmlAsync(): Promise<this> {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
-    this.subViewsFromTemplate = [];
     const html = await this.templateAsync(this.data);
-
-    if (html instanceof Html && !html._virtualView) {
-      html.setVirtualView(this);
-    }
-
     return this._resetCurrentHtml(
       html === this
         ? ''
         : html instanceof Html
-          ? await html.makeAsync()
+          ? await html.makeAsync(this)
           : `${html}`,
     );
   }
@@ -229,12 +104,111 @@ export class VirtualView<T> {
   async toHtmlAsync(): Promise<string> {
     return (await this._makeHtmlAsync())._currentHtml!;
   }
+}
 
-  toString() {
-    return this.constructor.name;
+export function html(
+  templateStrs: TemplateStringsArray,
+  ...templateVals: unknown[]
+): Html {
+  return new Html(templateStrs, templateVals);
+}
+
+html.preventEscape = (htmlStr: string): UnsafeHtml => new UnsafeHtml(htmlStr);
+
+export class Html {
+  private _templateStrs: TemplateStringsArray;
+  private _templateVals: unknown[];
+
+  constructor(templateStrs: TemplateStringsArray, templateVals: unknown[]) {
+    this._templateStrs = templateStrs;
+    this._templateVals = templateVals;
+    this._templateVals.push('');
   }
 
-  static toString() {
-    return this.name;
+  private _wrapArray(templateVals: unknown): unknown[] {
+    return Array.isArray(templateVals) ? templateVals : [templateVals];
+  }
+
+  private _isSubView(
+    templateVal: unknown,
+    virtualView: VirtualView<unknown>,
+  ): templateVal is VirtualView<unknown> {
+    return (
+      virtualView !== templateVal &&
+      virtualView.parentView !== templateVal &&
+      templateVal instanceof VirtualView
+    );
+  }
+
+  private _addSubViewsFromTemplate(
+    subView: VirtualView<unknown>,
+    virtualView: VirtualView<unknown>,
+  ): VirtualView<unknown> {
+    subView.parentView = virtualView;
+    virtualView.subViewsFromTemplate.push(subView);
+    return subView;
+  }
+
+  private _fromTemplateVal(templateVal: unknown): string {
+    return templateVal instanceof UnsafeHtml
+      ? templateVal.toString()
+      : _escape(templateVal as string);
+  }
+
+  private *_make(
+    virtualView: VirtualView<unknown>,
+    toHtml: (virtualView: VirtualView<unknown>) => string | Promise<string>,
+    make: (
+      html: Html,
+      virtualView: VirtualView<unknown>,
+    ) => string | Promise<string>,
+  ): Generator<string | Promise<string>> {
+    virtualView.subViewsFromTemplate = [];
+    for (let i = 0; i < this._templateStrs.length; i++) {
+      yield this._templateStrs[i];
+      const templateVals: unknown[] = [this._templateVals[i]].flat();
+      for (const templateVal of templateVals) {
+        yield this._isSubView(templateVal, virtualView)
+          ? toHtml(this._addSubViewsFromTemplate(templateVal, virtualView))
+          : templateVal instanceof Html
+            ? make(templateVal, virtualView)
+            : this._fromTemplateVal(templateVal);
+      }
+    }
+  }
+
+  make(virtualView: VirtualView<unknown>): string {
+    return pipe(
+      this._make(
+        virtualView,
+        (view) => view.toHtml(),
+        (html, view) => html.make(view),
+      ),
+      join(''),
+    );
+  }
+
+  async makeAsync(virtualView: VirtualView<unknown>): Promise<string> {
+    return pipe(
+      this._make(
+        virtualView,
+        (view) => view.toHtmlAsync(),
+        (html, view) => html.makeAsync(view),
+      ),
+      toAsync,
+      join(''),
+    );
+  }
+}
+
+export class UnsafeHtml {
+  private _htmlStr: string;
+
+  constructor(_htmlStr: string) {
+    this._htmlStr = _htmlStr;
+  }
+
+  toString() {
+    return this._htmlStr;
   }
 }

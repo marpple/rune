@@ -7,18 +7,12 @@ import { _nextOrPrev } from './lib/_nextOrPrev';
 import _toCamel from './lib/_toCamel';
 import _toDash from './lib/_toDash';
 
-export type DelegateEventHandler<T extends keyof HTMLElementEventMap> = (
-  this: HTMLElement,
-  e: HTMLElementEventMap[T],
-  delegateTarget: HTMLElement,
-) => void;
-
 export class $Element {
   private _element: HTMLElement;
   private _prev$Element: $Element | undefined;
   private _error: Error | undefined;
 
-  constructor(element: HTMLElement, prev$Element?, error?: Error) {
+  constructor(element: HTMLElement, prev$Element?: $Element, error?: Error) {
     if (element === undefined) throw new Error('element is undefined');
     this._element = element;
     this._prev$Element = prev$Element;
@@ -231,32 +225,25 @@ export class $Element {
     return this;
   }
 
-  addEventListener<K extends keyof HTMLElementEventMap>(
-    eventType: K,
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-    options?: boolean | AddEventListenerOptions,
-  ): this {
-    this._element.addEventListener(eventType, listener, options);
-    return this;
-  }
-
-  removeEventListener<K extends keyof HTMLElementEventMap>(
-    eventType: K,
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any,
-    options?: boolean | EventListenerOptions,
-  ): this {
-    this._element.removeEventListener(eventType, listener, options);
-    return this;
-  }
-
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   delegate<K extends keyof HTMLElementEventMap>(
-    event: K | string,
+    eventType: K,
     selector: string,
-    listener: DelegateEventHandler<K>,
+    listener: (this: HTMLElement, e: HTMLElementEventMap[K]) => any,
+  ): this;
+  delegate(
+    eventType: string,
+    selector: string,
+    listener: (this: HTMLElement, ev: Event) => any,
+  ): this;
+  delegate<K extends keyof HTMLElementEventMap>(
+    eventType: K | string,
+    selector: string,
+    listener:
+      | ((this: HTMLElement, e: HTMLElementEventMap[K]) => void)
+      | ((this: HTMLElement, ev: Event) => any),
   ): this {
-    this._element.addEventListener(event, (e: Event) => {
+    this._element.addEventListener(eventType, (e: Event) => {
       pipe(
         this.findAll(selector),
         filter(($currentTarget: $Element) => {
@@ -264,31 +251,23 @@ export class $Element {
           return $currentTarget.contains(e.target as HTMLElement);
         }),
         each(($currentTarget: $Element) => {
-          listener.call(
-            this._element,
-            {
-              ...(e as HTMLElementEventMap[K]),
-              target: e.target,
-              currentTarget: $currentTarget._element,
-            } as HTMLElementEventMap[K],
-            this._element,
-          );
+          listener.call(this._element, {
+            ...(e as HTMLElementEventMap[K]),
+            target: e.target,
+            currentTarget: $currentTarget._element,
+          } as HTMLElementEventMap[K]);
         }),
       );
     });
     return this;
   }
-
-  dispatchEvent<T extends Event>(event: T): this {
-    this._element.dispatchEvent(event);
-    return this;
-  }
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 
   to<T>(f: (element: HTMLElement) => T): T {
     return f(this._element);
   }
 
-  apply(f: (element: HTMLElement) => HTMLElement | void): $Element {
+  chain(f: (element: HTMLElement) => HTMLElement | void): $Element {
     const element2 = f(this._element);
     return !element2 || element2 === this._element ? this : $(element2);
   }

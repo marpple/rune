@@ -1,5 +1,5 @@
 export { rune } from './rune';
-export { $Element, $, type DelegateEventHandler } from './$Element/$Element';
+export { $Element, $ } from './$Element';
 export { View, ListView } from './View';
 export { Enable, ListEnable } from './Enable';
 export { Layout } from './Layout';
@@ -12,3 +12,4 @@ export {
   type Html,
   html,
 } from './VirtualView';
+export { on } from './decorators';

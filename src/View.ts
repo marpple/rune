@@ -1,14 +1,18 @@
 import { rune } from './rune';
 import { VirtualView } from './VirtualView';
 import { each, pipe, zip } from '@fxts/core';
-import { $, type DelegateEventHandler } from './$Element/$Element';
+import { $ } from './$Element';
 
 export class View<T> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
   private _element: HTMLElement | null = null;
   ignoreRefreshOnlySubViewFromParent = false;
 
-  element(): HTMLElement {
+  isRendered(): boolean {
+    return this._element !== null;
+  }
+
+  override element(): HTMLElement {
     if (this._element === null) {
       throw new TypeError(
         "element is not created. call 'render' or 'hydrateFromSSR'.",
@@ -19,7 +23,8 @@ export class View<T> extends VirtualView<T> {
 
   private _setElement(element: HTMLElement): this {
     this._element = element;
-    rune.setView(this._element, this);
+    rune.set(this._element, this);
+
     return this;
   }
 
@@ -68,10 +73,8 @@ export class View<T> extends VirtualView<T> {
           $(this.element())
             .parentNode()
             ?.closest('[data-rune-view]')
-            ?.apply((parentViewElement) => {
-              this.parentView = rune.getView(
-                parentViewElement,
-              ) as View<unknown>;
+            ?.chain((parentViewElement) => {
+              this.parentView = rune.getView(parentViewElement, View)!;
               this.element().dataset.runeViewParent =
                 this.parentView.constructor.name;
               observer.disconnect();
@@ -83,121 +86,10 @@ export class View<T> extends VirtualView<T> {
     return this;
   }
 
-  private _onMount() {
-    this.onMount();
-    this._pendingListeners.forEach(({ eventType, listener, options }) =>
-      this.element().addEventListener(eventType, listener, options),
-    );
+  override _onMount() {
+    rune.set(this.element(), this, View);
+    super._onMount();
     this.dispatchEvent(new CustomEvent('view:mountend'));
-    return this;
-  }
-
-  protected onMount() {}
-
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  private static _listeners = new WeakMap<any, any>();
-
-  _makeListener<K extends keyof HTMLElementEventMap, S>(
-    listener: (this: S, ev: HTMLElementEventMap[K], view: S) => any,
-  ): EventListenerOrEventListenerObject {
-    if (View._listeners.get(listener)) {
-      return View._listeners.get(listener);
-    } else {
-      const listenerForView: (
-        this: HTMLElement,
-        ev: HTMLElementEventMap[K],
-      ) => any = function (e) {
-        const view = rune.getView(this) as S;
-        listener.call(view, e, view);
-      };
-      View._listeners.set(listener, listenerForView);
-      return listenerForView as EventListenerOrEventListenerObject;
-    }
-  }
-
-  private _pendingListeners: {
-    eventType: string;
-    listener: EventListenerOrEventListenerObject;
-    options?: boolean | AddEventListenerOptions;
-  }[] = [];
-
-  addEventListener<K extends keyof HTMLElementEventMap>(
-    eventType: K,
-    listener: (this: this, ev: HTMLElementEventMap[K], view?: this) => any,
-    options?: boolean | AddEventListenerOptions,
-  );
-  addEventListener(
-    type: string,
-    listener: (this: this, ev: Event, view?: this) => any,
-    options?: boolean | AddEventListenerOptions,
-  );
-  addEventListener<K extends keyof HTMLElementEventMap>(
-    eventType: K | string,
-    listener:
-      | ((this: this, ev: HTMLElementEventMap[K], view?: this) => any)
-      | ((this: this, ev: Event, view?: this) => any),
-    options?: boolean | AddEventListenerOptions,
-  ): this {
-    if (this._element) {
-      this.element().addEventListener(
-        eventType,
-        this._makeListener<K, this>(listener),
-        options,
-      );
-    } else {
-      this._pendingListeners.push({
-        eventType: eventType,
-        listener: this._makeListener<K, this>(listener),
-        options,
-      });
-    }
-    return this;
-  }
-
-  removeEventListener<K extends keyof HTMLElementEventMap>(
-    eventType: K,
-    listener: (this: this, ev: HTMLElementEventMap[K], view?: this) => any,
-    options?: boolean | EventListenerOptions,
-  ): this {
-    this.element().removeEventListener(
-      eventType,
-      this._makeListener(listener),
-      options,
-    );
-    return this;
-  }
-
-  _makeDelegateListener<K extends keyof HTMLElementEventMap, S>(
-    listener: (this: S, ev: HTMLElementEventMap[K], view?: S) => void,
-  ): DelegateEventHandler<K> {
-    if (View._listeners.get(listener)) {
-      return View._listeners.get(listener);
-    } else {
-      const listenerForView: DelegateEventHandler<K> = function (e) {
-        const view = rune.getView(this) as S;
-        listener.call(view, e, view);
-      };
-      View._listeners.set(listener, listenerForView);
-      return listenerForView;
-    }
-  }
-
-  delegate<K extends keyof HTMLElementEventMap>(
-    event: K | string,
-    selector: string,
-    listener: (this: this, e: HTMLElementEventMap[K], view?: this) => void,
-  ): this {
-    $(this.element()).delegate(
-      event,
-      selector,
-      this._makeDelegateListener<K, this>(listener),
-    );
-    return this;
-  }
-  /* eslint-enable @typescript-eslint/no-explicit-any */
-
-  dispatchEvent(event: Event): this {
-    this.element().dispatchEvent(event);
     return this;
   }
 
@@ -213,6 +105,7 @@ export class View<T> extends VirtualView<T> {
       }
     }
     for (const { name, value } of element2.attributes) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const attr = element.attributes[name];
       if (!attr || attr.value !== value) {
         element.setAttribute(name, value);
@@ -246,9 +139,9 @@ export class View<T> extends VirtualView<T> {
   }
 
   findSubViews(): View<unknown>[] {
-    return this.findSubViewElements().map(
-      (element: HTMLElement) => rune.getView(element) as View<unknown>,
-    );
+    return this.findSubViewElements().map((element: HTMLElement) => {
+      return rune.getView(element, View)!;
+    });
   }
 
   redrawOnlySubViews(): this {
@@ -256,17 +149,6 @@ export class View<T> extends VirtualView<T> {
       .filter((view) => !view.ignoreRefreshOnlySubViewFromParent)
       .forEach((view) => view.redraw());
     return this;
-  }
-
-  rootView(): View<unknown> | null {
-    return View.rootView();
-  }
-
-  static rootView(): View<unknown> | null {
-    const rootElement = document.querySelector('body [data-rune-view]')!;
-    return rootElement
-      ? (rune.getView(rootElement) as View<unknown>) || null
-      : null;
   }
 }
 
