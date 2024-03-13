@@ -1,7 +1,6 @@
 import { _escape } from './lib/_escape';
 import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
-import { type Enable } from './Enable';
 
 export class VirtualView<T> extends Base {
   root = false;
@@ -12,10 +11,6 @@ export class VirtualView<T> extends Base {
 
   renderCount = 0;
   protected _currentHtml: string | null = null;
-
-  // protected _ReservedEnables: (new (...args: unknown[]) => Enable<unknown>)[] =
-  //   [];
-  protected _reservedEnables: Enable<unknown>[] = [];
 
   constructor(data: T) {
     super();

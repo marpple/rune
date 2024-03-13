@@ -138,6 +138,7 @@ export class View<T> extends VirtualView<T> {
     return this;
   }
 
+  protected _reservedEnables: Enable<unknown>[] = [];
   static _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[] = [];
 }
 
