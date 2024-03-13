@@ -77,6 +77,7 @@ export class VirtualView<T> extends Base {
 
   protected _makeHtml(): this {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
+    this.subViewsFromTemplate = [];
     const html = this.template(this.data);
     return this._resetCurrentHtml(
       html instanceof Html ? html.make(this) : html,
@@ -85,6 +86,7 @@ export class VirtualView<T> extends Base {
 
   protected async _makeHtmlAsync(): Promise<this> {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
+    this.subViewsFromTemplate = [];
     const html = await this.templateAsync(this.data);
     return this._resetCurrentHtml(
       html instanceof Html ? await html.makeAsync(this) : html,
@@ -149,7 +151,6 @@ export class Html {
       virtualView: VirtualView<unknown>,
     ) => string | Promise<string>,
   ): Generator<string | Promise<string>> {
-    virtualView.subViewsFromTemplate = [];
     const end = this._templateStrs.length - 1;
     for (let i = 0; i < end; i++) {
       yield this._templateStrs[i];
