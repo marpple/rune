@@ -2,7 +2,7 @@ import { rune } from './rune';
 import { VirtualView } from './VirtualView';
 import { each, pipe, zip } from '@fxts/core';
 import { $ } from './$Element';
-import { Enable } from './Enable';
+import { type Enable } from './Enable';
 
 export class View<T> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
@@ -71,7 +71,6 @@ export class View<T> extends VirtualView<T> {
   }
 
   override _onMount() {
-    console.log((this.constructor as HasReservedEnables)._ReservedEnables);
     this._reservedEnables = (
       this.constructor as HasReservedEnables
     )._ReservedEnables.map((ReservedEnable) => new ReservedEnable(this).init());
