@@ -1,4 +1,4 @@
-import { _escape } from './escape';
+import { _escape } from './lib/escape';
 import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
 
@@ -116,7 +116,54 @@ export class Html {
   constructor(templateStrs: TemplateStringsArray, templateVals: unknown[]) {
     this._templateStrs = templateStrs;
     this._templateVals = templateVals;
-    this._templateVals.push('');
+  }
+
+  make(virtualView: VirtualView<unknown>): string {
+    return pipe(
+      this._make(
+        virtualView,
+        (view) => view.toHtml(),
+        (html, view) => html.make(view),
+      ),
+      join(''),
+    );
+  }
+
+  async makeAsync(virtualView: VirtualView<unknown>): Promise<string> {
+    return pipe(
+      this._make(
+        virtualView,
+        (view) => view.toHtmlAsync(),
+        (html, view) => html.makeAsync(view),
+      ),
+      toAsync,
+      join(''),
+    );
+  }
+
+  private *_make(
+    virtualView: VirtualView<unknown>,
+    toHtml: (virtualView: VirtualView<unknown>) => string | Promise<string>,
+    make: (
+      html: Html,
+      virtualView: VirtualView<unknown>,
+    ) => string | Promise<string>,
+  ): Generator<string | Promise<string>> {
+    virtualView.subViewsFromTemplate = [];
+    const end = this._templateStrs.length - 1;
+    for (let i = 0; i < end; i++) {
+      yield this._templateStrs[i];
+      for (const templateVal of this._wrapArray(this._templateVals[i])) {
+        yield this._isSubView(templateVal, virtualView)
+          ? toHtml(this._addSubViewsFromTemplate(templateVal, virtualView))
+          : templateVal instanceof Html
+            ? make(templateVal, virtualView)
+            : templateVal instanceof UnsafeHtml
+              ? templateVal.toString()
+              : _escape(templateVal as string);
+      }
+    }
+    yield this._templateStrs[end];
   }
 
   private _wrapArray(templateVals: unknown): unknown[] {
@@ -141,57 +188,6 @@ export class Html {
     subView.parentView = virtualView;
     virtualView.subViewsFromTemplate.push(subView);
     return subView;
-  }
-
-  private _fromTemplateVal(templateVal: unknown): string {
-    return templateVal instanceof UnsafeHtml
-      ? templateVal.toString()
-      : _escape(templateVal as string);
-  }
-
-  private *_make(
-    virtualView: VirtualView<unknown>,
-    toHtml: (virtualView: VirtualView<unknown>) => string | Promise<string>,
-    make: (
-      html: Html,
-      virtualView: VirtualView<unknown>,
-    ) => string | Promise<string>,
-  ): Generator<string | Promise<string>> {
-    virtualView.subViewsFromTemplate = [];
-    for (let i = 0; i < this._templateStrs.length; i++) {
-      yield this._templateStrs[i];
-      const templateVals: unknown[] = [this._templateVals[i]].flat();
-      for (const templateVal of templateVals) {
-        yield this._isSubView(templateVal, virtualView)
-          ? toHtml(this._addSubViewsFromTemplate(templateVal, virtualView))
-          : templateVal instanceof Html
-            ? make(templateVal, virtualView)
-            : this._fromTemplateVal(templateVal);
-      }
-    }
-  }
-
-  make(virtualView: VirtualView<unknown>): string {
-    return pipe(
-      this._make(
-        virtualView,
-        (view) => view.toHtml(),
-        (html, view) => html.make(view),
-      ),
-      join(''),
-    );
-  }
-
-  async makeAsync(virtualView: VirtualView<unknown>): Promise<string> {
-    return pipe(
-      this._make(
-        virtualView,
-        (view) => view.toHtmlAsync(),
-        (html, view) => html.makeAsync(view),
-      ),
-      toAsync,
-      join(''),
-    );
   }
 }
 

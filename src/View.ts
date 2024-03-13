@@ -135,7 +135,18 @@ export class View<T> extends VirtualView<T> {
   }
 }
 
+export class ViewWithOptions<T, O> extends View<T> {
+  options?: O;
+
+  constructor(data: T, options?: O) {
+    super(data);
+    this.options = options;
+  }
+}
+
 export class ListView<T> extends View<T[]> {}
+
+export class ListViewWithOptions<T, O> extends ViewWithOptions<T[], O> {}
 
 if (typeof window !== 'undefined') {
   window.__rune_View__ = View;
