@@ -35,7 +35,7 @@ export abstract class Base {
     options?: boolean | AddEventListenerOptions,
   ): this;
   addEventListener<M extends keyof this>(
-    type: string,
+    eventType: string,
     listener: M,
     options?: boolean | AddEventListenerOptions,
   ): this;
@@ -44,9 +44,9 @@ export abstract class Base {
     listener: (this: this, ev: HTMLElementEventMap[K]) => any,
     options?: boolean | AddEventListenerOptions,
   ): this;
-  addEventListener(
-    type: string,
-    listener: (this: this, ev: Event) => any,
+  addEventListener<T extends Event>(
+    eventType: string,
+    listener: (this: this, ev: T) => any,
     options?: boolean | AddEventListenerOptions,
   ): this;
   addEventListener<K extends keyof HTMLElementEventMap, M extends keyof this>(
@@ -81,9 +81,9 @@ export abstract class Base {
     listener: (this: this, ev: HTMLElementEventMap[K]) => any,
     options?: boolean | EventListenerOptions,
   ): this;
-  removeEventListener(
+  removeEventListener<T extends Event>(
     eventType: string,
-    listener: (this: this, ev: Event) => any,
+    listener: (this: this, ev: T) => any,
     options?: boolean | EventListenerOptions,
   ): this;
   removeEventListener<
@@ -122,10 +122,10 @@ export abstract class Base {
     selector: string,
     listener: (this: this, e: HTMLElementEventMap[K]) => void,
   ): this;
-  delegate(
+  delegate<T extends Event>(
     eventType: string,
     selector: string,
-    listener: (this: this, ev: Event) => any,
+    listener: (this: this, ev: T) => any,
   ): this;
   delegate<K extends keyof HTMLElementEventMap, M extends keyof this>(
     eventType: K | string,

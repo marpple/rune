@@ -231,10 +231,10 @@ export class $Element {
     selector: string,
     listener: (this: HTMLElement, e: HTMLElementEventMap[K]) => any,
   ): this;
-  delegate(
+  delegate<T extends Event>(
     eventType: string,
     selector: string,
-    listener: (this: HTMLElement, ev: Event) => any,
+    listener: (this: HTMLElement, ev: T) => any,
   ): this;
   delegate<K extends keyof HTMLElementEventMap>(
     eventType: K | string,
