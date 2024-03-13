@@ -1,5 +1,5 @@
 import { rune } from './rune';
-import { VirtualView } from './VirtualView';
+import { html, Html, VirtualView } from './VirtualView';
 import { each, pipe, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
@@ -159,9 +159,32 @@ export class ViewWithOptions<T, O> extends View<T> {
   }
 }
 
-export class ListView<T> extends View<T[]> {}
+export class ListView<T> extends View<T[]> {
+  ItemView: new (data: T) => View<T> = View;
+  itemViews: View<T>[] = [];
 
-export class ListViewWithOptions<T, O> extends ViewWithOptions<T[], O> {}
+  constructor(data: T[]) {
+    super(data);
+  }
+
+  override template() {
+    return html` <div>${this.createItemViews()}</div> `;
+  }
+
+  createItemViews() {
+    this.itemViews = this.data.map((data) => new this.ItemView(data));
+    return this.itemViews;
+  }
+}
+
+export class ListViewWithOptions<T, O> extends ListView<T> {
+  options?: O;
+
+  constructor(data: T[], options?: O) {
+    super(data);
+    this.options = options;
+  }
+}
 
 if (typeof window !== 'undefined') {
   window.__rune_View__ = View;
