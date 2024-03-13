@@ -1,4 +1,4 @@
-import { _escape } from './lib/escape';
+import { _escape } from './lib/_escape';
 import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
 
