@@ -138,15 +138,17 @@ export class View<T> extends VirtualView<T> {
     return this;
   }
 
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   protected _reservedEnables: Enable<unknown>[] = [];
   static _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[] = [];
 }
 
-type Constructor = new (...args: unknown[]) => View<unknown>;
+type Constructor = new (...args: any[]) => View<unknown>;
 
 export interface HasReservedEnables extends Constructor {
   _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[];
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 export class ViewWithOptions<T, O> extends View<T> {
   options?: O;
