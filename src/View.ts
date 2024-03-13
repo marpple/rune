@@ -1,5 +1,5 @@
 import { rune } from './rune';
-import { html, Html, VirtualView } from './VirtualView';
+import { html, VirtualView } from './VirtualView';
 import { each, pipe, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
