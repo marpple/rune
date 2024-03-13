@@ -5,27 +5,10 @@ import { $ } from './$Element';
 
 export class View<T> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
-  private _element: HTMLElement | null = null;
   ignoreRefreshOnlySubViewFromParent = false;
 
   isRendered(): boolean {
     return this._element !== null;
-  }
-
-  override element(): HTMLElement {
-    if (this._element === null) {
-      throw new TypeError(
-        "element is not created. call 'render' or 'hydrateFromSSR'.",
-      );
-    }
-    return this._element;
-  }
-
-  private _setElement(element: HTMLElement): this {
-    this._element = element;
-    rune.set(this._element, this);
-
-    return this;
   }
 
   render(): HTMLElement {

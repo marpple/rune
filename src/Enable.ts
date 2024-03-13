@@ -1,4 +1,3 @@
-import { rune } from './rune';
 import { View } from './View';
 import { Base } from './Base';
 
@@ -23,12 +22,8 @@ export abstract class Enable<T, E = null> extends Base {
     return this;
   }
 
-  override element(): HTMLElement {
-    return this.view.element();
-  }
-
   override _onMount() {
-    const element = this.element();
+    const element = this._setElement(this.view.element()).element();
     element.classList.add(this.constructor.name);
     element.dataset.runeEnables = `${
       element.dataset.runeEnables ? `${element.dataset.runeEnables}, ` : ''

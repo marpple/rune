@@ -2,6 +2,8 @@ import { eventHelper } from './EventHelper';
 import { rune } from './rune';
 
 export abstract class Base {
+  protected _element: HTMLElement | null = null;
+
   protected onMount() {}
 
   protected _onMount() {
@@ -13,7 +15,17 @@ export abstract class Base {
   }
 
   element(): HTMLElement {
-    throw TypeError('override required');
+    if (this._element === null) {
+      throw new TypeError(
+        "element is not created. call 'view.render' or 'view.hydrateFromSSR'.",
+      );
+    }
+    return this._element;
+  }
+
+  protected _setElement(element: HTMLElement): this {
+    this._element = element;
+    return this;
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -47,7 +59,7 @@ export abstract class Base {
   ): this {
     eventHelper.addEventListener(
       this,
-      this.element(),
+      this._element,
       eventType,
       listener,
       options,
@@ -87,7 +99,7 @@ export abstract class Base {
   ): this {
     eventHelper.removeEventListener(
       this,
-      this.element(),
+      this._element,
       eventType,
       listener,
       options,
@@ -123,7 +135,7 @@ export abstract class Base {
       | ((this: this, e: HTMLElementEventMap[K]) => void)
       | ((this: this, ev: Event) => any),
   ): this {
-    eventHelper.delegate(this, this.element(), eventType, selector, listener);
+    eventHelper.delegate(this, this._element, eventType, selector, listener);
     return this;
   }
   /* eslint-enable @typescript-eslint/no-explicit-any */
