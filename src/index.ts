@@ -6,4 +6,4 @@ export { Layout } from './Layout';
 export { LayoutHelper } from './LayoutHelper';
 export { Page } from './Page';
 export { UnsafeHtml, VirtualView, type Html, html } from './VirtualView';
-export { on } from './decorators';
+export { on, enable } from './decorators';

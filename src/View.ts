@@ -2,6 +2,7 @@ import { rune } from './rune';
 import { VirtualView } from './VirtualView';
 import { each, pipe, zip } from '@fxts/core';
 import { $ } from './$Element';
+import { Enable } from './Enable';
 
 export class View<T> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
@@ -70,6 +71,10 @@ export class View<T> extends VirtualView<T> {
   }
 
   override _onMount() {
+    console.log((this.constructor as HasReservedEnables)._ReservedEnables);
+    this._reservedEnables = (
+      this.constructor as HasReservedEnables
+    )._ReservedEnables.map((ReservedEnable) => new ReservedEnable(this).init());
     rune.set(this.element(), this, View);
     super._onMount();
     this.dispatchEvent(new CustomEvent('view:mountend'));
@@ -133,6 +138,14 @@ export class View<T> extends VirtualView<T> {
       .forEach((view) => view.redraw());
     return this;
   }
+
+  static _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[] = [];
+}
+
+type Constructor = new (...args: unknown[]) => View<unknown>;
+
+export interface HasReservedEnables extends Constructor {
+  _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[];
 }
 
 export class ViewWithOptions<T, O> extends View<T> {
