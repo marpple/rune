@@ -9,9 +9,12 @@ hero:
   actions:
     - theme: brand
       text: Get Started
-      link: /markdown-examples
+      link: /guide/getting-started
     - theme: alt
       text: View on GitHub
+      link: https://github.com/marpple/rune
+    - theme: alt
+      text: API Reference 
       link: https://github.com/marpple/rune
 
 features:
@@ -22,4 +25,3 @@ features:
   - title: Feature C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
-
