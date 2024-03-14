@@ -8,38 +8,46 @@ npm install rune-ts
 ```typescript
 interface Setting {
   title: string;
-  isOn: boolean;
+  on: boolean;
 }
 
 class SettingsView extends ListView<Setting> {
-  override ItemView = SwitchView;
-  override itemViews: SwitchView[] = [];
-
-  checkAllView: SwitchView = new SwitchView({
-    title: 'Check All',
-    isOn: false,
-  });
-
   override template() {
     return html`
       <div>
-        <div class="header">${this.checkAllView}</div>
-        <div class="body">${this.createItemViews()}</div>
+        <div class="header">
+          <span class="title">Check All</span>
+          ${new SwitchView({ on: this.isAllChecked() })}
+        </div>
+        <div class="body">
+          ${this.data.map(
+            (setting) => html`
+              <div class="setting-item">
+                <span class="title">${setting.title}</span>
+                ${new SwitchView(setting)}
+              </div>
+            `,
+          )}
+        </div>
       </div>
     `;
   }
 
   @on('switch:change', '> .header')
-  toggleCheckAll() {
-    const { isOn } = this.checkAllView.data;
-    this.itemViews
-        .filter(({ data }) => isOn !== data.isOn)
-        .forEach((settingView) => settingView.setOn(isOn));
+  checkAll() {
+    const { on } = this.subViewIn('> .header', SwitchView)!.data;
+    this.subViewsIn('> .body', SwitchView)
+      .filter((view) => on !== view.data.on)
+      .forEach((view) => view.setOn(on));
   }
 
   @on('switch:change', '> .body')
   settingViewChanged() {
-    this.checkAllView.setOn(this.itemViews.every(({ data: { isOn } }) => isOn));
+    this.subViewIn('> .header', SwitchView)!.setOn(this.isAllChecked());
+  }
+
+  isAllChecked() {
+    return this.data.every(({ on }) => on);
   }
 }
 ```

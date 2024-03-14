@@ -1,6 +1,6 @@
 import { rune } from './rune';
-import { html, VirtualView } from './VirtualView';
-import { each, pipe, zip } from '@fxts/core';
+import { VirtualView } from './VirtualView';
+import { each, flatMap, pipe, toArray, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
 
@@ -41,7 +41,7 @@ export class View<T> extends VirtualView<T> {
   private hydrateSubViews(): this {
     if (this.subViewsFromTemplate.length > 0) {
       pipe(
-        zip(this.findSubViewElements(), this.subViewsFromTemplate),
+        zip(this.subViewElements(), this.subViewsFromTemplate),
         each(([element, view]) => {
           view._setElement(element).hydrate();
         }),
@@ -119,20 +119,69 @@ export class View<T> extends VirtualView<T> {
       ._setInnerHtmlFromCurrentInnerHtml();
   }
 
-  findSubViewElements(): HTMLElement[] {
-    return $(this.element())
-      .findAll(`[data-rune-view-parent="${this.constructor.name}"]`)
-      .map(($element) => $element.element());
+  private _subViewSelector(subViewName?: string) {
+    return `[data-rune-view-parent="${this.constructor.name}"]${subViewName ? `[data-rune-view="${subViewName}"]` : ''}`;
   }
 
-  findSubViews(): View<unknown>[] {
-    return this.findSubViewElements().map((element: HTMLElement) => {
-      return rune.getView(element, View)!;
+  protected subViewElements(subViewName?: string): HTMLElement[] {
+    return [
+      ...this.element().querySelectorAll(this._subViewSelector(subViewName)),
+    ] as HTMLElement[];
+  }
+
+  protected subViewElementsIn(
+    selector: string,
+    subViewName: string,
+  ): HTMLElement[] {
+    return pipe(
+      $(this.element()).findAll(selector),
+      flatMap(($el) =>
+        $el.element().querySelectorAll(this._subViewSelector(subViewName)),
+      ),
+      toArray,
+    ) as HTMLElement[];
+  }
+
+  protected subViews<T extends ViewConstructor>(SubView: T) {
+    return this.subViewElements(SubView.name).map((element: HTMLElement) => {
+      return rune.getView(element, SubView)!;
     });
   }
 
+  protected subViewsIn<T extends ViewConstructor>(
+    selector: string,
+    SubView: T,
+  ) {
+    return this.subViewElementsIn(selector, SubView.name).map(
+      (element: HTMLElement) => {
+        return rune.getView(element, SubView)!;
+      },
+    );
+  }
+
+  protected subViewElement(subViewName?: string): HTMLElement | null {
+    return this.element().querySelector(this._subViewSelector(subViewName));
+  }
+
+  protected subViewElementIn(
+    selector: string,
+    subViewName: string,
+  ): HTMLElement | null {
+    return (
+      $(this.element())
+        .find(selector)
+        ?.element()
+        .querySelector(this._subViewSelector(subViewName)) ?? null
+    );
+  }
+
+  protected subViewIn<T extends ViewConstructor>(selector: string, SubView: T) {
+    const element = this.subViewElementIn(selector, SubView.name);
+    return element ? rune.getView(element, SubView) ?? null : null;
+  }
+
   redrawOnlySubViews(): this {
-    this.findSubViews()
+    this.subViews(View)
       .filter((view) => !view.ignoreRefreshOnlySubViewFromParent)
       .forEach((view) => view.redraw());
     return this;
@@ -143,9 +192,9 @@ export class View<T> extends VirtualView<T> {
   static _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[] = [];
 }
 
-type Constructor = new (...args: any[]) => View<unknown>;
+type ViewConstructor = new (...args: any[]) => View<unknown>;
 
-export interface HasReservedEnables extends Constructor {
+export interface HasReservedEnables extends ViewConstructor {
   _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[];
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -159,32 +208,9 @@ export class ViewWithOptions<T, O> extends View<T> {
   }
 }
 
-export class ListView<T> extends View<T[]> {
-  ItemView: new (data: T) => View<T> = View;
-  itemViews: View<T>[] = [];
+export class ListView<T> extends View<T[]> {}
 
-  constructor(data: T[]) {
-    super(data);
-  }
-
-  override template() {
-    return html` <div>${this.createItemViews()}</div> `;
-  }
-
-  createItemViews() {
-    this.itemViews = this.data.map((data) => new this.ItemView(data));
-    return this.itemViews;
-  }
-}
-
-export class ListViewWithOptions<T, O> extends ListView<T> {
-  options?: O;
-
-  constructor(data: T[], options?: O) {
-    super(data);
-    this.options = options;
-  }
-}
+export class ListViewWithOptions<T, O> extends ViewWithOptions<T[], O> {}
 
 if (typeof window !== 'undefined') {
   window.__rune_View__ = View;
