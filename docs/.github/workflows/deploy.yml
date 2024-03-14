@@ -26,8 +26,8 @@ jobs:
         with:
           path: 'docs/set-vite-press'
 #          fetch-depth: 0 # Not needed if lastUpdated is not enabled
-      # - uses: pnpm/action-setup@v3 # Uncomment this if you're using pnpm
       # - uses: oven-sh/setup-bun@v1 # Uncomment this if you're using Bun
+      - uses: pnpm/action-setup@v3 # Uncomment this if you're using pnpm
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
