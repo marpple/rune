@@ -20,11 +20,13 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./docs
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          path: 'docs/set-vite-press'
+          path: 'chore/deploy-docs'
 #          fetch-depth: 0 # Not needed if lastUpdated is not enabled
       # - uses: oven-sh/setup-bun@v1 # Uncomment this if you're using Bun
       - uses: pnpm/action-setup@v3 # Uncomment this if you're using pnpm
