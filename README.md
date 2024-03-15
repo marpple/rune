@@ -11,7 +11,7 @@ interface Setting {
   on: boolean;
 }
 
-class SettingsView extends ListView<Setting> {
+class SettingsView extends View<Setting[]> {
   override template() {
     return html`
       <div>
