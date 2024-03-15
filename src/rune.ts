@@ -5,13 +5,13 @@
 type Constructor = new (...args: any) => any;
 
 class Rune {
-  weakMap = new WeakMap();
+  private _weakMap = new WeakMap();
   set(
     element: HTMLElement | EventTarget,
     instance: any,
     Constructor?: Constructor,
   ) {
-    return this.weakMap.set(
+    return this._weakMap.set(
       element,
       this._getMap(element).set(Constructor ?? instance.constructor, instance),
     );
@@ -29,8 +29,8 @@ class Rune {
 
   private _getMap(element: HTMLElement | EventTarget) {
     return (
-      this.weakMap.get(element) ||
-      this.weakMap.set(element, new Map()).get(element)
+      this._weakMap.get(element) ||
+      this._weakMap.set(element, new Map()).get(element)
     );
   }
 

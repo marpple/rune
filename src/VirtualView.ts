@@ -45,20 +45,14 @@ export class VirtualView<T> extends Base {
   private _addRuneAttrs(html: string): string {
     if (this.root) return html;
     const { startTag, startTagName } = this._matchStartTag(html);
-    const runeDataset = `data-rune-view="${this.constructor.name}" data-rune-view-parent="${this.parentView?.constructor.name}"`;
+    const runeDataset = `data-rune="${this}" data-rune-parent="${this.parentView}"`;
     html = startTag.includes('class="')
-      ? html.replace(
-          'class="',
-          `${runeDataset} class="${this.constructor.name} `,
-        )
+      ? html.replace('class="', `${runeDataset} class="${this} `)
       : startTag.includes("class='")
-        ? html.replace(
-            "class='",
-            `${runeDataset} class='${this.constructor.name} `,
-          )
+        ? html.replace("class='", `${runeDataset} class='${this} `)
         : html.replace(
             `<${startTagName}`,
-            `<${startTagName} ${runeDataset} class="${this.constructor.name}"`,
+            `<${startTagName} ${runeDataset} class="${this}"`,
           );
     return html;
   }

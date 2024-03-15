@@ -6,9 +6,7 @@ export class Page<T> extends View<T> {
 
   override hydrateFromSSR(): this {
     return super.hydrateFromSSR(
-      document.querySelector(
-        `body [data-rune-view="${this.constructor.name}"]`,
-      )!,
+      document.querySelector(`body [data-rune="${this}"]`)!,
     );
   }
 }

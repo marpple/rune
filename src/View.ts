@@ -56,11 +56,10 @@ export class View<T> extends VirtualView<T> {
         if (mutation.type === 'childList') {
           $(this.element())
             .parentNode()
-            ?.closest('[data-rune-view]')
+            ?.closest('[data-rune]')
             ?.chain((parentViewElement) => {
               this.parentView = rune.getView(parentViewElement, View)!;
-              this.element().dataset.runeViewParent =
-                this.parentView.constructor.name;
+              this.element().dataset.runeParent = this.parentView.toString();
               observer.disconnect();
             });
         }
@@ -120,7 +119,7 @@ export class View<T> extends VirtualView<T> {
   }
 
   private _subViewSelector(subViewName?: string) {
-    return `[data-rune-view-parent="${this.constructor.name}"]${subViewName ? `[data-rune-view="${subViewName}"]` : ''}`;
+    return `[data-rune-parent="${this}"]:not([data-rune-parent="${this}"] [data-rune-parent="${this}"])${subViewName && subViewName != 'View' ? `.${subViewName}` : ''}`;
   }
 
   protected subViewElements(subViewName?: string): HTMLElement[] {
@@ -142,20 +141,26 @@ export class View<T> extends VirtualView<T> {
     ) as HTMLElement[];
   }
 
-  protected subViews<T extends ViewConstructor>(SubView: T) {
-    return this.subViewElements(SubView.name).map((element: HTMLElement) => {
-      return rune.getView(element, SubView)!;
-    });
+  private _subViews<T extends ViewConstructor>(
+    elements: HTMLElement[],
+    SubView: T,
+  ) {
+    return elements.map((element) => rune.getView(element, SubView)!);
+  }
+
+  protected subViews<T extends ViewConstructor>(SubView: T, selector?: string) {
+    return selector !== undefined
+      ? this.subViewsIn(selector, SubView)
+      : this._subViews(this.subViewElements(SubView.name), SubView);
   }
 
   protected subViewsIn<T extends ViewConstructor>(
     selector: string,
     SubView: T,
   ) {
-    return this.subViewElementsIn(selector, SubView.name).map(
-      (element: HTMLElement) => {
-        return rune.getView(element, SubView)!;
-      },
+    return this._subViews(
+      this.subViewElementsIn(selector, SubView.name),
+      SubView,
     );
   }
 
@@ -175,9 +180,24 @@ export class View<T> extends VirtualView<T> {
     );
   }
 
-  protected subViewIn<T extends ViewConstructor>(selector: string, SubView: T) {
-    const element = this.subViewElementIn(selector, SubView.name);
+  private _subView<T extends ViewConstructor>(
+    element: HTMLElement | null,
+    SubView: T,
+  ) {
     return element ? rune.getView(element, SubView) ?? null : null;
+  }
+
+  protected subView<T extends ViewConstructor>(SubView: T, selector?: string) {
+    return selector !== undefined
+      ? this.subViewIn(selector, SubView)
+      : this._subView(this.subViewElement(SubView.name), SubView);
+  }
+
+  protected subViewIn<T extends ViewConstructor>(selector: string, SubView: T) {
+    return this._subView(
+      this.subViewElementIn(selector, SubView.name),
+      SubView,
+    );
   }
 
   redrawOnlySubViews(): this {
