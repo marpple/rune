@@ -4,9 +4,9 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Rune",
   description: "Hello, Rune!",
+  base: '/rune/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-
     sidebar: [
       {
         text: 'Introduction',
@@ -31,9 +31,6 @@ export default defineConfig({
         ]
       }
     ],
-
-
-
     socialLinks: [
       { icon: 'github', link: 'https://github.com/marpple/rune' }
     ]
