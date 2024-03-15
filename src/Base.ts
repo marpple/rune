@@ -3,6 +3,8 @@ import { rune } from './rune';
 
 export abstract class Base {
   protected _element: HTMLElement | null = null;
+  private _runeElNumber = 0;
+  private _isTempElId = false;
 
   protected onMount() {}
 
@@ -21,6 +23,23 @@ export abstract class Base {
       );
     }
     return this._element;
+  }
+
+  protected _getElId() {
+    if (this.element().id) {
+      return this.element().id;
+    } else {
+      this._isTempElId = true;
+      return (this.element().id = `rune-temp-id-${++this._runeElNumber}`);
+    }
+  }
+
+  protected _removeTempElId(): this {
+    if (this._isTempElId) {
+      this.element().removeAttribute('id');
+      this._isTempElId = false;
+    }
+    return this;
   }
 
   protected _setElement(element: HTMLElement): this {

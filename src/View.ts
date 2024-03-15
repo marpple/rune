@@ -119,26 +119,30 @@ export class View<T> extends VirtualView<T> {
   }
 
   private _subViewSelector(subViewName?: string) {
-    return `[data-rune-parent="${this}"]:not([data-rune-parent="${this}"] [data-rune-parent="${this}"])${subViewName && subViewName != 'View' ? `.${subViewName}` : ''}`;
+    return `[data-rune-parent="${this}"]:not(#${this._getElId()} [data-rune-parent="${this}"] [data-rune-parent="${this}"])${subViewName && subViewName != 'View' ? `.${subViewName}` : ''}`;
   }
 
   protected subViewElements(subViewName?: string): HTMLElement[] {
-    return [
+    const elements = [
       ...this.element().querySelectorAll(this._subViewSelector(subViewName)),
     ] as HTMLElement[];
+    this._removeTempElId();
+    return elements;
   }
 
   protected subViewElementsIn(
     selector: string,
     subViewName: string,
   ): HTMLElement[] {
-    return pipe(
+    const elements = pipe(
       $(this.element()).findAll(selector),
       flatMap(($el) =>
         $el.element().querySelectorAll(this._subViewSelector(subViewName)),
       ),
       toArray,
     ) as HTMLElement[];
+    this._removeTempElId();
+    return elements;
   }
 
   private _subViews<T extends ViewConstructor>(
@@ -165,19 +169,24 @@ export class View<T> extends VirtualView<T> {
   }
 
   protected subViewElement(subViewName?: string): HTMLElement | null {
-    return this.element().querySelector(this._subViewSelector(subViewName));
+    const element = this.element().querySelector(
+      this._subViewSelector(subViewName),
+    );
+    this._removeTempElId();
+    return element as HTMLElement | null;
   }
 
   protected subViewElementIn(
     selector: string,
     subViewName: string,
   ): HTMLElement | null {
-    return (
+    const element =
       $(this.element())
         .find(selector)
         ?.element()
-        .querySelector(this._subViewSelector(subViewName)) ?? null
-    );
+        .querySelector(this._subViewSelector(subViewName)) ?? null;
+    this._removeTempElId();
+    return element as HTMLElement | null;
   }
 
   private _subView<T extends ViewConstructor>(
