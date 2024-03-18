@@ -102,20 +102,21 @@ export class View<T> extends VirtualView<T> {
 
   private _setInnerHtmlFromCurrentInnerHtml(): this {
     $(this.element()).setInnerHtml(this._currentInnerHtml());
-    this.hydrateSubViews();
     return this;
   }
 
   redraw(): this {
     return this._makeHtml()
       ._redrawAttributes()
-      ._setInnerHtmlFromCurrentInnerHtml();
+      ._setInnerHtmlFromCurrentInnerHtml()
+      .hydrateSubViews();
   }
 
   async redrawAsync(): Promise<this> {
     return (await this._makeHtmlAsync())
       ._redrawAttributes()
-      ._setInnerHtmlFromCurrentInnerHtml();
+      ._setInnerHtmlFromCurrentInnerHtml()
+      .hydrateSubViews();
   }
 
   private _subViewSelector(subViewName?: string) {
