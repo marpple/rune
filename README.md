@@ -1,10 +1,24 @@
+# Rune - Web API based Front-end SDK
+Rune은 품질 좋은 프론트엔드 앱 개발을 위한 빠르고 견고한 라이브러리이자 최신 웹 기술 기반의 SDK입니다.
+
+- Type-safe Generic Views & Enable
+- 단일 컴포넌트 Server Side Rendering
+- 유려하게 동작하는 UI 컴포넌트 개발 키트
+- 높은 이식성, 고성능
+- 객체지향 프로그래밍 기반 아키텍쳐 제공
+
 # Getting Started
 ```shell
 pnpm add rune-ts
 npm install rune-ts
 ```
 
-# SettingsView
+# Documentation
+- [Website](https://marpple.github.io/rune/)
+- [What is Rune?](https://marpple.github.io/rune/guide/what-is-rune.html)
+- [Tutorial](https://marpple.github.io/rune/tutorial/view.html)
+
+# Example
 ```typescript
 interface Setting {
   title: string;
@@ -20,14 +34,12 @@ class SettingsView extends View<Setting[]> {
           ${new SwitchView({ on: this.isAllChecked() })}
         </div>
         <div class="body">
-          ${this.data.map(
-            (setting) => html`
-              <div class="setting-item">
-                <span class="title">${setting.title}</span>
-                ${new SwitchView(setting)}
-              </div>
-            `,
-          )}
+          ${this.data.map((setting) => html`
+            <div class="setting-item">
+              <span class="title">${setting.title}</span>
+              ${new SwitchView(setting)}
+            </div>
+          `)}
         </div>
       </div>
     `;
@@ -42,7 +54,7 @@ class SettingsView extends View<Setting[]> {
   }
 
   @on('switch:change', '> .body')
-  settingViewChanged() {
+  private _settingViewChanged() {
     this.subViewIn('> .header', SwitchView)!.setOn(this.isAllChecked());
   }
 
@@ -51,7 +63,3 @@ class SettingsView extends View<Setting[]> {
   }
 }
 ```
-
-# DOCS
-- [RUNE VIEW TUTORIAL](https://github.com/marpple/Rune/blob/main/docs/core/rune.View/%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC.md)
-- [RUNE $ TUTORIAL](https://github.com/marpple/Rune/blob/main/docs/core/rune.%24/%ED%8A%9C%ED%86%A0%EB%A6%AC%EC%96%BC.md)
