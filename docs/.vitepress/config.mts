@@ -21,13 +21,6 @@ export default defineConfig({
           { text: 'View', link: '/tutorial/view' },
           { text: 'View 추상화하기', link: '/tutorial/view-abstract' },
           { text: 'Enable', link: '/tutorial/enable' },
-          { text: 'Markdown Examples', link: 'guide/markdown-examples' },
-        ]
-      },
-      {
-        text: 'API Reference',
-        items: [
-          { text: 'API name', link: '/api/examples' },
         ]
       }
     ],
