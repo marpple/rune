@@ -33,14 +33,14 @@ class SettingsView extends View<Setting[]> {
           <span class="title">Check All</span>
           ${new SwitchView({ on: this.isAllChecked() })}
         </div>
-        <div class="body">
+        <ul class="body">
           ${this.data.map((setting) => html`
-            <div class="setting-item">
+            <li>
               <span class="title">${setting.title}</span>
               ${new SwitchView(setting)}
-            </div>
+            </li>
           `)}
-        </div>
+        </ul>
       </div>
     `;
   }
@@ -54,7 +54,7 @@ class SettingsView extends View<Setting[]> {
   }
 
   @on('switch:change', '> .body')
-  private _settingViewChanged() {
+  private _changed() {
     this.subViewIn('> .header', SwitchView)!.setOn(this.isAllChecked());
   }
 

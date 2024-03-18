@@ -42,7 +42,7 @@ class SettingsView extends View<Setting[]> {
   }
 
   @on('switch:change', '> .body')
-  private _settingViewChanged() {
+  private _changed() {
     this.subViewIn('> .header', SwitchView)!.setOn(this.isAllChecked());
   }
 
