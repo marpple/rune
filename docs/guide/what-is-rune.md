@@ -42,7 +42,7 @@ class SettingsView extends View<Setting[]> {
   }
 
   @on('switch:change', '> .body')
-  settingViewChanged() {
+  private _settingViewChanged() {
     this.subViewIn('> .header', SwitchView)!.setOn(this.isAllChecked());
   }
 
@@ -58,9 +58,7 @@ class SettingsView extends View<Setting[]> {
 Rune은 그 자체로는 리액티브 하지 않습니다. 대신 컴포넌트의 조합을 거듭하면서 리액티브 한 특성을 갖게 되며 DOM 조작 코드는 점점 추상화됩니다. 이때 각 컴포넌트는 각자에 맞는 최적화된 렌더링 로직을 갖게 됩니다. 라이브러리 레벨에서의 자동적인 리렌더와 그로 인한 사이드 이펙트가 없기 때문에 유려한 UI 개발에 필요한 복잡성을 제어하기 용이하고 고도화에 유리합니다.
 
 ```typescript
-class SwitchView extends View<{
-  on: boolean;
-}> {
+class SwitchView extends View<{ on: boolean }> {
   override template() {
     return html`
       <button class="${this.data.on ? 'on' : ''}">
@@ -70,18 +68,22 @@ class SwitchView extends View<{
   }
 
   @on('click')
-  private toggle() {
+  private _toggle() {
     this.setOn(!this.data.on);
     this.dispatchEvent(new CustomEvent('switch:change', { bubbles: true }));
   }
 
   setOn(on: boolean): this {
     this.data.on = on;
+    return this.redraw();
+  }
+
+  override redraw() {
     const { classList } = this.element();
-    on ? classList.add('on') : classList.remove('on');
+    this.data.on ? classList.add('on') : classList.remove('on');
     return this;
   }
 }
 ```
 
-Rune은 웹의 표준 기술과 전통적인 프로그래밍 패러다임과 같은 단단한 기초 위에 세워졌고 순수하게 자바스크립트만으로 동작하며 서버에서도 렌더링이 가능하며 이식성이 높습니다. 때문에 최신 Web API를 충분히 활용한 고품질 컴포넌트들을 만들어볼만한 도구입니다. Rune이 많은 개발자들과 함께 프론트엔드 개발 생태계에 기여해볼 수 있기를 기대합니다.
+Rune은 웹의 최신 표준 기술과 전통적인 프로그래밍 패러다임과 같은 단단한 기반을 따르고 있습니다. Rune 컴포넌트는 순수한 자바스크립트만으로 동작하며 컴포넌트 혼자서도 서버사이드 렌더링을 지원하고 이식성이 높습니다. 그렇기 때문에 Rune은 Vanilla JS 기반의 고품질 컴포넌트들을 만들어볼 만한 새로운 도구입니다. Rune이 많은 개발자들과 함께 프론트엔드 개발 생태계에 기여해 볼 수 있기를 기대합니다.

@@ -1,6 +1,6 @@
-# Enable
+# Enable 패턴
 
-rune은 하나의 `View`에 여러개의 기능을 부여하는 Enable 패턴을 제공합니다. `Enable`을 이용하면 동작이나 기능을 모듈화하고 `View`를 확장하기 용이한 개념이자 클래스입니다. `Enable`은 템플릿이 없는 `View`와 같다고 생각하면 쉬우며 `View`를 받아 기능을 확장하는 패턴을 보여줍니다.
+Rune은 하나의 `View`에 여러개의 기능을 부여하는 Enable 패턴을 제공합니다. `Enable`을 이용하면 동작이나 기능을 모듈화하고 `View`를 확장하기 용이한 개념이자 클래스입니다. `Enable`은 템플릿이 없는 `View`와 같다고 생각하면 쉬우며 `View`를 받아 기능을 확장하는 패턴을 보여줍니다.
 
 ## View와 데이터를 공유하는 Enable
 
@@ -15,7 +15,7 @@ type CheckableData = {
 
 class Checkable<T extends CheckableData> extends Enable<T> {
   @on('click')
-  toggle() {
+  private _toggle() {
     this.view.data.checked = !this.view.data.checked;
     this.view.element().classList.toggle('checked');
     this.view.element().dispatchEvent(
@@ -32,7 +32,7 @@ type Color = {
 class CheckableColorView extends View<Color> {
   checkable = new Checkable(this).init();
   
-  template(color: Color) {
+  override template(color: Color) {
     return html`
       <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}">
       </div>
@@ -49,7 +49,7 @@ console.log(checkableColorView.data.checked);
 `Enable.prototype.onMount`는 인자로 받은 `View`의 `element`가 브라우저에 추가(append) 되었을 때 실행됩니다. 또한 `Enable`도 `View`처럼 `addEventListener`를 가지고 있습니다.
 
 ```typescript
-toggle() {
+_toggle() {
   this.data.checked = !this.data.checked;
   this.element().classList.toggle('checked');
   this.element().dispatchEvent(
@@ -67,8 +67,8 @@ toggle() {
 
 ```typescript
 class Deletable extends Enable<unknown> {
-  onMount() {
-    this.delegate('mousedown', '.remove-target', this.remove);
+  override onMount() {
+    this.delegate('mousedown', '.remove-target', 'remove');
   }
 
   remove() {
@@ -83,7 +83,7 @@ type Ball = {
 class BallView extends View<Ball> {
   deletable = new Deletable(this).init();
 
-  template() {
+  override template() {
     return html`
       <div style="
          border: 1px solid black; 
@@ -102,10 +102,10 @@ class BallView extends View<Ball> {
 }
 
 [{ color: 'red' }, { color: 'green' }, { color: 'blue' }]
-    .map((ball) => new BallView(ball))
-    .forEach((ballView) => {
-      document.body.appendChild(ballView.render());
-    });
+  .map((ball) => new BallView(ball))
+  .forEach((ballView) => {
+    document.body.appendChild(ballView.render());
+  });
 ```
 
 ## ViewExtraInterface
@@ -118,8 +118,8 @@ interface DeletableViewExtraInterface {
 }
 
 export class Deletable extends Enable<unknown, DeletableViewExtraInterface> {
-  onMount() {
-    this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
+  override onMount() {
+    this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }
 
   remove() {
@@ -132,7 +132,7 @@ export class BallView extends View<Ball> {
   
   readonly targetClassName = 'target';
 
-  template() {
+  override template() {
     return html`
       <div style="
          border: 1px solid black; 
@@ -162,8 +162,8 @@ interface DeletableViewExtraInterface {
 }
 
 export class Deletable extends Enable<unknown, DeletableViewExtraInterface> {
-  onMount() {
-    this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
+  override onMount() {
+    this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }
 
   remove() {
@@ -187,7 +187,7 @@ export class BallView extends View<Ball> {
     return confirm('삭제하시겠습니까?');
   }
 
-  template() {
+  override template() {
     return html`
       ...
     `;
@@ -202,7 +202,7 @@ export class BallView extends View<Ball> {
 
 ```typescript
 class Movable extends Enable<unknown> {
-  onMount() {
+  override onMount() {
     this.element().animate(
       [
         { transform: 'translateX(0px)' },
@@ -231,7 +231,7 @@ export class BallView extends View<Ball> {
     return confirm('삭제하시겠습니까?');
   }
 
-  template() {
+  override template() {
     return html`
       ...
     `;
@@ -257,7 +257,7 @@ export class BallView extends View<Ball> {
     return --this.data.count === 0;
   }
 
-  template() {
+  override template() {
     return html`
       ...
     `;
@@ -278,4 +278,4 @@ balls
 
 이제 횡으로 반복하는 공을 여러번 클릭해야 터지는 간단한 게임이 완성되었습니다.
 
-위 코드들은 간결하며 재사용성이 높습니다. 다만 너무 많은 객체간의 통신은 부작용을 조심해야하며 개발자는 객체들이 서로 간섭하지 않도록 유의해야합니다. 본 문서에서는 rune의 기능과 코딩 패턴을 소개하기 위해 의도적으로 작은 컴포넌트를 만들었습니다. 문제를 작게 만들어 해결하는 것은 좋지만 하나의 컴포넌트가 충분한 역할을 가지도록 설계할 필요가 있습니다.
+위 코드들은 간결하며 재사용성이 높습니다. 다만 너무 많은 객체간의 통신은 부작용을 조심해야하며 개발자는 객체들이 서로 간섭하지 않도록 유의해야합니다. 본 문서에서는 Rune의 기능과 코딩 패턴을 소개하기 위해 의도적으로 작은 컴포넌트를 만들었습니다. 문제를 작게 만들어 해결하는 것은 좋지만 하나의 컴포넌트가 충분한 역할을 가지도록 설계할 필요가 있습니다.

@@ -18,9 +18,10 @@ export default defineConfig({
       {
         text: 'Tutorial',
         items: [
-          { text: 'View', link: '/tutorial/view' },
-          { text: 'View 추상화하기', link: '/tutorial/view-abstract' },
-          { text: 'Enable', link: '/tutorial/enable' },
+          { text: 'View 만들기', link: '/tutorial/view' },
+          { text: 'Event 다루기', link: '/tutorial/event' },
+          { text: 'View 추상화', link: '/tutorial/abstract-view' },
+          { text: 'Enable 패턴', link: '/tutorial/enable' },
         ]
       }
     ],

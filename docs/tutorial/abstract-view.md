@@ -1,4 +1,4 @@
-# View 추상화하기
+# View 추상화
 
 ## 체크하는 기능을 분리하기
 
@@ -13,15 +13,15 @@ export type Color = {
 };
 
 export class ColorView extends View<Color> {
-  template({ code }: Color) {
+  override template({ code }: Color) {
     return html`
-        <div style="background-color: ${code}"></div>
-      `;
+      <div style="background-color: ${code}"></div>
+    `;
   }
 }
 
 export class ColorCheckboxView extends View<Color> {
-  template(color: Color) {
+  override template(color: Color) {
     return html`
       <li class="${color.checked ? 'checked' : ''}">
         ${new ColorView(color)}
@@ -30,7 +30,7 @@ export class ColorCheckboxView extends View<Color> {
   }
 
   @on('click')
-  toggle() {
+  private _toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
     this.element().dispatchEvent(
@@ -40,7 +40,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 
 export class ColorCheckboxListView extends View<Color[]> {
-  template(colors: Color[]) {
+  override template(colors: Color[]) {
     return html`
       <ul>
         ${colors.map((color) => new ColorCheckboxView(color))}
@@ -48,7 +48,7 @@ export class ColorCheckboxListView extends View<Color[]> {
     `;
   }
 
-  onMount() {
+  override onMount() {
     this.delegate('checkbox:change', '.ColorCheckboxView', this.onChange);
   }
 
@@ -78,7 +78,7 @@ export class CheckboxView<T extends CheckboxData> extends View<T> {
   tagName: string = 'li';
   SubView: { new (data: T): View<T> } | null = null;
 
-  template({ checked }: T) {
+  override template({ checked }: T) {
     return html`
       <${this.tagName} class="${checked ? 'checked' : ''}">
         ${this.createSubView()}
@@ -91,7 +91,7 @@ export class CheckboxView<T extends CheckboxData> extends View<T> {
   }
 
   @on('click')
-  toggle() {
+  private _toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
     this.element().dispatchEvent(
@@ -104,7 +104,7 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
   tagName: string = 'ul';
   CheckboxView: { new (data: T): CheckboxView<T> } = CheckboxView;
 
-  template(checkBoxDatas: T[]) {
+  override template(checkBoxDatas: T[]) {
     return html`
       <${this.tagName}>
         ${checkBoxDatas.map(
@@ -178,7 +178,7 @@ export type Color = {
 };
 
 export class ColorView extends View<Color> {
-  template({ code }: Color) {
+  override template({ code }: Color) {
     return html`
       <div style="background-color: ${code}"></div>
     `;
@@ -228,29 +228,29 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-## html을 활용하여 좀 더 쉽게 추상화하기
+## template으로 쉽게 추상화하기
 
-위에서 `CheckboxView`를 구현한 방식은 타입 정의를 잘해주어야하기 때문에 추상화가 약간 어렵습니다. rune의 템플릿 함수를 활용하면 아래처럼 좀 더 쉽게 추상화할 수 있습니다.
+위에서 `CheckboxView`를 구현한 방식은 타입 정의를 잘해주어야하기 때문에 추상화가 약간 어렵습니다. Rune의 템플릿 함수를 활용하면 아래처럼 좀 더 쉽게 추상화할 수 있습니다.
 
 ```typescript
 export class CheckboxView<T extends CheckboxData> extends View<T> {
   tagName: string = 'li';
 
-  template({ checked }: T) {
+  override template({ checked }: T) {
     return html`
       <${this.tagName} class="${checked ? 'checked' : ''}">
-        ${this.createSubView()}
+        ${this.subViewTemplate()}
       </${this.tagName}>
     `;
   }
 
-  createSubView() {
+  subViewTemplate() {
     return html``;
   }
 }
 
 export class ColorCheckboxView extends CheckboxView<Color> {
-  createSubView() {
+  override subViewTemplate() {
     return html`${new ColorView(this.data)}`;
   }
 }
