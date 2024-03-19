@@ -112,7 +112,7 @@ userView.toHtml();
 </div>
 ```
 
-## setData();
+## setData()
 
 `public setData(data: T): this;`
 
@@ -200,3 +200,72 @@ override redraw() {
   $(this.element()).find('img')!.setAttributes(this.data);
 }
 ```
+
+## subView()
+
+```
+protected subView<T extends ViewConstructor>(
+  SubView: T, 
+  selector?: string
+): InstanceType<T> | null;
+```
+
+View의 `template()` 메서드 안에서 생성된 subView들, 즉 첫 번째 뎁스의 subView들 중에 컨스트럭터가 인자로 전달한 컨스트럭터와 동일한 첫 번째 subView를 리턴합니다. 두 번째 인자인 selector? 는 CSS Selector로, SubView를 조회하는 조건을 추가할 수 있습니다.
+
+```typescript
+class ProductView extends View<Product> {
+  override template(product: Product) {
+    return html`
+      <div>
+        ${new PhotoView({ src: product.thumbnail, alt: product.name })}
+        <div class="name">${product.name}</div>
+        <div class="price">$${product.price}</div>
+      </div>
+    `;
+  }
+  
+  override onMount() {
+    console.log(this.subView(PhotoView)!.data.src);
+  }
+}
+```
+
+## subViews()
+
+```
+protected subViews<T extends ViewConstructor>(
+  SubView: T, 
+  selector?: string
+): InstanceType<T>[];
+```
+
+subViews 배열을 리턴합니다.
+
+## subViewIn()
+
+```
+protected subViewIn<T extends ViewConstructor>(
+  selector: string, 
+  SubView: T
+): InstanceType<T> | null;
+```
+
+selector로 찾아지는 부모 엘리먼트 내부에 그려진 subView를 하나를 리턴합니다. ([연관 예제 참고](/guide/what-is-rune.html))
+
+## subViewsIn()
+
+```
+protected subViewsIn<T extends ViewConstructor>(
+  selector: string,
+  SubView: T,
+): InstanceType<T>[];
+```
+
+selector로 찾아지는 부모 엘리먼트 내부에 그려진 subViews 배열을 리턴합니다. ([연관 예제 참고](/guide/what-is-rune.html))
+
+
+## redrawOnlySubViews()
+
+`protected redrawOnlySubViews(): this;`
+
+subView를 순회하면서 `redraw()`를 실행합니다.
