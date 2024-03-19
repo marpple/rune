@@ -1,0 +1,137 @@
+# Solo Component SSR
+
+## View 혼자서 가능한 서버 사이드 렌더링
+
+Rune의 컴포넌트는 별도의 기술 없이 혼자서도 서버사이드 렌더링을 지원하며 자바스크립트만으로 동작합니다. 이러한 특성은 이식성을 높게 하여 프로젝트에서 React, Solid, Next.js, Express.js 등 어떤 방식으로 서버사이드 렌더링을 구축했는지와 관계없이 함께 바로 사용이 가능하며 자바스크립트가 동작하는 어디에나 이식 가능합니다.
+
+```typescript
+interface Product {
+  name: string;
+  price: number;
+  quantity: number;
+}
+
+class ProductView extends View<Product> {
+  override template(product: Product) {
+    return html`
+      <div>
+        <div class="name">${product.name}</div>
+        <div class="price">$${product.price}</div>
+        <div class="quantity">${product.quantity}</div>
+        <button>Total Price</button>
+      </div>
+    `;
+  }
+
+  @on('click', 'button')
+  showTotalPrice() {
+    console.log(`$${this.data.price * this.data.quantity}`);
+  }
+}
+```
+
+위와 같은 컴포넌트를 만든 경우 서버측에서 아래와 같이 실행하여 HTML 문자열을 만들 수 있습니다.
+
+```typescript
+// Server Side
+new ProductView({
+  name: 'Phone Case',
+  price: 13,
+  quantity: 3,
+}).toHtml();
+```
+
+```html
+<div class="ProductView">
+  <div class="name">Phone Case</div>
+  <div class="price">$13</div>
+  <div class="quantity">3</div>
+  <button>Total Price</button>
+</div>
+```
+
+## Hydration
+
+클라이언트 측에서는 서버 측에서 HTML을 만들 때 사용한 동일한 데이터를 전달하며 View 객체를 생성한 다음 `hydrateFormSSR` 메서드에 도큐먼트에 생성되어있는 HTMLElement를 전달하면 됩니다. 
+
+```typescript
+// Client Side
+new ProductView({
+  name: 'Phone Case',
+  price: 13,
+  quantity: 3,
+}).hydrateFromSSR(document.querySelector('.ProductView')!);
+
+// click button -> $39
+```
+
+## 중첩 컴포넌트의 Hydration
+
+중첩 컴포넌트 역시 부모 컴포넌트에게 데이터를 전달하면 됩니다. 
+
+```typescript
+interface Product {
+  name: string;
+  price: number;
+  quantity: number;
+  thumbnail: string;
+}
+
+class ProductView extends View<Product> {
+  override template(product: Product) {
+    return html`
+      <div class="ProductView">
+        ${new PhotoView({ src: product.thumbnail, alt: product.name })}
+        <div class="name">${product.name}</div>
+        <div class="price">$${product.price}</div>
+        <div class="quantity">${product.quantity}</div>
+        <button>Total Price</button>
+      </div>
+    `;
+  }
+
+  @on('click', 'button')
+  showTotalPrice() {
+    console.log(`$${this.data.price * this.data.quantity}`);
+  }
+}
+
+class PhotoView extends View<{
+  src: string;
+  originalSrc?: string;
+  alt: string;
+}> {
+  override template({ src, alt }) {
+    return html`<img src="${src}" alt="${alt}" />`;
+  }
+
+  @on('click')
+  showOriginalImg() {
+    console.log(this.data.originalSrc ?? this.data.src);
+  }
+}
+```
+
+```typescript
+// Server Side
+new ProductView({
+  name: 'Phone Case',
+  price: 13,
+  quantity: 3,
+  thumbnail: 'phone-case.png',
+}).toHtml();
+
+// Client Side
+new ProductView({
+  name: 'Phone Case',
+  price: 13,
+  quantity: 3,
+  thumbnail: 'phone-case.png',
+}).hydrateFromSSR(document.querySelector('.ProductView')!);
+
+// click button -> $39
+// click img -> phone-case.png
+```
+
+
+

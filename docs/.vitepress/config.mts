@@ -22,6 +22,7 @@ export default defineConfig({
           { text: 'Event 다루기', link: '/tutorial/event' },
           { text: 'View 추상화', link: '/tutorial/abstract-view' },
           { text: 'Enable 패턴', link: '/tutorial/enable' },
+          { text: 'Solo Component SSR', link: '/tutorial/solo-component-ssr' },
         ]
       }
     ],
