@@ -24,6 +24,12 @@ export default defineConfig({
           { text: 'Enable 패턴', link: '/tutorial/enable' },
           { text: 'Solo Component SSR', link: '/tutorial/solo-component-ssr' },
         ]
+      },
+      {
+        text: 'API Reference',
+        items: [
+          { text: 'View', link: '/api/view' },
+        ]
       }
     ],
     socialLinks: [
