@@ -200,8 +200,8 @@ export class $Element {
     };
   }
 
-  append(child: $Element | HTMLElement): this {
-    this._element.appendChild($(child)._element);
+  append(...children: ($Element | HTMLElement)[]): this {
+    this._element.append(...$Element.toHTMLElements(children));
     return this;
   }
 
@@ -210,13 +210,23 @@ export class $Element {
     return this;
   }
 
-  prepend(child: $Element | HTMLElement): this {
-    this._element.insertBefore($(child)._element, this._element.firstChild);
+  prepend(...children: ($Element | HTMLElement)[]): this {
+    this._element.prepend(...$Element.toHTMLElements(children));
     return this;
   }
 
   prependTo(parent: $Element | HTMLElement): this {
     $(parent).prepend(this._element);
+    return this;
+  }
+
+  after(...children: ($Element | HTMLElement)[]): this {
+    this._element.after(...$Element.toHTMLElements(children));
+    return this;
+  }
+
+  before(...children: ($Element | HTMLElement)[]): this {
+    this._element.before(...$Element.toHTMLElements(children));
     return this;
   }
 
@@ -277,10 +287,7 @@ export class $Element {
   };
 
   static fromHtml = (htmlStr: string): $Element => {
-    htmlStr = htmlStr.trim();
-    return htmlStr.startsWith('<')
-      ? $(elementFromHtml(htmlStr))
-      : $(document.createElement(htmlStr));
+    return $(elementFromHtml(htmlStr));
   };
 
   static to$Elements = <T>(
@@ -288,6 +295,10 @@ export class $Element {
   ): $Element[] => {
     return [..._toIterator(elements)].map((element) => $(element));
   };
+
+  static toHTMLElements($elements: ($Element | HTMLElement)[]) {
+    return $elements.map((child) => $(child)._element);
+  }
 
   static throwIfNull = (
     element: HTMLElement | Element | $Element,
