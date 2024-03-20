@@ -2,11 +2,15 @@
 outline: deep
 ---
 
-# View
+# View class
 
-## Class Definition
+View는 HTML 템플릿, HTMLElement 생성, 이벤트 핸들링에 필요한 도구를 지원하며 UI 컴포넌트를 만들 때 사용하는 클래스입니다. 
+
+## Definition
 
 ```typescript
+import { View } from 'rune-ts';
+
 interface SwitchData {
   on: boolean;
 }
@@ -23,6 +27,9 @@ class SwitchView extends View<SwitchData> {
 ```
 
 ## Create
+`new (data: T) => View<T>;`
+
+인자로 넘긴 `data`는 `this.data`에 등록되며 `this.template(data: T);`과 같이 `template()` 메서드로 전달됩니다.
 
 ```typescript
 new SwitchView({ on: false });
@@ -31,51 +38,11 @@ new SwitchView({ on: false });
 ## template()
 `protected template(): Html;`
 
-`template` 메서드안에서는 `html`을 사용하여 HTML 문자열을 템플릿을 만듭니다. 
+`template` 메서드안에서는 `html`을 사용하여 HTML 템플릿을 만듭니다. ([템플릿 API 더보기](/api/template.html))
 
 ```typescript
-interface Product {
-  name: string;
-  price: number;
-  thumbnail: string;
-  options: { id: number; name: string }[];
-}
+import { View, html } from 'rune-ts';
 
-class ProductView extends View<Product> {
-  override template(product: Product) {
-    return html`
-      <div>
-        ${new PhotoView({ src: product.thumbnail, alt: product.name })}
-        <div class="name">${product.name}</div>
-        <div class="price">$${product.price}</div>
-        <select>
-          ${product.options.map(
-            ({ id, name }) => html`<option value="${id}">${name}</option>`,
-          )}
-        </select>
-      </div>
-    `;
-  }
-}
-
-class PhotoView extends View<{ src: string; alt: string }> {
-  override template({ src, alt }) {
-    return html`<div><img src="${src}" alt="${alt}" /></div>`;
-  }
-}
-```
-
-`${}`를 통해 넘어오는 값은 다음과 같이 처리합니다.
-
-- array => join('');
-- view => view.toHtml();
-- string | number ... => escape(a.toString());
-
-## toHtml()
-
-`public toHtml(): string;`
-
-```typescript
 class UserView extends View<{ name: string, age: number }> {
   override template() {
     return html`
@@ -86,7 +53,13 @@ class UserView extends View<{ name: string, age: number }> {
     `
   }
 }
+```
 
+## toHtml()
+
+`public toHtml(): string;`
+
+```typescript
 const userView = new UserView({ name: 'milg', age: 20 });
 userView.toHtml();
 ```

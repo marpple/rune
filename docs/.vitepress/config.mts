@@ -28,7 +28,8 @@ export default defineConfig({
       {
         text: 'API Reference',
         items: [
-          { text: 'View', link: '/api/view' },
+          { text: 'View class', link: '/api/view' },
+          { text: 'Template', link: '/api/template' },
         ]
       }
     ],
