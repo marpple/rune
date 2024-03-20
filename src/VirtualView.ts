@@ -23,11 +23,11 @@ export class VirtualView<T> extends Base {
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  template(data: T): Html | string {
+  protected template(data: T): Html {
     return html``;
   }
 
-  async templateAsync(data: T): Promise<Html | string> {
+  async templateAsync(data: T): Promise<Html> {
     return Promise.resolve(this.template(data));
   }
 
@@ -72,18 +72,14 @@ export class VirtualView<T> extends Base {
   protected _makeHtml(): this {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
     this.subViewsFromTemplate = [];
-    const html = this.template(this.data);
-    return this._resetCurrentHtml(
-      html instanceof Html ? html.make(this) : html,
-    );
+    return this._resetCurrentHtml(html`${this.template(this.data)}`.make(this));
   }
 
   protected async _makeHtmlAsync(): Promise<this> {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
     this.subViewsFromTemplate = [];
-    const html = await this.templateAsync(this.data);
     return this._resetCurrentHtml(
-      html instanceof Html ? await html.makeAsync(this) : html,
+      await html`${await this.templateAsync(this.data)}`.makeAsync(this),
     );
   }
 

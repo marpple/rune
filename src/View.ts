@@ -41,7 +41,7 @@ export class View<T> extends VirtualView<T> {
   private hydrateSubViews(): this {
     if (this.subViewsFromTemplate.length > 0) {
       pipe(
-        zip(this.subViewElements(), this.subViewsFromTemplate),
+        zip(this._subViewElements(), this.subViewsFromTemplate),
         each(([element, view]) => {
           view._setElement(element).hydrate();
         }),
@@ -120,10 +120,10 @@ export class View<T> extends VirtualView<T> {
   }
 
   private _subViewSelector(subViewName?: string) {
-    return `[data-rune-parent="${this}"]:not(#${this._getElId()} [data-rune-parent="${this}"] [data-rune-parent="${this}"])${subViewName && subViewName != 'View' ? `.${subViewName}` : ''}`;
+    return `[data-rune-parent="${this}"]:not(#${this._getElId()} [data-rune-parent="${this}"] [data-rune-parent="${this}"])${subViewName && subViewName !== 'View' ? `.${subViewName}` : ''}`;
   }
 
-  protected subViewElements(subViewName?: string): HTMLElement[] {
+  private _subViewElements(subViewName?: string): HTMLElement[] {
     const elements = [
       ...this.element().querySelectorAll(this._subViewSelector(subViewName)),
     ] as HTMLElement[];
@@ -131,7 +131,7 @@ export class View<T> extends VirtualView<T> {
     return elements;
   }
 
-  protected subViewElementsIn(
+  private _subViewElementsIn(
     selector: string,
     subViewName: string,
   ): HTMLElement[] {
@@ -156,7 +156,7 @@ export class View<T> extends VirtualView<T> {
   protected subViews<T extends ViewConstructor>(SubView: T, selector?: string) {
     return selector !== undefined
       ? this.subViewsIn(selector, SubView)
-      : this._subViews(this.subViewElements(SubView.name), SubView);
+      : this._subViews(this._subViewElements(SubView.name), SubView);
   }
 
   protected subViewsIn<T extends ViewConstructor>(
@@ -164,12 +164,12 @@ export class View<T> extends VirtualView<T> {
     SubView: T,
   ) {
     return this._subViews(
-      this.subViewElementsIn(selector, SubView.name),
+      this._subViewElementsIn(selector, SubView.name),
       SubView,
     );
   }
 
-  protected subViewElement(subViewName?: string): HTMLElement | null {
+  private _subViewElement(subViewName?: string): HTMLElement | null {
     const element = this.element().querySelector(
       this._subViewSelector(subViewName),
     );
@@ -177,7 +177,7 @@ export class View<T> extends VirtualView<T> {
     return element as HTMLElement | null;
   }
 
-  protected subViewElementIn(
+  private _subViewElementIn(
     selector: string,
     subViewName: string,
   ): HTMLElement | null {
@@ -200,17 +200,17 @@ export class View<T> extends VirtualView<T> {
   protected subView<T extends ViewConstructor>(SubView: T, selector?: string) {
     return selector !== undefined
       ? this.subViewIn(selector, SubView)
-      : this._subView(this.subViewElement(SubView.name), SubView);
+      : this._subView(this._subViewElement(SubView.name), SubView);
   }
 
   protected subViewIn<T extends ViewConstructor>(selector: string, SubView: T) {
     return this._subView(
-      this.subViewElementIn(selector, SubView.name),
+      this._subViewElementIn(selector, SubView.name),
       SubView,
     );
   }
 
-  redrawOnlySubViews(): this {
+  protected redrawOnlySubViews(): this {
     this.subViews(View)
       .filter((view) => !view.ignoreRefreshOnlySubViewFromParent)
       .forEach((view) => view.redraw());
