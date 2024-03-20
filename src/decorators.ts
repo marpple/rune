@@ -16,9 +16,7 @@ export function on(
   };
 }
 
-export function enable(
-  ...Enables: (new (...args: any[]) => Enable<unknown>)[]
-) {
+export function enable(...Enables: (new (...args: any[]) => Enable<object>)[]) {
   return function (Constructor: any) {
     (Constructor as HasReservedEnables)._ReservedEnables = Enables;
   };

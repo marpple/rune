@@ -3,7 +3,7 @@ import { Base } from './Base';
 
 type ExtendExtraInterface<T, E> = E extends null ? T : T & E;
 
-export abstract class Enable<T, E = null> extends Base {
+export abstract class Enable<T extends object = object, E = null> extends Base {
   view: ExtendExtraInterface<View<T>, E>;
   data: T;
 
@@ -34,7 +34,11 @@ export abstract class Enable<T, E = null> extends Base {
   }
 }
 
-export abstract class EnableWithOptions<T, O, E = null> extends Enable<T, E> {
+export abstract class EnableWithOptions<
+  T extends object = object,
+  O = object,
+  E = null,
+> extends Enable<T, E> {
   options?: O;
 
   constructor(view: ExtendExtraInterface<View<T>, E>, options?: O) {

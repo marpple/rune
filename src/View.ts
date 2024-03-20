@@ -4,7 +4,7 @@ import { each, flatMap, pipe, toArray, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
 
-export class View<T> extends VirtualView<T> {
+export class View<T extends object> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
   ignoreRefreshOnlySubViewFromParent = false;
 
@@ -218,18 +218,18 @@ export class View<T> extends VirtualView<T> {
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  protected _reservedEnables: Enable<unknown>[] = [];
-  static _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[] = [];
+  protected _reservedEnables: Enable<object>[] = [];
+  static _ReservedEnables: (new (...args: any[]) => Enable<object>)[] = [];
 }
 
-type ViewConstructor = new (...args: any[]) => View<unknown>;
+type ViewConstructor = new (...args: any[]) => View<object>;
 
 export interface HasReservedEnables extends ViewConstructor {
-  _ReservedEnables: (new (...args: any[]) => Enable<unknown>)[];
+  _ReservedEnables: (new (...args: any[]) => Enable<object>)[];
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-export class ViewWithOptions<T, O> extends View<T> {
+export class ViewWithOptions<T extends object, O = object> extends View<T> {
   options?: O;
 
   constructor(data: T, options?: O) {
@@ -238,10 +238,9 @@ export class ViewWithOptions<T, O> extends View<T> {
   }
 }
 
-export class ListView<T> extends View<T[]> {}
+export class ListView<T extends object> extends View<T[]> {}
 
-export class ListViewWithOptions<T, O> extends ViewWithOptions<T[], O> {}
-
-if (typeof window !== 'undefined') {
-  window.__rune_View__ = View;
-}
+export class ListViewWithOptions<T extends object, O> extends ViewWithOptions<
+  T[],
+  O
+> {}

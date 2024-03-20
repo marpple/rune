@@ -2,24 +2,27 @@ import { _escape } from './lib/_escape';
 import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
 
-export class VirtualView<T> extends Base {
+export class VirtualView<T extends object> extends Base {
   root = false;
-  data: T;
+  private readonly _data: T;
 
-  parentView: VirtualView<unknown> | null = null;
-  subViewsFromTemplate: VirtualView<unknown>[] = [];
+  parentView: VirtualView<object> | null = null;
+  subViewsFromTemplate: VirtualView<object>[] = [];
 
   renderCount = 0;
   protected _currentHtml: string | null = null;
 
-  constructor(data: T) {
-    super();
-    this.data = data;
+  get data(): T {
+    return this._data;
   }
 
-  setData(data: T): this {
-    this.data = data;
-    return this;
+  set data(data: T) {
+    throw TypeError('data property is readonly.');
+  }
+
+  constructor(data: T) {
+    super();
+    this._data = data;
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -110,7 +113,7 @@ export class Html {
     this._templateVals = templateVals;
   }
 
-  make(virtualView: VirtualView<unknown>): string {
+  make(virtualView: VirtualView<object>): string {
     return pipe(
       this._make(
         virtualView,
@@ -121,7 +124,7 @@ export class Html {
     );
   }
 
-  async makeAsync(virtualView: VirtualView<unknown>): Promise<string> {
+  async makeAsync(virtualView: VirtualView<object>): Promise<string> {
     return pipe(
       this._make(
         virtualView,
@@ -134,11 +137,11 @@ export class Html {
   }
 
   private *_make(
-    virtualView: VirtualView<unknown>,
-    toHtml: (virtualView: VirtualView<unknown>) => string | Promise<string>,
+    virtualView: VirtualView<object>,
+    toHtml: (virtualView: VirtualView<object>) => string | Promise<string>,
     make: (
       html: Html,
-      virtualView: VirtualView<unknown>,
+      virtualView: VirtualView<object>,
     ) => string | Promise<string>,
   ): Generator<string | Promise<string>> {
     const end = this._templateStrs.length - 1;
@@ -163,8 +166,8 @@ export class Html {
 
   private _isSubView(
     templateVal: unknown,
-    virtualView: VirtualView<unknown>,
-  ): templateVal is VirtualView<unknown> {
+    virtualView: VirtualView<object>,
+  ): templateVal is VirtualView<object> {
     return (
       virtualView !== templateVal &&
       virtualView.parentView !== templateVal &&
@@ -173,9 +176,9 @@ export class Html {
   }
 
   private _addSubViewsFromTemplate(
-    subView: VirtualView<unknown>,
-    virtualView: VirtualView<unknown>,
-  ): VirtualView<unknown> {
+    subView: VirtualView<object>,
+    virtualView: VirtualView<object>,
+  ): VirtualView<object> {
     subView.parentView = virtualView;
     virtualView.subViewsFromTemplate.push(subView);
     return subView;

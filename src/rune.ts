@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+import { View } from './View';
+
 type Constructor = new (...args: any) => any;
 
 class Rune {
@@ -40,6 +42,14 @@ class Rune {
   ): InstanceType<typeof Constructor> | undefined {
     return this.get(element, Constructor);
   }
+
+  getUnknownView(element: HTMLElement | EventTarget) {
+    return this.get(element, View);
+  }
 }
 
 export const rune = new Rune();
+
+if (typeof window !== 'undefined') {
+  window.__rune__ = rune;
+}
