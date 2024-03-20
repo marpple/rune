@@ -31,6 +31,7 @@ export default defineConfig({
           { text: 'View class', link: '/api/view' },
           { text: 'Template', link: '/api/template' },
           { text: 'Event handling', link: '/api/event' },
+          { text: 'Enable class', link: '/api/enable' },
         ]
       }
     ],

@@ -4,7 +4,7 @@ outline: deep
 
 # Event handling
 
-View class, Enable class 에 제공되는 이벤트 핸들링 메서드들을 설명합니다.
+View class, Enable class는 Base class에 구현된 Event handling 관련 메서드들을 상속 받았습니다.
 
 ## addEventListener()
 
@@ -84,7 +84,7 @@ delegate<T extends Event>(
 
 ([Tutorial - 이벤트 델리게이트](/tutorial/event.html#이벤트-델리게이트))
 
-## @on Decorator
+## @on decorator
 
 `@on` 데코레이터를 사용하면 보다 간결하게 코드를 작성할 수 있습니다. 
 

@@ -271,3 +271,7 @@ new MyView('hi').toString();
 ## onMount()
 
 View가 `document`에 `append` 된 이후에 실행됩니다.
+
+## Event handling
+
+View class는 Base class로 부터 Event handling 메서드들을 상속 받았습니다. ([API - Event handling 참고](/api/event.html))
