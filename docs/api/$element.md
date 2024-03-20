@@ -98,121 +98,194 @@ $(".container").findAll('&[active="false"] li');
 
 `closest(selector: string): $Element | null;`
 
+자신을 포함하여 셀렉터와 매칭되는 부모 엘리먼트를 찾습니다.
+
+
 ## children()
 
 `children(): $Element[];`
+
+모든 자식 요소를 가져옵니다.
 
 ## prev()
 
 `prev(selector: string): $Element;`
 
+Web API의 `prevElementSibling`을 하면서 selector와 매칭되는 첫 번째 요소를 가져옵니다.
+
 ## next()
 
 `next(selector: string): $Element;`
+
+Web API의 `nextElementSibling`을 하면서 selector와 매칭되는 첫 번째 요소를 가져옵니다.
 
 ## prevAll()
 
 `prevAll(selector: string): $Element[];`
 
+Web API의 `prevElementSibling`을 하면서 selector와 매칭되는 모든 요소를 가져옵니다.
+
 ## nextAll()
 
 `nextAll(selector: string): $Element[];`
+
+Web API의 `nextElementSibling`을 하면서 selector와 매칭되는 모든 요소를 가져옵니다.
 
 ## siblings()
 
 `siblings(selector: string): $Element[];`
 
+자신을 제외한 자신과 동일한 레벨의 엘리먼트들 selector와 매칭되는 모든 요소를 가져옵니다.
+
 ## parentNode()
 
 `parentNode(): $Element | null;`
+
+`parentNode`를 가져옵니다.
 
 ## is()
 
 `is(selector: string): boolean;`
 
+[Element: matches() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches)와 같습니다.
+
 ## matches()
 
 `matches(selector: string): boolean;`
+
+[Element: matches() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches)와 같습니다.
 
 ## contains()
 
 `contains(child: $Element | HTMLElement): boolean;`
 
+[Node: contains()](https://developer.mozilla.org/en-US/docs/Web/API/Node/contains)와 같습니다.
+
 ## getValue()
 
 `getValue(): string;`
+
+`element.value`를 가져옵니다. 
 
 ## setValue()
 
 `setValue(value: string): this;`
 
+`element.value`를 변경합니다.
+
 ## floatValue()
 
 `floatValue(): number;`
+
+`parseFloat(this.getValue())` 입니다. `<input type="number" />`에 사용하면 편리합니다. 
 
 ## getAttribute()
 
 `getAttribute(name: string): string | null;`
 
+[Element: getAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute)와 같습니다.
+
 ## getAttributes()
 
 `getAttributes(names: string[]): Record<string, string | null>;`
+
+attributes들을 가져오면서 key를 CamelCase로 변경합니다.
 
 ## setAttribute()
 
 `setAttribute(name: string, value: any): this;`
 
+[Element: setAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute)와 같습니다.
+
 ## setAttributes()
 
 `setAttributes(attributes: Record<string, any>): this;`
+
+attributes들을 변경합니다.
 
 ## removeAttribute()
 
 `removeAttribute(name: string): this;`
 
+[Element: removeAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute)와 같습니다.
+
+
 ## getInnerHtml()
 
 `getInnerHtml(): string;`
+
+[Element: innerHTML property](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)와 같습니다.
 
 ## setInnerHtml()
 
 `setInnerHtml(html: string): this;`
 
+[Element: innerHTML property](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)와 같습니다.
+
 ## getTextContent()
 
 `getTextContent(): string | null;`
+
+[Node: textContent property](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)와 같습니다.
 
 ## setTextContent()
 
 `setTextContent(html: string): this;`
 
+[Node: textContent property](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)와 같습니다.
+
 ## addClass()
 
 `addClass(...classNames: string[]): this;`
+
+[Element: classList property](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)와 같습니다.
+
 
 ## removeClass()
 
 `removeClass(...classNames: string[]): this;`
 
+[Element: classList property](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)와 같습니다.
+
 ## hasClass()
 
 `hasClass(className: string): boolean;`
+
+[DOMTokenList: contains() method](https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/contains)와 같습니다.
 
 ## getComputedStyle()
 
 `getComputedStyle(property: keyof CSSStyleDeclaration): string;`
 
+`element.ownerDocument.defaultView?.getComputedStyle`를 쉽게 가져옵니다.
+
 ## getComputedStyles()
 
 `getComputedStyles(properties: (keyof CSSStyleDeclaration)[]): Record<string, string>;`
+
+`getComputedStyle`들을 가져옵니다.
 
 ## offsetFromBody()
 
 `offsetFromBody(): { top: number; left: number };`
 
+document 시작으로부터 좌표를 구합니다. 
+
+```javascript
+offsetFromBody() {
+  const rect = this._element.getBoundingClientRect();
+  return {
+    top: rect.top + window.scrollY,
+    left: rect.left + window.scrollX,
+  };
+}
+```
+
 ## append()
 
 `append(child: $Element | HTMLElement): this;`
+
+``
 
 ## appendTo()
 
