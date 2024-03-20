@@ -22,6 +22,17 @@ const div: $Element = $('div')!;
 const divs: $Element[] = $('div');
 ```
 
+## static $.fromHtml()
+
+`static fromHtml(htmlStr: string): $Element;`
+
+HTML 문자열로 HTMLElement를 생성하여 $Element를 리턴합니다.
+
+```typescript
+$.fromHtml('<div class="rune"></div>');
+// div.rune
+```
+
 ## element()
 
 `element(): HTMLElement;`
@@ -285,19 +296,33 @@ offsetFromBody() {
 
 `append(child: $Element | HTMLElement): this;`
 
-``
+[Element: append() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/append)와 같습니다.
 
 ## appendTo()
 
-`appendTo(parent: $Element | HTMLElement): this;`
+`append(...children: ($Element | HTMLElement)[]): this;`
 
 ## prepend()
 
-`prepend(child: $Element | HTMLElement): this;`
+`prepend(...children: ($Element | HTMLElement)[]): this`
+
+[Element: prepend() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/prepend)와 같습니다.
 
 ## prependTo()
 
 `prependTo(parent: $Element | HTMLElement): this;`
+
+## after()
+
+`after(...children: ($Element | HTMLElement)[]): this`
+
+[Element: after() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/after)와 같습니다.
+
+## before()
+
+`before(...children: ($Element | HTMLElement)[]): this`
+
+[Element: before() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/before)와 같습니다.
 
 ## remove()
 
