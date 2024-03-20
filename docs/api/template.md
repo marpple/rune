@@ -57,18 +57,20 @@ html`` 사이의 `${}`로 넘어오는 값은 내부에서 다음과 같이 처�
 `(htmlStr: string): UnsafeHtml;`
 
 ```typescript
-class MyView extends View<string> {
-  override template(htmlStr) {
+type Data = { value: string };
+
+class MyView extends View<Data> {
+  override template({ value }: Data) {
     return html`
       <div>
-        ${htmlStr}
-        ${html.preventEscape(htmlStr)}
+        ${value}
+        ${html.preventEscape(value)}
       </div>
     `;
   }
 }
 
-new MyView('<marquee>Hello, world!</marquee>').toHtml();
+new MyView({ value: '<marquee>Hello, world!</marquee>' }).toHtml();
 ```
 ```html
 <div class="MyView">

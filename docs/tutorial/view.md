@@ -45,7 +45,9 @@ colorView.toHtml();
 같은 코드를 메서드 체이닝으로 표현할 수 있습니다.
 
 ```typescript
-colorView.setData({ code: 'blue' }).toHtml();
+colorView
+  .chain((view) => view.data.code = 'blue')
+  .toHtml();
 ```
 
 ## HTMLElement 생성하기

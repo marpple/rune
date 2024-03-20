@@ -60,13 +60,13 @@ class UserView extends View<{ name: string, age: number }> {
 `public toHtml(): string;`
 
 ```typescript
-const userView = new UserView({ name: 'milg', age: 20 });
+const userView = new UserView({ name: 'marty', age: 30 });
 userView.toHtml();
 ```
 ```html
 <div class="UserView">
-  <div class="name">milg</div>
-  <div class="age">20</div>
+  <div class="name">marty</div>
+  <div class="age">30</div>
 </div>
 ```
 
@@ -75,28 +75,14 @@ userView.toHtml();
 `public data: T;`
 
 ```typescript
-userView.data.age = 30;
+userView.data.name = 'milg';
+userView.data.age = 37;
 userView.toHtml();
 ```
 ```html
 <div class="UserView">
   <div class="name">milg</div>
-  <div class="age">30</div>
-</div>
-```
-
-## setData()
-
-`public setData(data: T): this;`
-
-```typescript
-userView.setData({ name: 'milgarian', age: 25 });
-userView.toHtml();
-```
-```html
-<div class="UserView">
-  <div class="name">milgarian</div>
-  <div class="age">25</div>
+  <div class="age">37</div>
 </div>
 ```
 

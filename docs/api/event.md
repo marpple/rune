@@ -112,7 +112,7 @@ export class CheckboxView extends View<{ checked: boolean }> {
 `@on` 데코레이터에 인자를 하나만 전달하면 `addEventListener`를 사용하고, `@on`에 두 번째 인자로 CSS 셀렉터를 함께 전달하면 `delegate`를 사용합니다. 
 
 ```typescript
-class MyView extends View<number> {
+class MyView extends View<object> {
   override onMount() {
     this.delegate('click', 'button', () => this.remove());
   }
@@ -122,7 +122,7 @@ class MyView extends View<number> {
   }
 }
 
-class MyView extends View<number> {
+class MyView extends View<object> {
   @on('click', 'button')
   remove() {
     this.element().remove();

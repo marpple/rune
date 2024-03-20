@@ -63,10 +63,10 @@ _toggle() {
 
 ## 데이터 공유가 없는 View 확장
 
-`Deletable`을 사용하여 클릭했을 때 삭제되는 `BallView`를 쉽게 만들 수 있습니다.
+`Deletable`을 사용하여 클릭했을 때 삭제되는 `BallView`를 쉽게 만들 수 있습니다. `class Deletable extends Enable` 는 `class Deletable extends Enable<object>`와 같습니다.
 
 ```typescript
-class Deletable extends Enable<unknown> {
+class Deletable extends Enable {
   override onMount() {
     this.delegate('mousedown', '.remove-target', 'remove');
   }
@@ -117,7 +117,7 @@ interface DeletableViewExtraInterface {
   readonly targetClassName: string;
 }
 
-export class Deletable extends Enable<unknown, DeletableViewExtraInterface> {
+export class Deletable extends Enable<object, DeletableViewExtraInterface> {
   override onMount() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }
@@ -161,7 +161,7 @@ interface DeletableViewExtraInterface {
   canRemove(): boolean;
 }
 
-export class Deletable extends Enable<unknown, DeletableViewExtraInterface> {
+export class Deletable extends Enable<object, DeletableViewExtraInterface> {
   override onMount() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }
@@ -201,7 +201,7 @@ export class BallView extends View<Ball> {
 `Enable`을 이용하면 하나의 `View`에 두 개 이상의 기능을 부여할 수 있습니다.
 
 ```typescript
-class Movable extends Enable<unknown> {
+class Movable extends Enable {
   override onMount() {
     this.element().animate(
       [
