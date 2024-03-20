@@ -347,6 +347,16 @@ delegate<T extends Event>(
 
 `chain(f: (element: HTMLElement) => HTMLElement | void): $Element;`
 
+`chain`을 이용하여 확장할 수 있습니다.
+
+```typescript
+$('#body')
+  .addClass('fixed')
+  .chain((el: HTMLElement) => el.scrollTo(0, 500))
+  .removeClass('fixed');
+```
+
 ## to()
 
 `to<T>(f: (element: HTMLElement) => T): T;`
+
