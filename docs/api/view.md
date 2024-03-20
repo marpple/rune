@@ -126,6 +126,13 @@ const element: HTMLElement = userView.element();
 
 `public isRendered(): boolean;`
 
+
+## renderCount
+`public renderCount: number;`
+
+내부에서 `template()` 함수를 실행한 수입니다. 이 프로퍼티를 활용하여 부분적으로만 렌더링하도록 `template()` 함수를 정의하는 식으로 지연적인 렌더링을 구현할 수 있습니다. 
+
+
 ## hydrateFromSSR()
 
 `public hydrateFromSSR(element: HTMLElement): this;`
@@ -242,3 +249,25 @@ selector로 찾아지는 부모 엘리먼트 내부에 그려진 subViews 배열
 `protected redrawOnlySubViews(): this;`
 
 subView를 순회하면서 `redraw()`를 실행합니다.
+
+## chain()
+
+`chain(f: (this: this, view: this) => void): this;`
+
+```typescript
+view
+  .chain((view) => view.data.quantity++)
+  .redraw();
+```
+
+## toString()
+
+View의 클래스이름을 리턴합니다.
+
+```typescript
+new MyView('hi').toString();
+// MyView
+```
+## onMount()
+
+View가 `document`에 `append` 된 이후에 실행됩니다.
