@@ -26,5 +26,5 @@ features:
   - title: Pure JS based SSR & Hydration
     details: TS만으로 구현하고 JS만으로 동작하여<br>빠르고 조합성 높은 Server Side Rendering
   - title: Class based Component Builder
-    details: 유려하게 동작하는 UI 컴포넌트 개발을 위한<br> 객체지향 프로그래밍 기반 아키텍쳐 제공 
+    details: 유려하게 동작하는 UI 컴포넌트 개발을 위한<br> 객체지향 프로그래밍 기반 아키텍쳐 제공
 ---

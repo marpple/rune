@@ -32,11 +32,15 @@ export default defineConfig({
           { text: 'Template', link: '/api/template' },
           { text: 'Event handling', link: '/api/event' },
           { text: 'Enable class', link: '/api/enable' },
+          { text: 'DOM Manipulation', link: '/api/$element' },
         ]
       }
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/marpple/rune' }
-    ]
+    ],
+    footer: {
+      copyright: 'Copyright © 2024 <a href="https://www.marpplecorp.com/" target="_blank">MARPPLE CORP.</a>'
+    }
   }
 })
