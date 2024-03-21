@@ -43,12 +43,12 @@ new SwitchView({ on: false });
 ```typescript
 import { View, html } from 'rune-ts';
 
-class UserView extends View<{ name: string, age: number }> {
+class DessertView extends View<{ name: string, rating: number }> {
   override template() {
     return html`
       <div>
         <div class="name">${this.data.name}</div>
-        <div class="age">${this.data.age}</div>
+        <div class="rating">${this.data.rating}</div>
       </div>
     `
   }
@@ -60,13 +60,13 @@ class UserView extends View<{ name: string, age: number }> {
 `public toHtml(): string;`
 
 ```typescript
-const userView = new UserView({ name: 'marty', age: 30 });
-userView.toHtml();
+const dessertView = new DessertView({ name: 'Choco', rating: 2.8 });
+dessertView.toHtml();
 ```
 ```html
-<div class="UserView">
-  <div class="name">marty</div>
-  <div class="age">30</div>
+<div class="DessertView">
+  <div class="name">Choco</div>
+  <div class="rating">2.8</div>
 </div>
 ```
 
@@ -75,14 +75,14 @@ userView.toHtml();
 `public data: T;`
 
 ```typescript
-userView.data.name = 'milg';
-userView.data.age = 37;
-userView.toHtml();
+dessertView.data.name = 'Latte';
+dessertView.data.rating = 3.5;
+dessertView.toHtml();
 ```
 ```html
-<div class="UserView">
-  <div class="name">milg</div>
-  <div class="age">37</div>
+<div class="DessertView">
+  <div class="name">Latte</div>
+  <div class="rating">3.5</div>
 </div>
 ```
 
@@ -93,8 +93,8 @@ userView.toHtml();
 내부에서 `this.template(this.data)`로 HTML문자열을 만들고 HTMLElement를 생성하여 `this._element`에 등록하고 리턴합니다. 
 
 ```typescript
-const element: HTMLElement = userView.render();
-// div.UserView
+const element: HTMLElement = dessertView.render();
+// div.DessertView
 ```
 
 ## element()
@@ -104,8 +104,8 @@ const element: HTMLElement = userView.render();
 생성되어있는 HTMLElement를 리턴합니다.
 
 ```typescript
-const element: HTMLElement = userView.element();
-// div.UserView
+const element: HTMLElement = dessertView.element();
+// div.DessertView
 ```
 
 ## isRendered()
