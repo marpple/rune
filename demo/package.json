@@ -1,0 +1,17 @@
+{
+  "name": "rune-demo",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "pnpm rune dev",
+    "build": "pnpm rune build",
+    "start": "pnpm rune start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rune-ts/server": "^0.0.5",
+    "rune-ts": "^0.0.7"
+  }
+}
