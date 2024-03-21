@@ -1,6 +1,6 @@
 {
   "name": "rune-ts",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Rune Core Library",
   "engines": {
     "node": ">=14.0.0"
@@ -13,10 +13,16 @@
     "postbuild": "tsc",
     "release": "pnpm publish --access public --no-git-checks"
   },
+  "homepage": "https://marpple.github.io/rune/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marpple/rune"
+  },
+  "bugs": {
+    "url": "https://github.com/marpple/rune/issues"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "unpkg": "dist/",
-  "jsdelivr": "dist/",
   "license": "Apache-2.0",
   "files": [
     "tsconfig.json",
