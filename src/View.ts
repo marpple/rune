@@ -237,10 +237,3 @@ export class ViewWithOptions<T extends object, O = object> extends View<T> {
     this.options = options;
   }
 }
-
-export class ListView<T extends object> extends View<T[]> {}
-
-export class ListViewWithOptions<T extends object, O> extends ViewWithOptions<
-  T[],
-  O
-> {}

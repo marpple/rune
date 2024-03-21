@@ -17,7 +17,7 @@ export class VirtualView<T extends object> extends Base {
   }
 
   set data(data: T) {
-    throw TypeError('data property is readonly.');
+    throw TypeError("'data' property is readonly.");
   }
 
   constructor(data: T) {
@@ -86,11 +86,15 @@ export class VirtualView<T extends object> extends Base {
     );
   }
 
+  protected ready() {}
+
   toHtml(): string {
+    if (this.renderCount === 0) this.ready();
     return this._makeHtml()._currentHtml!;
   }
 
   async toHtmlAsync(): Promise<string> {
+    if (this.renderCount === 0) this.ready();
     return (await this._makeHtmlAsync())._currentHtml!;
   }
 }

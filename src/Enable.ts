@@ -46,11 +46,3 @@ export abstract class EnableWithOptions<
     this.options = options;
   }
 }
-
-export abstract class ListEnable<T, E> extends Enable<T[], E> {}
-
-export abstract class ListEnableWithOptions<T, O, E> extends EnableWithOptions<
-  T[],
-  O,
-  E
-> {}
