@@ -216,7 +216,7 @@ protected subViewIn<T extends ViewConstructor>(
 ): InstanceType<T> | null;
 ```
 
-selector로 찾아지는 부모 엘리먼트 내부에 그려진 subView를 하나를 리턴합니다. ([연관 예제 참고](/guide/what-is-rune.html))
+selector로 찾아지는 부모 엘리먼트 내부에 그려진 subView를 하나를 리턴합니다.
 
 ## subViewsIn()
 
@@ -227,7 +227,7 @@ protected subViewsIn<T extends ViewConstructor>(
 ): InstanceType<T>[];
 ```
 
-selector로 찾아지는 부모 엘리먼트 내부에 그려진 subViews 배열을 리턴합니다. ([연관 예제 참고](/guide/what-is-rune.html))
+selector로 찾아지는 부모 엘리먼트 내부에 그려진 subViews 배열을 리턴합니다.
 
 
 ## redrawOnlySubViews()

@@ -25,37 +25,33 @@ interface Setting {
   on: boolean;
 }
 
-class SettingsView extends View<Setting[]> {
+class SettingController extends View<Setting[]> {
+  private checkAllSwitchView = new SwitchView({ on: this.isAllChecked() });
+  private settingListview = new SettingListView(this.data);
+
   override template() {
     return html`
       <div>
         <div class="header">
           <span class="title">Check All</span>
-          ${new SwitchView({ on: this.isAllChecked() })}
+          ${this.checkAllSwitchView}
         </div>
-        <ul class="body">
-          ${this.data.map((setting) => html`
-            <li>
-              <span class="title">${setting.title}</span>
-              ${new SwitchView(setting)}
-            </li>
-          `)}
-        </ul>
+        ${this.settingListview}
       </div>
     `;
   }
 
   @on('switch:change', '> .header')
   checkAll() {
-    const { on } = this.subViewIn('> .header', SwitchView)!.data;
-    this.subViewsIn('> .body', SwitchView)
-      .filter((view) => on !== view.data.on)
-      .forEach((view) => view.setOn(on));
+    const { on } = this.checkAllSwitchView.data;
+    this.settingListview.itemViews
+        .filter((view) => on !== view.data.on)
+        .forEach((view) => view.switchView.setOn(on));
   }
 
-  @on('switch:change', '> .body')
+  @on('switch:change', `> .${SettingListView}`)
   private _changed() {
-    this.subViewIn('> .header', SwitchView)!.setOn(this.isAllChecked());
+    this.checkAllSwitchView.setOn(this.isAllChecked());
   }
 
   isAllChecked() {
@@ -63,3 +59,5 @@ class SettingsView extends View<Setting[]> {
   }
 }
 ```
+
+<img src="https://s3.marpple.co/files/u_218933/2024/3/original/a3e403fe7005e00e23b99bf3a331c5c252f392401.gif" width="100%">
