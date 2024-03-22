@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "postinstall": "pnpm link rune-ts",
     "dev": "pnpm rune dev",
     "build": "pnpm rune build",
     "start": "pnpm rune start"
@@ -11,7 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@rune-ts/server": "^0.0.5",
-    "rune-ts": "^0.0.7"
+    "@rune-ts/server": "^0.0.20",
+    "rune-ts": "^0.0.8"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/express-serve-static-core": "^4.17.43"
   }
 }

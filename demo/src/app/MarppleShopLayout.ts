@@ -30,8 +30,10 @@ export class MarppleShopLayout extends Layout<MarppleShopLayoutData> {
     super(page, data);
 
     this.styleSheet = () =>
-      html.preventEscape(`
-        <link rel="stylesheet" href="${manifest['main.css']}" />`);
+      manifest?.['main.css']
+        ? html.preventEscape(`
+        <link rel="stylesheet" href="${manifest?.['main.css']}" />`)
+        : html.preventEscape('');
 
     this.dataScript = () =>
       html.preventEscape(`

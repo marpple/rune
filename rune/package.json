@@ -1,0 +1,53 @@
+{
+  "name": "rune-ts",
+  "version": "0.0.8",
+  "description": "Rune Core Library",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "prepare": "pnpm run build",
+    "dev": "taskr",
+    "types:dev": "tsc --watch",
+    "build": "taskr build",
+    "postbuild": "tsc",
+    "release": "pnpm publish --access public --no-git-checks"
+  },
+  "homepage": "https://marpple.github.io/rune/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marpple/rune"
+  },
+  "bugs": {
+    "url": "https://github.com/marpple/rune/issues"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "Apache-2.0",
+  "files": [
+    "dist/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
+  "taskr": {
+    "requires": [
+      "./taskfile-swc.js",
+      "./taskfile-watch.js"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "devDependencies": {
+    "@swc/core": "^1.4.2",
+    "@taskr/clear": "^1.1.0",
+    "@taskr/esnext": "^1.1.0",
+    "@types/watchpack": "^2.4.4",
+    "taskr": "^1.1.0",
+    "typescript": "^5.3.3",
+    "watchpack": "^2.4.0"
+  },
+  "dependencies": {
+    "@fxts/core": "^0.24.0"
+  }
+}

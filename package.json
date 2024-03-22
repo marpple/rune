@@ -1,53 +1,44 @@
 {
-  "name": "rune-ts",
-  "version": "0.0.8",
-  "description": "Rune Core Library",
+  "name": "rune",
+  "version": "0.0.1",
+  "description": "Rune Core Library REPOSITORY",
   "engines": {
     "node": ">=14.0.0"
   },
   "scripts": {
-    "prepare": "pnpm run build",
-    "dev": "taskr",
-    "types:dev": "tsc --watch",
-    "build": "taskr build",
-    "postbuild": "tsc",
-    "release": "pnpm publish --access public --no-git-checks"
+    "ci": "pnpm install --frozen-lockfile",
+    "fi": "pnpm install --force",
+    "prepare": "husky"
   },
-  "homepage": "https://marpple.github.io/rune/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/marpple/rune"
-  },
-  "bugs": {
-    "url": "https://github.com/marpple/rune/issues"
-  },
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "license": "Apache-2.0",
-  "files": [
-    "tsconfig.json",
-    "dist/",
-    "README.md",
-    "LICENSE"
-  ],
-  "taskr": {
-    "requires": [
-      "./taskfile-swc.js",
-      "./taskfile-watch.js"
-    ]
-  },
-  "keywords": [],
   "author": "",
   "devDependencies": {
-    "@swc/core": "^1.4.2",
-    "@taskr/clear": "^1.1.0",
-    "@taskr/esnext": "^1.1.0",
-    "@types/watchpack": "^2.4.4",
-    "taskr": "^1.1.0",
-    "typescript": "^5.3.3",
-    "watchpack": "^2.4.0"
+    "@types/node": "^20.11.20",
+    "@typescript-eslint/eslint-plugin": "^7.0.2",
+    "@typescript-eslint/parser": "^7.0.2",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-boundaries": "^4.2.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
+    "stylelint": "^16.2.1",
+    "stylelint-config-prettier-scss": "^1.0.0",
+    "stylelint-config-property-sort-order-smacss": "^10.0.0",
+    "stylelint-config-recommended-scss": "^14.0.0",
+    "stylelint-config-standard": "^36.0.0",
+    "stylelint-prettier": "^5.0.0",
+    "stylelint-scss": "^6.2.1",
+    "typescript": "^5.3.3"
   },
-  "dependencies": {
-    "@fxts/core": "^0.24.0"
+  "lint-staged": {
+    "*.scss": [
+      "stylelint --fix '**/*.scss'"
+    ],
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
