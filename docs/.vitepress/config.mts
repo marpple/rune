@@ -7,7 +7,7 @@ export default defineConfig({
   base: '/rune/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: { light: '/img/logo.png', dark: '/img/logo_dark.png', alt: 'rune' },
+    logo: { light: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png', dark: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo_dark.png', alt: 'rune' },
     siteTitle: false,
     sidebar: [
       {
