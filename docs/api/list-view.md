@@ -118,12 +118,12 @@ dessertListView.add([
 ```
 
 ```html
-<ul class="DessertListView">
+<ol class="DessertListView">
   <li class="DessertView">Choco (3.8)</li>
   <li class="DessertView">Latte (4.5)</li>
   <li class="DessertView">Coffee (4.2)</li>
   <li class="DessertView">Decaf (2.1)</li>
-</ul>
+</ol>
 ```
 
 추가 옵션인 `at`을 이용하면 원하는 위치에 추가할 수 있습니다.
