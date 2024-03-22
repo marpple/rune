@@ -112,6 +112,8 @@ const element: HTMLElement = dessertView.element();
 
 `public isRendered(): boolean;`
 
+`isRendered()`는 View 내부에 HTMLElement를 생성한적이 있는지를 체크합니다. 렌더링된 상태에서만 실행하고자 하는 코드를 구분하고자 할 때 유용합니다.
+
 
 ## renderCount
 `public renderCount: number;`
@@ -245,6 +247,25 @@ view
   .chain((view) => view.data.quantity++)
   .redraw();
 ```
+
+```typescript
+view
+  .chain((view) => view.data.quantity++)
+  .redraw();
+```
+
+## safely()
+
+`safely(f: (this: this, view: this) => void): this;`
+
+```typescript
+safely(f: (this: this, view: this) => void): this {
+  return this.isRendered() ? this.chain(f) : this;
+}
+```
+
+`safely`의 구현은 위와 같습니다. 엘리먼트가 렌더링 된 상태에서만 동작했으면 하는 코드를 체이닝할 때 사용합니다.
+
 
 ## toString()
 
