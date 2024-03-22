@@ -7,8 +7,8 @@ hero:
   text: "Web API based Front-end SDK"
   tagline: 빠르고 견고한 프론트엔드 개발 라이브러리
   image:
-    light: /img/logo.png
-    dark: /img/logo_dark.png
+    light: https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png
+    dark: https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo_dark.png
     alt: VitePress
   actions:
     - theme: alt
