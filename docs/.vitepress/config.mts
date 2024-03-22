@@ -3,8 +3,12 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Rune",
-  description: "Hello, Rune!",
+  description: "Web API based Front-end SDK",
   base: '/rune/',
+  head: [
+    ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/favicon.ico' }],
+    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }]
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: { light: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png', dark: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo_dark.png', alt: 'rune' },
