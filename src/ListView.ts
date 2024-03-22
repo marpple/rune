@@ -63,7 +63,10 @@ export class ListView<
   }
 
   add(items: T[], at?: number): this {
-    if (at === undefined) {
+    if (at !== undefined && (at < 0 || at >= this.length)) {
+      throw TypeError("'at' exceeds the range of the itemViews array.");
+    }
+    if (at === undefined || at === this.length) {
       this.appendAll(items);
     } else if (at === 0) {
       this.prependAll(items);
@@ -72,7 +75,7 @@ export class ListView<
       this.data.splice(at, 0, ...items);
       this._itemViews[at]
         .element()
-        .before(...itemViews.map((view) => view.element()));
+        .before(...itemViews.map((view) => view.render()));
       this._itemViews.splice(at, 0, ...itemViews);
     }
     return this;
@@ -141,13 +144,13 @@ export class ListView<
     }
   }
 
-  removeBy(f: (itemView: IV) => boolean) {
+  removeBy(f: (itemView: IV) => boolean): IV | undefined {
     return this.removeByIndex(
       this._itemViews.findIndex((itemView) => f(itemView)),
     );
   }
 
-  removeAllBy(f: (itemView: IV) => boolean) {
+  removeAllBy(f: (itemView: IV) => boolean): IV[] {
     return this.removeAllByItemViews(
       this._itemViews.filter((itemView) => f(itemView)),
     );
