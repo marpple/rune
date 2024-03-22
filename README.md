@@ -1,3 +1,5 @@
+<p><img src="https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png" width="50%"></p>
+
 # Rune - Web API based Front-end SDK
 Rune은 품질 좋은 프론트엔드 앱 개발을 위한 빠르고 견고한 라이브러리이자 최신 웹 기술 기반의 SDK입니다.
 
@@ -60,4 +62,4 @@ class SettingController extends View<Setting[]> {
 }
 ```
 
-<img src="https://s3.marpple.co/files/u_218933/2024/3/original/a3e403fe7005e00e23b99bf3a331c5c252f392401.gif" width="100%">
+<img src="https://raw.githubusercontent.com/marpple/rune/main/docs/img/setting_controller.gif">
