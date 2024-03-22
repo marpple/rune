@@ -1,6 +1,6 @@
 {
   "name": "rune-ts",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Rune Core Library",
   "engines": {
     "node": ">=14.0.0"
@@ -26,7 +26,6 @@
   "license": "Apache-2.0",
   "files": [
     "tsconfig.json",
-    "docs/",
     "dist/",
     "README.md",
     "LICENSE"
