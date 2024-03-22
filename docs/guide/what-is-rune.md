@@ -42,7 +42,7 @@ class SettingController extends View<Setting[]> {
 }
 ```
 
-<img src="https://s3.marpple.co/files/u_218933/2024/3/original/a3e403fe7005e00e23b99bf3a331c5c252f392401.gif" width="100%">
+<img src="/img/setting_controller.gif" width="100%">
 
 
 Rune은 그 자체로는 리액티브 하지 않습니다. 대신 컴포넌트의 조합을 거듭하면서 리액티브 한 특성을 갖게 되며 DOM 조작 코드는 점점 추상화됩니다. 이때 각 컴포넌트는 각자에 맞는 최적화된 렌더링 로직을 갖게 됩니다. 라이브러리 레벨에서의 자동적인 리렌더와 그로 인한 사이드 이펙트가 없기 때문에 유려한 UI 개발에 필요한 복잡성을 제어하기 용이하고 고도화에 유리합니다.

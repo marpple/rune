@@ -7,6 +7,8 @@ export default defineConfig({
   base: '/rune/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    logo: { light: '/img/logo.png', dark: '/img/logo_dark.png', alt: 'rune' },
+    siteTitle: false,
     sidebar: [
       {
         text: 'Introduction',
@@ -40,8 +42,11 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/marpple/rune' }
     ],
+    search: {
+      provider: 'local'
+    },
     footer: {
-      copyright: 'Copyright © 2024 <a href="https://www.marpplecorp.com/" target="_blank">MARPPLE CORP.</a>'
+      copyright: 'Copyright © 2024 <a href="https://www.marpplecorp.com/" target="_blank">Marpple Corporation ↗</a>'
     }
   }
 })
