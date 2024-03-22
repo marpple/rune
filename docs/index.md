@@ -6,6 +6,10 @@ hero:
   name: "Rune"
   text: "Web API based Front-end SDK"
   tagline: 빠르고 견고한 프론트엔드 개발 라이브러리
+  image:
+    light: https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png
+    dark: https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo_dark.png
+    alt: VitePress
   actions:
     - theme: alt
       text: What is Rune?
@@ -17,8 +21,8 @@ hero:
       text: Tutorial
       link: /tutorial/view
     - theme: alt
-      text: View on GitHub
-      link: https://github.com/marpple/rune
+      text: API Reference
+      link: /api/view
 
 features:
   - title: Front-end SDK & Library

@@ -7,6 +7,7 @@ export class ListView<
   IV extends View<T> = View<T>,
 > extends View<T[]> {
   tagName = 'ul';
+  classNameForItemViewsContainer = 'item-views-container';
   ItemView: (new (data: T) => IV) | null = null;
   readonly _itemViews: IV[] = [];
 
@@ -22,8 +23,19 @@ export class ListView<
     throw TypeError("'itemViews' property is readonly.");
   }
 
+  itemViewsContainer() {
+    return (
+      this.element().querySelector(`.${this.classNameForItemViewsContainer}`) ??
+      this.element()
+    );
+  }
+
   override template() {
-    return html`<${this.tagName}>${this.itemViews}</${this.tagName}>`;
+    return html`
+      <${this.tagName} class="${this.classNameForItemViewsContainer}">
+        ${this.itemViews}
+      </${this.tagName}>
+    `;
   }
 
   protected override ready() {
@@ -63,16 +75,16 @@ export class ListView<
   }
 
   add(items: T[], at?: number): this {
-    if (at === undefined) {
+    if (at === undefined || at >= this.length) {
       this.appendAll(items);
-    } else if (at === 0) {
+    } else if (at <= 0) {
       this.prependAll(items);
     } else {
       const itemViews = this.createItemViews(items);
       this.data.splice(at, 0, ...items);
       this._itemViews[at]
         .element()
-        .before(...itemViews.map((view) => view.element()));
+        .before(...itemViews.map((view) => view.render()));
       this._itemViews.splice(at, 0, ...itemViews);
     }
     return this;
@@ -86,7 +98,9 @@ export class ListView<
     const itemViews = this.createItemViews(items);
     this.data[push](...items);
     this._itemViews[push](...itemViews);
-    this.element()[append](...itemViews.map((view) => view.render()));
+    this.itemViewsContainer()[append](
+      ...itemViews.map((view) => view.render()),
+    );
     return this;
   }
 
@@ -141,13 +155,13 @@ export class ListView<
     }
   }
 
-  removeBy(f: (itemView: IV) => boolean) {
+  removeBy(f: (itemView: IV) => boolean): IV | undefined {
     return this.removeByIndex(
       this._itemViews.findIndex((itemView) => f(itemView)),
     );
   }
 
-  removeAllBy(f: (itemView: IV) => boolean) {
+  removeAllBy(f: (itemView: IV) => boolean): IV[] {
     return this.removeAllByItemViews(
       this._itemViews.filter((itemView) => f(itemView)),
     );
@@ -156,7 +170,7 @@ export class ListView<
   reset(): this {
     this.data.length = 0;
     this._itemViews.length = 0;
-    this.element().innerHTML = '';
+    this.itemViewsContainer().innerHTML = '';
     return this;
   }
 

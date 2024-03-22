@@ -3,10 +3,16 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Rune",
-  description: "Hello, Rune!",
+  description: "Web API based Front-end SDK",
   base: '/rune/',
+  head: [
+    ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/favicon.ico' }],
+    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }]
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    logo: { light: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png', dark: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo_dark.png', alt: 'rune' },
+    siteTitle: false,
     sidebar: [
       {
         text: 'Introduction',
@@ -32,6 +38,7 @@ export default defineConfig({
           { text: 'Template', link: '/api/template' },
           { text: 'Event handling', link: '/api/event' },
           { text: 'Enable class', link: '/api/enable' },
+          { text: 'ListView class', link: '/api/list-view' },
           { text: 'DOM Manipulation', link: '/api/$element' },
         ]
       }
@@ -39,8 +46,11 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/marpple/rune' }
     ],
+    search: {
+      provider: 'local'
+    },
     footer: {
-      copyright: 'Copyright © 2024 <a href="https://www.marpplecorp.com/" target="_blank">MARPPLE CORP.</a>'
+      copyright: 'Copyright © 2024 <a href="https://www.marpplecorp.com/" target="_blank">Marpple Corporation ↗</a>'
     }
   }
 })
