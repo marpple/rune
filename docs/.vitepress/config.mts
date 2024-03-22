@@ -32,6 +32,7 @@ export default defineConfig({
           { text: 'Template', link: '/api/template' },
           { text: 'Event handling', link: '/api/event' },
           { text: 'Enable class', link: '/api/enable' },
+          { text: 'ListView class', link: '/api/list-view' },
           { text: 'DOM Manipulation', link: '/api/$element' },
         ]
       }

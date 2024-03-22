@@ -52,7 +52,7 @@ new ProductView({
 
 ## Hydration
 
-클라이언트 측에서는 서버 측에서 HTML을 만들 때 사용한 동일한 데이터를 전달하며 View 객체를 생성한 다음 `hydrateFormSSR` 메서드에 도큐먼트에 생성되어있는 HTMLElement를 전달하면 됩니다. 
+서버 측에서 HTML을 생성할 당시 사용했던 동일한 데이터를 전달하여 View 객체를 생성한 다음 도큐먼트에 생성되어있는 HTMLElement를 `hydrateFormSSR` 메서드에 전달하면 됩니다. 
 
 ```typescript
 // Client Side

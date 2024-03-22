@@ -17,7 +17,10 @@ hero:
       text: Tutorial
       link: /tutorial/view
     - theme: alt
-      text: View on GitHub
+      text: API Reference
+      link: /api/view
+    - theme: alt
+      text: GitHub
       link: https://github.com/marpple/rune
 
 features:
