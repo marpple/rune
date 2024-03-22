@@ -25,6 +25,32 @@ export abstract class Base {
     return this._element;
   }
 
+  isRendered(): boolean {
+    return this._element !== null;
+  }
+
+  chain(f: (this: this, view: this) => void): this {
+    f.call(this, this);
+    return this;
+  }
+
+  async chainAsync(
+    f: (this: this, view: this) => Promise<void>,
+  ): Promise<this> {
+    await f.call(this, this);
+    return this;
+  }
+
+  safely(f: (this: this, view: this) => void): this {
+    return this.isRendered() ? this.chain(f) : this;
+  }
+
+  async safelyAsync(
+    f: (this: this, view: this) => Promise<void>,
+  ): Promise<this> {
+    return this.isRendered() ? this.chainAsync(f) : this;
+  }
+
   protected _getElId() {
     if (this.element().id) {
       return this.element().id;
@@ -161,18 +187,6 @@ export abstract class Base {
 
   dispatchEvent(event: Event): this {
     this.element().dispatchEvent(event);
-    return this;
-  }
-
-  chain(f: (this: this, view: this) => void): this {
-    f.call(this, this);
-    return this;
-  }
-
-  async chainAsync(
-    f: (this: this, view: this) => Promise<void>,
-  ): Promise<this> {
-    await f.call(this, this);
     return this;
   }
 

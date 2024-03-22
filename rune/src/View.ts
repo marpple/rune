@@ -8,10 +8,6 @@ export class View<T extends object> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
   ignoreRefreshOnlySubViewFromParent = false;
 
-  isRendered(): boolean {
-    return this._element !== null;
-  }
-
   render(): HTMLElement {
     return this._render(this.toHtml());
   }
@@ -106,17 +102,19 @@ export class View<T extends object> extends VirtualView<T> {
   }
 
   redraw(): this {
-    return this._makeHtml()
-      ._redrawAttributes()
-      ._setInnerHtmlFromCurrentInnerHtml()
-      .hydrateSubViews();
+    return this._makeHtml().safely(() =>
+      this._redrawAttributes()
+        ._setInnerHtmlFromCurrentInnerHtml()
+        .hydrateSubViews(),
+    );
   }
 
   async redrawAsync(): Promise<this> {
-    return (await this._makeHtmlAsync())
-      ._redrawAttributes()
-      ._setInnerHtmlFromCurrentInnerHtml()
-      .hydrateSubViews();
+    return (await this._makeHtmlAsync()).safely(() =>
+      this._redrawAttributes()
+        ._setInnerHtmlFromCurrentInnerHtml()
+        .hydrateSubViews(),
+    );
   }
 
   private _subViewSelector(subViewName?: string) {

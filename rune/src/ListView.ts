@@ -43,6 +43,9 @@ export class ListView<
   }
 
   override redraw(): this {
+    if (!this.isRendered()) {
+      return this._sync();
+    }
     if (
       this.data.length &&
       this.data.length === this.itemViews.length &&
@@ -82,9 +85,11 @@ export class ListView<
     } else {
       const itemViews = this.createItemViews(items);
       this.data.splice(at, 0, ...items);
-      this._itemViews[at]
-        .element()
-        .before(...itemViews.map((view) => view.render()));
+      if (this.isRendered()) {
+        this._itemViews[at]
+          .element()
+          .before(...itemViews.map((view) => view.render()));
+      }
       this._itemViews.splice(at, 0, ...itemViews);
     }
     return this;
@@ -98,9 +103,11 @@ export class ListView<
     const itemViews = this.createItemViews(items);
     this.data[push](...items);
     this._itemViews[push](...itemViews);
-    this.itemViewsContainer()[append](
-      ...itemViews.map((view) => view.render()),
-    );
+    if (this.isRendered()) {
+      this.itemViewsContainer()[append](
+        ...itemViews.map((view) => view.render()),
+      );
+    }
     return this;
   }
 
@@ -150,7 +157,9 @@ export class ListView<
     if (-1 < idx && idx < this.data.length) {
       this.data.splice(idx, 1);
       const itemView = this._itemViews.splice(idx, 1)[0];
-      itemView.element().remove();
+      if (this.isRendered()) {
+        itemView.element().remove();
+      }
       return itemView;
     }
   }
@@ -170,7 +179,9 @@ export class ListView<
   reset(): this {
     this.data.length = 0;
     this._itemViews.length = 0;
-    this.itemViewsContainer().innerHTML = '';
+    if (this.isRendered()) {
+      this.itemViewsContainer().innerHTML = '';
+    }
     return this;
   }
 
@@ -196,12 +207,14 @@ export class ListView<
       to < this.data.length
     ) {
       const targetIdx = at < to ? to - 1 : to;
-      const targetElement = this._itemViews[to].element();
       const item = this.data.splice(at, 1)[0];
       const itemView = this._itemViews.splice(at, 1)[0];
       this.data.splice(targetIdx, 0, item);
       this._itemViews.splice(targetIdx, 0, itemView);
-      targetElement[at < to ? 'after' : 'before'](itemView.element());
+      if (this.isRendered()) {
+        const targetElement = this._itemViews[to].element();
+        targetElement[at < to ? 'after' : 'before'](itemView.element());
+      }
     }
     return this;
   }
