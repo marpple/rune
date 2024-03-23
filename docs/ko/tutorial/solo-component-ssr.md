@@ -1,8 +1,8 @@
 # Solo Component SSR
 
-## View Capable of Server-Side Rendering Alone
+## View 혼자서도 가능한 서버 사이드 렌더링
 
-Rune's components support server-side rendering on their own without the need for additional technologies, and they work with JavaScript alone. This feature enhances portability, allowing them to be used seamlessly regardless of how server-side rendering is implemented in the project, whether it's through React, Solid, Next.js, Express.js, or any other method.
+Rune의 컴포넌트는 별도의 기술 없이 혼자서도 서버사이드 렌더링을 지원하며 자바스크립트만으로 동작합니다. 이러한 특성은 이식성을 높게 하여 프로젝트에서 React, Solid, Next.js, Express.js 등 어떤 방식으로 서버사이드 렌더링을 구축했는지와 관계없이 함께 바로 사용이 가능합니다.
 
 ```typescript
 interface Product {
@@ -30,7 +30,7 @@ class ProductView extends View<Product> {
 }
 ```
 
-If you have created such components, you can generate HTML strings on the server side as follows.
+위와 같은 컴포넌트를 만든 경우 서버측에서 아래와 같이 실행하여 HTML 문자열을 만들 수 있습니다.
 
 ```typescript
 // Server Side
@@ -52,7 +52,7 @@ new ProductView({
 
 ## Hydration
 
-On the server side, you can create View objects using the same data that was used when generating HTML. Then, you can pass the generated HTMLElement in the document to the `hydrateFromSSR` method.
+서버 측에서 HTML을 생성할 당시 사용했던 동일한 데이터를 전달하여 View 객체를 생성한 다음 도큐먼트에 생성되어있는 HTMLElement를 `hydrateFormSSR` 메서드에 전달하면 됩니다. 
 
 ```typescript
 // Client Side
@@ -65,9 +65,9 @@ new ProductView({
 // click button -> $39
 ```
 
-## Hydration of Nested Components
+## 중첩 컴포넌트의 Hydration
 
-For nested components, you simply need to pass data from the parent component to its children. Below is an example illustrating the addition of a `PhotoView` inside a `ProductView`.
+중첩 컴포넌트 역시 부모 컴포넌트에게 데이터를 전달하면 됩니다. 아례는 `ProductView` 내부에 `PhotoView`를 추가한 사례를 보여줍니다. 
 
 ```typescript
 interface Product {
@@ -133,7 +133,7 @@ new ProductView({
 // click img -> phone-case.png
 ```
 
-## Fast SSR, High Portability
+## 빠른 SSR, 높은 이식성
 
-The process of generating HTML strings by Rune's components relies on JavaScript's Template Literals, making it concise and fast. Moreover, since it communicates only through JavaScript's built-in values, it's highly portable and can be used anywhere JavaScript runs. If a developer needs to write reusable code within a project that requires high-quality functionality, intricate animation handling, utilization of the latest Web API technologies, direct manipulation of the DOM for internal code, development using a component-based approach, and the need for server-side rendering, and if they want to import and use those components within frameworks like React or Solid.js, then Rune components can serve as an excellent alternative.
+Rune의 컴포넌트들이 HTML 문자열을 만드는 과정은 자바스크립트의 Template Literals에 의한 문자열 조합이므로 간결하고 빠릅니다. 또한 자바스크립트의 내장 값으로만 소통하기 때문에 자바스크립트가 동작하는 어디에나 이식 가능합니다. 만일 개발자가 프로젝트 내에서 재사용이 필요한 코드를 작성해야 할 때, 동작의 퀄리티가 높아야하거나 애니메이션을 잘 다뤄야하거나 최신 Web API 기술을 사용해야해서 내부 코드를 DOM으로 직접 조작해야하고, 컴포넌트 방식으로 개발하고 싶고 서버 사이드 렌더링도 필요하다면, 그리고 그 컴포넌트를 React, Solid.js 등의 코드 내부에서 불러와 사용하고 싶다면, Rune 컴포넌트는 좋은 대안이 될 것입니다.
 

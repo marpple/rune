@@ -4,7 +4,7 @@ outline: deep
 
 # View class
 
-View is a class used for creating UI components, providing tools for HTML template generation, HTMLElement creation, and event handling. 
+View는 HTML 템플릿, HTMLElement 생성, 이벤트 핸들링에 필요한 도구를 지원하며 UI 컴포넌트를 만들 때 사용하는 클래스입니다. 
 
 ## Definition
 
@@ -29,7 +29,7 @@ class SwitchView extends View<SwitchData> {
 ## Create
 `new (data: T) => View<T>;`
 
-The data passed as an argument is registered in `this.data`, and it is passed to the `template()` method as `data: T;`.
+인자로 넘긴 `data`는 `this.data`에 등록되며 `this.template(data: T);`과 같이 `template()` 메서드로 전달됩니다.
 
 ```typescript
 new SwitchView({ on: false });
@@ -38,7 +38,7 @@ new SwitchView({ on: false });
 ## template()
 `protected template(): Html;`
 
-Inside the `template` method, HTML templates are created using the `html` function. (See [Template API](/api/template.html) for more details.)
+`template` 메서드안에서는 `html`을 사용하여 HTML 템플릿을 만듭니다. ([템플릿 API 더보기](/ko/api/template.html))
 
 ```typescript
 import { View, html } from 'rune-ts';
@@ -90,7 +90,7 @@ dessertView.toHtml();
 
 `public render(): HTMLElement;`
 
-Internally, the `template` method constructs an HTML string using `this.template(this.data)`, generates an HTMLElement, and then assigns it to `this._element` before returning it. 
+내부에서 `this.template(this.data)`로 HTML문자열을 만들고 HTMLElement를 생성하여 `this._element`에 등록하고 리턴합니다. 
 
 ```typescript
 const element: HTMLElement = dessertView.render();
@@ -101,7 +101,7 @@ const element: HTMLElement = dessertView.render();
 
 `public element(): HTMLElement;`
 
-It returns the generated HTMLElement.
+생성되어있는 HTMLElement를 리턴합니다.
 
 ```typescript
 const element: HTMLElement = dessertView.element();
@@ -112,19 +112,20 @@ const element: HTMLElement = dessertView.element();
 
 `public isRendered(): boolean;`
 
-`isRendered()` checks whether an HTMLElement has been created inside the View. It is useful for distinguishing code that should only run when rendered.
+`isRendered()`는 View 내부에 HTMLElement를 생성한적이 있는지를 체크합니다. 렌더링된 상태에서만 실행하고자 하는 코드를 구분하고자 할 때 유용합니다.
+
 
 ## renderCount
-
 `public renderCount: number;`
 
-It represents the number of times the `template()` function has been executed internally. You can use this property to implement deferred rendering by defining the `template()` function to render only parts of the view.
+내부에서 `template()` 함수를 실행한 수입니다. 이 프로퍼티를 활용하여 부분적으로만 렌더링하도록 `template()` 함수를 정의하는 식으로 지연적인 렌더링을 구현할 수 있습니다. 
+
 
 ## hydrateFromSSR()
 
 `public hydrateFromSSR(element: HTMLElement): this;`
 
-This method allows hydrating the View from an already rendered HTMLElement with the same data. It is useful for client-side hydration after server-side rendering. ([Tutorial - Solo Component SSR](/tutorial/solo-component-ssr.html))
+동일한 데이터로 만들어졌던 HTML로 그려진 HTMLElement와 data를 다시 넘겨주어 hydration을 할 수 있습니다. ([Tutorial - Solo Component SSR](/ko/tutorial/solo-component-ssr.html))
 
 ```typescript
 // Server Side
@@ -144,7 +145,7 @@ new ProductView({
 
 `public redraw(): this;`
 
-The View object redraws itself with its current data state. The default behavior is to update the HTML attributes of the outermost element and update the inner content using `innerHTML`. It's advisable for developers creating each component to optimize the `redraw` function by overriding it as needed.
+View 객체의 현재 data 상태로 자신을 다시 그립니다. 기본 동작은 가장 바깥 엘리먼트의 html attributes를 갱신하고 내부는 `innerHTML`로 변경합니다. 각 컴포넌트를 만드는 개발자가 `redraw` 함수를 최적화하여 오버라이드 해두면 좋습니다.  
 
 ```typescript
 class PhotoView extends View<{ src: string; alt: string }> {
@@ -160,7 +161,7 @@ class PhotoView extends View<{ src: string; alt: string }> {
 }
 ```
 
-The above code can be written more succinctly using Rune's DOM manipulation helper class `$Element`.
+위 코드는 Rune의 DOM 조작 헬퍼 클래스인 `$Element`를 활용하면 보다 간결하게 작성할 수 있습니다.
 
 ```typescript
 override redraw() {
@@ -177,7 +178,7 @@ protected subView<T extends ViewConstructor>(
 ): InstanceType<T> | null;
 ```
 
-In the `template()` method of View, the first-level subViews created are returned, i.e., the first subView that matches the constructor passed as an argument. The second argument, `selector`, is an optional CSS Selector that allows adding conditions for selecting the SubViews.
+View의 `template()` 메서드 안에서 생성된 subView들, 즉 첫 번째 뎁스의 subView들 중에 컨스트럭터가 인자로 전달한 컨스트럭터와 동일한 첫 번째 subView를 리턴합니다. 두 번째 인자인 selector? 는 CSS Selector로, SubView를 조회하는 조건을 추가할 수 있습니다.
 
 ```typescript
 class ProductView extends View<Product> {
@@ -206,7 +207,7 @@ protected subViews<T extends ViewConstructor>(
 ): InstanceType<T>[];
 ```
 
-It returns an array of subViews.
+subViews 배열을 리턴합니다.
 
 ## subViewIn()
 
@@ -217,7 +218,7 @@ protected subViewIn<T extends ViewConstructor>(
 ): InstanceType<T> | null;
 ```
 
-It returns one subView drawn inside the parent element found by the selector.
+selector로 찾아지는 부모 엘리먼트 내부에 그려진 subView를 하나를 리턴합니다.
 
 ## subViewsIn()
 
@@ -228,14 +229,14 @@ protected subViewsIn<T extends ViewConstructor>(
 ): InstanceType<T>[];
 ```
 
-It returns an array of subViews drawn inside the parent element found by the selector.
+selector로 찾아지는 부모 엘리먼트 내부에 그려진 subViews 배열을 리턴합니다.
 
 
 ## redrawOnlySubViews()
 
 `protected redrawOnlySubViews(): this;`
 
-It iterates through the subViews and executes `redraw()` on each one.
+subView를 순회하면서 `redraw()`를 실행합니다.
 
 ## chain()
 
@@ -263,22 +264,21 @@ safely(f: (this: this, view: this) => void): this {
 }
 ```
 
-The implementation of `safely` is as shown above. It is used to chain code that should only execute when the element has been rendered.
+`safely`의 구현은 위와 같습니다. 엘리먼트가 렌더링 된 상태에서만 동작했으면 하는 코드를 체이닝할 때 사용합니다.
 
 
 ## toString()
 
-Returns the class name of the View.
+View의 클래스이름을 리턴합니다.
 
 ```typescript
 new MyView('hi').toString();
 // MyView
 ```
-
 ## onMount()
 
-Executed after the View has been appended to the `document`.
+View가 `document`에 `append` 된 이후에 실행됩니다.
 
 ## Event handling
 
-The View class inherits event handling methods from the Base class. (Refer to [API - Event handling](/api/event.html))
+View class는 Base class로 부터 Event handling 메서드들을 상속 받았습니다. ([API - Event handling 참고](/ko/api/event.html))

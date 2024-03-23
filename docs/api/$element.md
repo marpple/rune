@@ -1,6 +1,6 @@
 # DOM Manipulation
 
-최근 [Web API](https://developer.mozilla.org/ko/docs/Web/API)는 많은 발전을 이루었으며 브라우저들의 표준화로 수많은 최신 기능들을 바로 사용할 수 있게 되었습니다. [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element), [HTMLElement](https://developer.mozilla.org/ko/docs/Web/API/HTMLElement), [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API) 등의 웹 표준 기술들을 사용하면 더 나은 사용자 경험을 제공하는 프론트엔드 앱 개발이 가능합니다. Rune은 개발자가 Web API를 이용할 때 DOM 조작과 코딩 패턴에 있어 약간의 편의성을 더할 라이브러리를 제공합니다.
+Recent advancements in the [Web API](https://developer.mozilla.org/ko/docs/Web/API) have brought about significant progress, allowing developers to leverage numerous modern features directly across standardized browsers. Technologies like [Element](https://developer.mozilla.org/en-US/docs/Web/API/Element), [HTMLElement](https://developer.mozilla.org/ko/docs/Web/API/HTMLElement), [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API), and others enable frontend app development that provides enhanced user experiences. Rune offers a library that adds a level of convenience to DOM manipulation and coding patterns for developers utilizing Web API functionalities.
 
 ## static $()
 
@@ -26,7 +26,7 @@ const divs: $Element[] = $('div');
 
 `static fromHtml(htmlStr: string): $Element;`
 
-HTML 문자열로 HTMLElement를 생성하여 $Element를 리턴합니다.
+Creates an HTMLElement from an HTML string and returns a $Element.
 
 ```typescript
 $.fromHtml('<div class="rune"></div>');
@@ -41,15 +41,15 @@ $.fromHtml('<div class="rune"></div>');
 
 `find(selector: string): $Element | null`
 
-자식 요소를 찾습니다.
+Finds a child element.
 
 ## findAll()
 
 `findAll(selector: string): $Element[]`
 
-자식 요소들을 찾습니다.
+Finds all child elements.
 
-## 확장된 CSS 선택자
+## Extended CSS Selectors
 
 ```html
 <div class="container div1" active="true">
@@ -67,7 +67,7 @@ $.fromHtml('<div class="rune"></div>');
 </div>
 ```
 
-Web API의 기본 `querySelector`나 `querySelectorAll`는 CSS 선택자의 시작으로 `>` 를 사용할 수 없습니다.
+The default Web API's `querySelector` and `querySelectorAll` do not support using `>` at the beginning of a CSS selector.
 
 ```typescript
 try {
@@ -78,21 +78,21 @@ try {
 }
 ```
 
-`find()`나 `findAll()`를 이용하면 `>`를 선택자의 시작으로 사용할 수 있습니다.
+When using `find()` or `findAll()`, you can use `>` at the beginning of the selector:
 
 ```typescript
 $(".container").findAll("> ul li");
 // [li.item1, li.item2, li.item3]
 ```
 
-Web API의 기본 `querySelector`나 `querySelectorAll`는 셀렉터의 시작이 항상 부모도 포함한다는 점을 유의해야합니다.
+The default behavior of `querySelector` and `querySelectorAll` in the Web API is to include the parent element when the selector starts with `>`. It's important to note this behavior:
 
 ```typescript
 document.querySelector(".container").querySelectorAll("[active=true] > ul li");
 // [li.item1, li.item2, li.item3, li.item4, li.item5]
 ```
 
-`find()`나 `findAll()`에서는 `&`를 사용하여 부모 `element`에 대한 부모를 포함하여 추가 조건을 붙일 것인지를 명시적으로 구분할 수 있습니다. `&`가 없다면 항상 자식요소부터 찾게 됩니다.
+In `find()` or `findAll()`, you can use `&` to explicitly indicate whether to include the parent element in additional conditions. If `&` is absent, it always starts searching from the child elements:
 
 ```typescript
 $(".container").findAll('&[active="true"] li');
@@ -105,228 +105,229 @@ $(".container").findAll('&[active="false"] li');
 // []
 ```
 
-## closest() 
+The usage of `find()` and `findAll()` allows for a more flexible and explicit way to search for elements based on the parent-child relationship and additional conditions.
+
+## closest()
 
 `closest(selector: string): $Element | null;`
 
-자신을 포함하여 셀렉터와 매칭되는 부모 엘리먼트를 찾습니다.
-
+Finds the closest ancestor element that matches the selector, including itself.
 
 ## children()
 
 `children(): $Element[];`
 
-모든 자식 요소를 가져옵니다.
+Gets all the child elements.
 
 ## prev()
 
 `prev(selector: string): $Element;`
 
-Web API의 `prevElementSibling`을 하면서 selector와 매칭되는 첫 번째 요소를 가져옵니다.
+Finds the previous sibling element that matches the selector using the Web API's `prevElementSibling`.
 
 ## next()
 
 `next(selector: string): $Element;`
 
-Web API의 `nextElementSibling`을 하면서 selector와 매칭되는 첫 번째 요소를 가져옵니다.
+Finds the next sibling element that matches the selector using the Web API's `nextElementSibling`.
 
 ## prevAll()
 
 `prevAll(selector: string): $Element[];`
 
-Web API의 `prevElementSibling`을 하면서 selector와 매칭되는 모든 요소를 가져옵니다.
+Gets all the previous sibling elements that match the selector using the Web API's `prevElementSibling`.
 
 ## nextAll()
 
 `nextAll(selector: string): $Element[];`
 
-Web API의 `nextElementSibling`을 하면서 selector와 매칭되는 모든 요소를 가져옵니다.
+Gets all the next sibling elements that match the selector using the Web API's `nextElementSibling`.
 
 ## siblings()
 
 `siblings(selector: string): $Element[];`
 
-자신을 제외한 자신과 동일한 레벨의 엘리먼트들 selector와 매칭되는 모든 요소를 가져옵니다.
+Gets all the sibling elements on the same level that match the selector, excluding itself.
 
 ## parentNode()
 
 `parentNode(): $Element | null;`
 
-`parentNode`를 가져옵니다.
+Gets the parent node.
 
 ## is()
 
 `is(selector: string): boolean;`
 
-[Element: matches() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches)와 같습니다.
+Similar to the [Element: matches() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches).
 
 ## matches()
 
 `matches(selector: string): boolean;`
 
-[Element: matches() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches)와 같습니다.
+Similar to the [Element: matches() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/matches).
 
 ## contains()
 
 `contains(child: $Element | HTMLElement): boolean;`
 
-[Node: contains()](https://developer.mozilla.org/en-US/docs/Web/API/Node/contains)와 같습니다.
+Similar to the [Node: contains()](https://developer.mozilla.org/en-US/docs/Web/API/Node/contains) method.
 
 ## getValue()
 
 `getValue(): string;`
 
-`element.value`를 가져옵니다. 
+Gets the value of the element.
 
 ## setValue()
 
 `setValue(value: string): this;`
 
-`element.value`를 변경합니다.
+Sets the value of the element.
 
 ## floatValue()
 
 `floatValue(): number;`
 
-`parseFloat(this.getValue())` 입니다. `<input type="number" />`에 사용하면 편리합니다. 
+Parses the value as a floating-point number using `parseFloat(this.getValue())`. Convenient for `<input type="number" />` elements.
 
 ## getAttribute()
 
 `getAttribute(name: string): string | null;`
 
-[Element: getAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute)와 같습니다.
+Similar to the [Element: getAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute).
 
 ## getAttributes()
 
 `getAttributes(names: string[]): Record<string, string | null>;`
 
-attributes들을 가져오면서 key를 CamelCase로 변경합니다.
+Gets the attributes while converting their keys to CamelCase.
 
 ## setAttribute()
 
 `setAttribute(name: string, value: any): this;`
 
-[Element: setAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute)와 같습니다.
+Similar to the [Element: setAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/setAttribute).
 
 ## setAttributes()
 
 `setAttributes(attributes: Record<string, any>): this;`
 
-attributes들을 변경합니다.
+Sets multiple attributes of the element.
+
+## setAttributes()
+
+`setAttributes(attributes: Record<string, any>): this;`
+
+Modifies the attributes of the element.
 
 ## removeAttribute()
 
 `removeAttribute(name: string): this;`
 
-[Element: removeAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute)와 같습니다.
-
+Similar to the [Element: removeAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute).
 
 ## getInnerHtml()
 
 `getInnerHtml(): string;`
 
-[Element: innerHTML property](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)와 같습니다.
+Similar to the [Element: innerHTML property](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML).
 
 ## setInnerHtml()
 
 `setInnerHtml(html: string): this;`
 
-[Element: innerHTML property](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML)와 같습니다.
+Similar to the [Element: innerHTML property](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML).
 
 ## getTextContent()
 
 `getTextContent(): string | null;`
 
-[Node: textContent property](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)와 같습니다.
+Similar to the [Node: textContent property](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent).
 
 ## setTextContent()
 
-`setTextContent(html: string): this;`
+`setTextContent(text: string): this;`
 
-[Node: textContent property](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent)와 같습니다.
+Similar to the [Node: textContent property](https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent).
 
 ## addClass()
 
 `addClass(...classNames: string[]): this;`
 
-[Element: classList property](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)와 같습니다.
-
+Similar to the [Element: classList property](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList).
 
 ## removeClass()
 
 `removeClass(...classNames: string[]): this;`
 
-[Element: classList property](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)와 같습니다.
+Similar to the [Element: classList property](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList).
 
 ## hasClass()
 
 `hasClass(className: string): boolean;`
 
-[DOMTokenList: contains() method](https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/contains)와 같습니다.
+Similar to the [DOMTokenList: contains() method](https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList/contains).
 
 ## getComputedStyle()
 
 `getComputedStyle(property: keyof CSSStyleDeclaration): string;`
 
-`element.ownerDocument.defaultView?.getComputedStyle`를 쉽게 가져옵니다.
+Conveniently retrieves the computed style using `element.ownerDocument.defaultView?.getComputedStyle`.
 
 ## getComputedStyles()
 
 `getComputedStyles(properties: (keyof CSSStyleDeclaration)[]): Record<string, string>;`
 
-`getComputedStyle`들을 가져옵니다.
+Retrieves computed styles for multiple properties.
 
 ## offsetFromBody()
 
 `offsetFromBody(): { top: number; left: number };`
 
-document 시작으로부터 좌표를 구합니다. 
-
-```javascript
-offsetFromBody() {
-  const rect = this._element.getBoundingClientRect();
-  return {
-    top: rect.top + window.scrollY,
-    left: rect.left + window.scrollX,
-  };
-}
-```
+Calculates the coordinates relative to the document origin.
 
 ## append()
 
 `append(child: $Element | HTMLElement): this;`
 
-[Element: append() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/append)와 같습니다.
+Similar to the [Element: append() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/append).
 
 ## appendTo()
 
-`append(...children: ($Element | HTMLElement)[]): this;`
+`appendTo(parent: $Element | HTMLElement): this;`
+
+Appends the element to the specified parent.
 
 ## prepend()
 
-`prepend(...children: ($Element | HTMLElement)[]): this`
+`prepend(...children: ($Element | HTMLElement)[]): this;`
 
-[Element: prepend() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/prepend)와 같습니다.
+Similar to the [Element: prepend() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/prepend).
 
 ## prependTo()
 
 `prependTo(parent: $Element | HTMLElement): this;`
 
+Prepends the element to the specified parent.
+
 ## after()
 
-`after(...children: ($Element | HTMLElement)[]): this`
+`after(...children: ($Element | HTMLElement)[]): this;`
 
-[Element: after() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/after)와 같습니다.
+Similar to the [Element: after() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/after).
 
 ## before()
 
-`before(...children: ($Element | HTMLElement)[]): this`
+`before(...children: ($Element | HTMLElement)[]): this;`
 
-[Element: before() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/before)와 같습니다.
+Similar to the [Element: before() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/before).
 
 ## remove()
 
 `remove(): this;`
+
+Removes the element from its parent.
 
 ## delegate()
 
@@ -347,7 +348,7 @@ delegate<T extends Event>(
 
 `chain(f: (element: HTMLElement) => HTMLElement | void): $Element;`
 
-`chain`을 이용하여 확장할 수 있습니다.
+Extends the element using the `chain` method.
 
 ```typescript
 $('#body')

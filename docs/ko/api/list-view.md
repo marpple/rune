@@ -4,7 +4,7 @@ outline: deep
 
 # ListView class
 
-This is the basic view class for handling array data. Since it inherits from the View class, all functionalities of the View class can be utilized as well.
+Array 데이터를 다루는 기본 뷰 클래스입니다. View class를 상속 받았기 때문에 View의 기능도 그대로 모두 사용할 수 있습니다.
 
 ```typescript
 export class ListView<
@@ -36,7 +36,7 @@ class DessertListView extends ListView<Dessert, DessertView> {
 }
 ```
 
-Define the ItemView class to be used inside ListView and pass the type of data used by ItemView as a type argument to the ListView class, like `ListView<Dessert, DessertView>`.
+ListView 안에서 사용할 ItemView 클래스를 정의하고 ItemView에서 사용하는 데이터의 타입을 `ListView<Dessert, DessertView>`와 같이 ListView 클래스의 타입 인자로 전달하면 됩니다.
 
 ## Create
 `new (data: T) => ListView<T, IV>;`
@@ -108,7 +108,7 @@ dessertListView.length === dessertListView.itemViews.length;
 
 `add(items: T[], at?: number): this;`
 
-Adds the passed data to `this.data` and creates ItemViews accordingly, reflecting them in the screen and `itemViews`.
+전달 받은 데이터를 `this.data`에 추가하고 `ItemView`를 생성하여 화면과 `itemViews`에 반영합니다.
 
 ```typescript
 dessertListView.add([
@@ -126,89 +126,100 @@ dessertListView.add([
 </ol>
 ```
 
-The optional parameter `at` can be used to add items at a specific position.
+추가 옵션인 `at`을 이용하면 원하는 위치에 추가할 수 있습니다.
 
 ## append()
 
 `append(item: T): this;`
 
-Adds the passed data to `this.data` and creates ItemViews accordingly, reflecting them in the screen and `itemViews`.
+전달 받은 데이터를 `this.data`에 추가하고 `ItemView`를 생성하여 화면과 `itemViews`에 반영합니다.
 
 ## appendAll()
 
 `appendAll(items: T[]): this;`
 
-Adds the passed data to `this.data` and creates ItemViews accordingly, reflecting them in the screen and `itemViews`.
+전달 받은 데이터를 `this.data`에 추가하고 `ItemView`를 생성하여 화면과 `itemViews`에 반영합니다.
+
 
 ## prepend()
 
 `prepend(item: T): this;`
 
-Adds the passed data to `this.data` and creates ItemViews accordingly, reflecting them in the screen and `itemViews`.
+전달 받은 데이터를 `this.data`에 추가하고 `ItemView`를 생성하여 화면과 `itemViews`에 반영합니다.
+
 
 ## prependAll()
 
 `prependAll(items: T[]): this;`
 
-Adds the passed data to `this.data` and creates ItemViews accordingly, reflecting them in the screen and `itemViews`.
+전달 받은 데이터를 `this.data`에 추가하고 `ItemView`를 생성하여 화면과 `itemViews`에 반영합니다.
+
 
 ## remove()
 
 `remove(item: T): IV | undefined;`
 
-Removes the item with the same reference as `item` from `this.data`, `itemViews`, and the screen, and returns the removed ItemView object if successful.
+레퍼런스가 동일한 `item` 을 받아 `this.data`에서 `item`을 삭제하고 `itemViews`와 화면에서 `ItemView` 객체를 삭제하고 삭제를 성공하면 삭제된 `ItemView` 객체를 리턴합니다. 
+
 
 ## removeAll()
 
 `removeAll(items: T[]): IV[];`
 
-Similar to `remove()`, removes all items passed in the array.
+`remove()`와 동일하게 동작하며 배열을 받아 모두 삭제합니다.
+
 
 ## removeByItemView()
 
 `removeByItemView(itemView: IV): IV | undefined;`
 
-Similar to `remove()`, removes the item with the same reference as `itemView`.
+`remove()`와 동일하게 동작하며 `itemView`와 레퍼런스가 동일한 값을 삭제합니다.
+
 
 ## removeAllByItemViews()
 
 `removeAllByItemViews(itemViews: IV[]): IV[];`
 
-Similar to `removeAll()`, removes all items whose references are passed in the array.
+`removeByItemView()`와 동일하게 동작하며 배열을 받아 모두 삭제합니다.
+
 
 ## removeByIndex()
 
 `removeByIndex(idx: number): IV | undefined;`
 
-Similar to `remove()`, removes the item at the specified index `idx`.
+`remove()`와 동일하게 동작하며 `idx` 값으로 삭제합니다.
+
 
 ## removeBy()
 
 `removeBy(f: (itemView: IV) => boolean): IV | undefined;`
 
-Iterates over ItemViews and removes the first ItemView object for which the function `f` returns true.
+`itemView`를 순회하면서 `f` 함수에게 전달하여 참이 조건이 되는 첫 번째 `ItemView` 객체를 삭제합니다.
+
 
 ## removeAllBy()
 
 `removeAllBy(f: (itemView: IV) => boolean): IV[];`
 
-Similar to `removeBy()`, removes all ItemView objects for which the function `f` returns true.
+`removeBy()`와 동일하게 동작하며 참이 되는 모든 `ItemView` 객체들을 삭제합니다.
+
+
 
 ## reset()
 
 `reset(): this;`
 
-Removes all items.
+모두 삭제합니다.
+
 
 ## set()
 
 `set(items: T[]): this;`
 
-Removes all items and refreshes the screen with the new items passed.
+모두 삭제하고 새로 받은 `items`로 `this.data`와 화면을 갱신합니다.
 
 ## move()
 
 `move(at: number, to: number): this;`
 
-Moves the item with index `at` to the position `to`.
-
+`at`이 인덱스였던 `itemView`와 데이터의 위치를 `to`로 이동합니다.

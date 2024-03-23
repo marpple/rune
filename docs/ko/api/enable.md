@@ -1,6 +1,6 @@
 # Enable class
 
-Rune provides the Enable pattern, which allows multiple functionalities to be added to a single View. Enabling allows for modularizing behavior or features and is a concept and class that facilitates extending Views. Think of Enable as similar to a View without a template, making it easy to understand, and it demonstrates a pattern of extending functionality by taking a View.
+Rune은 하나의 `View`에 여러개의 기능을 부여하는 Enable 패턴을 제공합니다. `Enable`을 이용하면 동작이나 기능을 모듈화하고 `View`를 확장하기 용이한 개념이자 클래스입니다. `Enable`은 템플릿이 없는 `View`와 같다고 생각하면 쉬우며 `View`를 받아 기능을 확장하는 패턴을 보여줍니다.
 
 ## Definition
 
@@ -52,25 +52,25 @@ class CheckableColorView extends View<Color> {
 
 `element(): HTMLElement;`
 
-Returns the HTMLElement associated with the `view` received as an argument during creation.
+생성시 인자로 받은 `view`의 `view.element()` 입니다.
 
 ## view
 
 `public view: ExtendExtraInterface<View<T>, E>;`
 
-The `view` received as an argument during creation.
+생성시 인자로 받은 `view`입니다.
 
 ## data
 
 `public data: T;`
 
-The `view.data` associated with the `view` received as an argument during creation.
+생성시 인자로 받은 `view`의 `view.data`입니다.
 
 ## onMount()
 
-When `enable.init()` is called, `onMount()` is executed when the `element` of the `view` passed as an argument during creation is appended to the `document`. If the element is already appended, `onMount()` is executed immediately upon calling `init()`.
+`enable.init()`을 실행하면 `enable`을 생성시 인자로 받았던 `view`의 `element`가 `document`에 `append` 되었을 때 `onMount()`가 실행됩니다. 이미 `append` 되어있던 상태라면 `init()` 실행시 바로 `onMount()`가 실행됩니다.
 
 ## Event handling
 
-Enable class inherits Event handling methods from the Base class, just like the View class. (Refer to [API - Event handling](/api/event.html))
+Enable class도 View class 처럼 Base class로부터 Event handling 메서드들을 상속 받았습니다. ([API - Event handling 참고](/ko/api/event.html))
 

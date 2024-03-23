@@ -1,8 +1,8 @@
-# Event handling
+# Event 다루기
 
-## Event Registration
+## 이벤트 등록
 
-`onMount()` is executed immediately after rendering within `document.body`, making it an appropriate time to register events. `this.element()` returns the `HTMLElement` associated with the `View`, enabling event registration using Web API's `addEventListener()`.
+`onMount()`는 `document.body` 내에 렌더링된 직후 실행되며 이벤트를 등록하기 적합한 시점입니다. `this.element()`는 `View`와 매핑된 `HTMLElement`를 리턴하며 Web API의 `addEventListener()`를 이용하여 이벤트를 등록할 수 있습니다.
 
 ```typescript
 
@@ -26,7 +26,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-The above code is not bad, but if there are many instances of `ColorCheckboxView`, there will also be a lot of registered event listeners. To prevent this, the `View` provides an extended method for `addEventListener`.
+위 코드는 나쁘지 않지만 `ColorCheckboxView`가 매우 많아질 경우 등록된 이벤트 리스너도 함께 많아지게 됩니다. 이를 방지하기 위해 `View`는 `addEventListener`를 확장한 메서드를 제공합니다.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -43,11 +43,11 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-`view.addEventListener()` registers the provided function and binds `view` to `this` when the event is triggered. In the above code, `ColorCheckboxView.prototype._toggle` is a single function, so it remains efficient even when multiple `ColorCheckboxView` instances are created. Alternatively, you can pass the method name like `'_toggle'`.
+`view.addEventListener()`는 받은 함수를 등록해두었다가 이벤트가 실행되었을 때 `this`에 `view`를 바인딩하여 실행합니다. 위 코드에서 `ColorCheckboxView.prototype._toggle`은 하나의 함수이기 때문에 여러개의 ColorCheckboxView가 만들어지더라도 효율적입니다. 혹은 `'_toggle'`과 같이 메서드명을 전달해도 됩니다.
 
-## Event Registration Decorator
+## 이벤트 등록 데코레이터
 
-Using the `@on` decorator allows for a more concise code. `@on('click')` replaces the code written within `onMount`.
+`@on` 데코레이터를 사용하면 보다 간결하게 코드를 작성할 수 있습니다. `@on('click')`은 `onMount` 내 작성했던 코드를 대체합니다.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -59,7 +59,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-## Custom Event Dispatch
+## 커스텀 이벤트 디스패치
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -75,9 +75,9 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-## Event Delegate
+## 이벤트 델리게이트
 
-As shown above, you can trigger events using `dispatchEvent()`. `checkbox:` is a kind of convention to avoid duplication and doesn't have any functionality. Additionally, you can listen to events using the instance method `delegate()` of the `View` as follows.
+위와 같이`dispatchEvent()`를 사용하여 이벤트를 발생시킬 수 있습니다. `checkbox:`는 중복을 피하기위한 일종의 컨벤션이며 기능은 없습니다. 또한 아래처럼 `View`의 인스턴스 메서드 `delegate()`를 통해 이벤트를 들을 수 있습니다.
 
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {
@@ -98,7 +98,7 @@ export class ColorCheckboxListView extends View<Color[]> {
 }
 ```
 
-When passing only one argument to the `@on` decorator, it utilizes `addEventListener`, and when passing a CSS selector as the second argument to `@on`, it utilizes `delegate`. You can also write `delegate` as a decorator for convenience.
+`@on` 데코레이터에 인자를 하나만 전달하면 `addEventListener`를 사용하고, `@on`에 두 번째 인자로 CSS 셀렉터를 함께 전달하면 `delegate`를 사용합니다. `delegate`도 데코레이터로 아래처럼 간결하게 작성할 수 있습니다.
 
 ```typescript
 class MyView extends View<{ val: number }> {
@@ -119,7 +119,7 @@ class MyView extends View<{ val: number }> {
 }
 ```
 
-## ColorCheckBoxListView
+## ColorCheckBoxListView 마무리
 
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {

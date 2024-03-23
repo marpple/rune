@@ -4,7 +4,7 @@ outline: deep
 
 # Event handling
 
-The View class and the Enable class inherit event handling methods implemented in the Base class.
+View class, Enable class는 Base class에 구현된 Event handling 관련 메서드들을 상속 받았습니다.
 
 ## addEventListener()
 
@@ -31,7 +31,7 @@ addEventListener<T extends Event>(
 ): this;
 ```
 
-The View class and the Enable class provide extended methods for `addEventListener`. When you use `view.addEventListener()`, the provided function is registered and executed with `this` bound to the `view` when the event occurs. All other behaviors are consistent with the Web API's `addEventListener`. ([Tutorial - Handling Events](/tutorial/event.html))
+View class와 Enable class는 `addEventListener`를 확장한 메서드를 제공합니다. `view.addEventListener()`는 받은 함수를 등록해두었다가 이벤트가 실행되었을 때 `this`에 `view`를 바인딩하여 실행합니다. 그 외 모든 동작은 Web API의 `addEventListener`와 동일합니다. ([Tutorial - Event 다루기](/ko/tutorial/event.html))
 
 ## removeEventListener() 
 
@@ -82,11 +82,11 @@ delegate<T extends Event>(
 ): this;
 ```
 
-([Tutorial - Event Delegate](/tutorial/event.html#event-delegate))
+([Tutorial - 이벤트 델리게이트](/ko/tutorial/event.html#이벤트-델리게이트))
 
 ## @on decorator
 
-Using the `@on` decorator allows for more concise code writing.
+`@on` 데코레이터를 사용하면 보다 간결하게 코드를 작성할 수 있습니다. 
 
 ```typescript
 export class CheckboxView extends View<{ checked: boolean }> {
@@ -109,7 +109,7 @@ export class CheckboxView extends View<{ checked: boolean }> {
 }
 ```
 
-When passing only one argument to the `@on` decorator, it utilizes `addEventListener`, while passing a second argument, a CSS selector, to `@on` indicates the use of `delegate`. 
+`@on` 데코레이터에 인자를 하나만 전달하면 `addEventListener`를 사용하고, `@on`에 두 번째 인자로 CSS 셀렉터를 함께 전달하면 `delegate`를 사용합니다. 
 
 ```typescript
 class MyView extends View<object> {

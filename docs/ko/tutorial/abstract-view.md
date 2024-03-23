@@ -1,10 +1,10 @@
-# Abstracting View
+# View 추상화
 
-## Separating Check Functionality
+## 체크하는 기능을 분리하기
 
-The `ColorCheckboxListView` and `ColorCheckboxView` above have a property indicating whether they can be checked. By preparing a `View` abstracting the check functionality, you can more easily create more views with check functionality.
+위의 `ColorCheckboxListView`와 `ColorCheckboxView`는 체크할 수 있다는 속성을 가지고 있습니다. 체크 기능을 추상화한 `View`를 준비하면 체크 기능이 적용된 더 많은 `View`를 보다 쉽게 만들 수 있습니다.
 
-First, let's review the code for `ColorView`, `ColorCheckboxListView`, and `ColorCheckboxView`:
+먼저 `ColorView`, `ColorCheckboxListView`, `ColorCheckboxView`의 코드를 다시보면 아래와 같습니다.
 
 ```typescript
 export type Color = {
@@ -65,9 +65,9 @@ export class ColorCheckboxListView extends View<Color[]> {
 
 ```
 
-## Abstracted Classes and Generics
+## 추상화된 클래스와 제네릭
 
-`ColorCheckboxListView` and `ColorCheckboxView` can be abstracted using the following approach. Compare it with the previous code to see what has changed:
+`ColorCheckboxListView`, `ColorCheckboxView`를 아래와 같은 방법으로 추상화할 수 있습니다. 이전 코드와 비교하여 변한 부분을 확인해보세요.
 
 ```typescript
 export type CheckboxData = {
@@ -131,11 +131,13 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
 }
 ```
 
-Generics were used to allow type inference for the `data` in code extending `CheckboxListView` and `CheckboxView`. `CheckboxView<T extends CheckboxData>` constrains the type of `data` for new `View` extending `CheckboxView`. Additionally, properties like `tagName`, `SubView`, and `CheckboxView` were added for extension purposes.
+제네릭을 활용하여 `CheckboxListView`, `CheckboxView`를 확장할 코드들에서 `data`의
+타입을 추론할 수 있도록 하였습니다. `CheckboxView<T extends CheckboxData>`는 `CheckboxView`을 확장할 새로운 `View`의 `data`의 타입을 제약합니다. 또한 `tagName`, `SubView`, `CheckboxView` 등을 확장할 수 있도록 프로퍼티를 추가했습니다.
 
-## Extending through Inheritance
 
-By inheriting `CheckboxView` and `CheckboxListView`, `ColorCheckboxListView` and `ColorCheckboxView` can be reimplemented as follows:
+## 상속으로 확장하기
+
+`CheckboxView`와 `CheckboxListView`를 상속하여 `ColorCheckboxListView`, `ColorCheckboxView`를 다시 구현하면 아래와 같습니다.
 
 ```typescript
 export class ColorCheckboxView extends CheckboxView<Color> {
@@ -147,7 +149,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-They can be used in the same way:
+동일하게 사용할 수 있습니다.
 
 ```typescript
 const colorCheckboxListView = new ColorCheckboxListView([
@@ -165,9 +167,9 @@ colorCheckboxListView.addEventListener('checkboxlist:change', function () {
 });
 ```
 
-## Utilizing First-class Objects
+## 1급 객체 활용
 
-Let's include `ColorView` in the code:
+`ColorView`를 포함하여 코드를 다시 보겠습니다.
 
 ```typescript
 export type Color = {
@@ -192,7 +194,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-If you don't use `ColorCheckboxView`, you can write the code like this:
+만일 `ColorCheckboxView`를 사용하지 않는다면 아래와 같이 코드를 작성할 수 있습니다.
 
 ```typescript
 export class ColorView extends View<Color> {
@@ -210,7 +212,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-Similarly, if you don't use `ColorView`, you can implement it like this:
+마찬가지로 `ColorView`도 사용하지 않는다면 아래와 같이 구현할 수 있습니다.
 
 ```typescript
 export class ColorCheckboxListView extends CheckboxListView<Color> {
@@ -226,9 +228,9 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-## Abstracting with Templates
+## template으로 쉽게 추상화하기
 
-The approach used to implement `CheckboxView` requires careful type definitions, making abstraction somewhat challenging. By leveraging Rune's template functions, you can abstract more easily as shown below.
+위에서 `CheckboxView`를 구현한 방식은 타입 정의를 잘해주어야하기 때문에 추상화가 약간 어렵습니다. Rune의 템플릿 함수를 활용하면 아래처럼 좀 더 쉽게 추상화할 수 있습니다.
 
 ```typescript
 export class CheckboxView<T extends CheckboxData> extends View<T> {

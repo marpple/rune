@@ -1,8 +1,8 @@
-# Creating a View
+# View 만들기
 
-## Creating a simple component
+## 간단하게 컴포넌트 만들기
 
-In Rune, components are created by inheriting from the `View` class.
+Rune에서는 `View` 클래스를 상속하여 컴포넌트를 만듭니다.
 
 ```typescript
 import { View, html } from 'rune-ts';
@@ -23,15 +23,15 @@ const colorView = new ColorView({ code: 'red' });
 colorView.toHtml();
 ```
 
-`colorView.toHtml()` returns an HTML string.
+`colorView.toHtml()`은 HTML 문자열을 리턴합니다.
 
 ```html
 <div class="ColorView" style="background-color: red"></div>
 ```
 
-## Data Modification
+## 데이터 변경하기
 
-After modifying the data in `colorView`, you can obtain the HTML string again.
+colorView의 데이터를 변경한 후 다시 HTML 문자열을 얻을 수 있습니다.
 
 ```typescript
 colorView.data.code = 'blue';
@@ -42,7 +42,7 @@ colorView.toHtml();
 <div class="ColorView" style="background-color: blue"></div>
 ```
 
-The same code can be expressed using method chaining.
+같은 코드를 메서드 체이닝으로 표현할 수 있습니다.
 
 ```typescript
 colorView
@@ -50,9 +50,9 @@ colorView
   .toHtml();
 ```
 
-## Creating an HTMLElement
+## HTMLElement 생성하기
 
-Executing `colorView.render();` generates an HTMLElement and returns it. It's recommended to use the `render` method only on the browser side.
+`colorView.render();` 를 실행하면 HTMLElement 생성하여 리턴합니다. `render` 메서드는 브라우저단에서만 사용하는 것을 권장합니다.
 
 ```typescript
 document.body.appendChild(
@@ -69,9 +69,9 @@ document.body.appendChild(
 </html>
 ```
 
-## Creating Nested Components
+## 중첩 컴포넌트 만들기
 
-You can implement nested components using template literals.
+템플릿 리터럴을 이용하여 중첩 컴포넌트를 구현할 수 있습니다.
 
 ```typescript
 export type Color = {
@@ -99,8 +99,7 @@ new ColorCheckboxView(
   <div class="ColorView" style="background-color: green"></div>
 </li>
 ```
-
-You can create a `ColorCheckboxView` that contains `ColorView` like this. Below is an example of creating a `ColorCheckboxListView` that contains multiple `ColorCheckboxView` by passing an array.
+이와 같이 `ColorView`를 가지는 `ColorCheckboxView`를 만들 수 있습니다. 아래는 배열을 전달하여 여러개의 `ColorCheckboxView`를 가지는 `ColorCheckboxListView`를 만드는 예시입니다.
 
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {
