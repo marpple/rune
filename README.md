@@ -1,13 +1,13 @@
-<p><img src="https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png" width="50%"></p>
+<p><img src="https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png" width="50%" alt="rune"></p>
 
 # Rune - Web API based Front-end SDK
-Rune은 품질 좋은 프론트엔드 앱 개발을 위한 빠르고 견고한 라이브러리이자 최신 웹 기술 기반의 SDK입니다.
+Rune is a fast and robust library for building high-quality frontend applications, serving as a modern web technology-based SDK.
 
 - Type-safe Generic Views & Enable
-- 단일 컴포넌트 Server Side Rendering
-- 유려하게 동작하는 UI 컴포넌트 개발 키트
-- 높은 이식성, 고성능
-- 객체지향 프로그래밍 기반 아키텍쳐 제공
+- Single-component Server-Side Rendering
+- Sleek UI component development kit
+- High portability and performance
+- Object-oriented programming-based architecture
 
 # Getting Started
 ```shell
@@ -62,4 +62,4 @@ class SettingController extends View<Setting[]> {
 }
 ```
 
-<img src="https://raw.githubusercontent.com/marpple/rune/main/docs/img/setting_controller.gif">
+<img src="https://raw.githubusercontent.com/marpple/rune/main/docs/img/setting_controller.gif" alt="setting_controller">
