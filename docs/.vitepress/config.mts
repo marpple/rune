@@ -3,6 +3,13 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/rune/',
+  description: "Web API based Front-end SDK",
+  title: "Rune",
+  lang: 'en-US',
+  head: [
+    ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/favicon.ico' }],
+    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }]
+  ],
   locales: {
     root: {
       label: 'English',
