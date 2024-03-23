@@ -8,7 +8,8 @@ export default defineConfig({
   lang: 'en-US',
   head: [
     ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/favicon.ico' }],
-    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }]
+    ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }],
+    ['meta', { property: 'og:description', content: 'Web API based Front-end SDK' }]
   ],
   locales: {
     root: {
@@ -18,7 +19,8 @@ export default defineConfig({
       lang: 'en-US',
       head: [
         ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/favicon.ico' }],
-        ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }]
+        ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }],
+        ['meta', { property: 'og:description', content: 'Web API based Front-end SDK' }]
       ],
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
@@ -76,7 +78,8 @@ export default defineConfig({
       lang: 'ko-KR',
       head: [
         ['link', { rel: 'icon', href: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/favicon.ico' }],
-        ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }]
+        ['meta', { property: 'og:image', content: 'https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png' }],
+        ['meta', { property: 'og:description', content: 'Web API based Front-end SDK' }]
       ],
       themeConfig: {
         // https://vitepress.dev/reference/default-theme-config
