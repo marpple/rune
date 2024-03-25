@@ -18,7 +18,7 @@ export class EventHelper {
       return boundListener;
     } else {
       const boundListener = function (this: any, e: any) {
-        const _instance = rune.get(this, instance.constructor);
+        const _instance = rune.getUnknownView(this)!;
         fn.call(_instance, e, _instance);
       };
       this._listenerMap.set(fn, boundListener);
