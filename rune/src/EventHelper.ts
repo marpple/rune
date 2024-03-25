@@ -100,15 +100,8 @@ export class EventHelper {
     return this;
   }
 
-  decoratedListenerMap = new Map<
-    any,
-    ((instance: any, element: any) => void)[]
-  >();
-
   addDecoratedListeners(instance: any, element: any): this {
-    this.decoratedListenerMap
-      .get(Object.getPrototypeOf(instance))
-      ?.forEach((f) => f(instance, element));
+    instance._decoratedListeners?.forEach((f) => f(instance, element));
     return this;
   }
 
@@ -118,13 +111,8 @@ export class EventHelper {
     listener: any,
     selector?: string | ((runeInstance: any) => string),
   ) {
-    const decoratedListeners =
-      this.decoratedListenerMap.get(instancePrototype) ??
-      this.decoratedListenerMap
-        .set(instancePrototype, [])
-        .get(instancePrototype)!;
-
-    decoratedListeners.push(
+    instancePrototype._decoratedListeners = [
+      ...(instancePrototype._decoratedListeners ?? []),
       selector === undefined
         ? (instance: any, element: any) =>
             eventHelper.addEventListener(instance, element, eventType, listener)
@@ -136,7 +124,7 @@ export class EventHelper {
               typeof selector === 'string' ? selector : instance,
               listener,
             ),
-    );
+    ];
   }
 }
 
