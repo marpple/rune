@@ -16,10 +16,10 @@ export class ColorCheckboxView extends View<Color> {
   }
 
   override onMount() {
-    this.element().addEventListener('click', () => this._toggle());
+    this.element().addEventListener('click', () => this.toggle());
   }
 
-  private _toggle() {
+  toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
   }
@@ -32,18 +32,18 @@ export class ColorCheckboxView extends View<Color> {
 export class ColorCheckboxView extends View<Color> {
   ...
   override onMount() {
-    this.addEventListener('click', this._toggle);
-    // or this.addEventListener('click', '_toggle');
+    this.addEventListener('click', this.toggle);
+    // or this.addEventListener('click', 'toggle');
   }
 
-  private _toggle() {
+  toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
   }
 }
 ```
 
-`view.addEventListener()`는 받은 함수를 등록해두었다가 이벤트가 실행되었을 때 `this`에 `view`를 바인딩하여 실행합니다. 위 코드에서 `ColorCheckboxView.prototype._toggle`은 하나의 함수이기 때문에 여러개의 ColorCheckboxView가 만들어지더라도 효율적입니다. 혹은 `'_toggle'`과 같이 메서드명을 전달해도 됩니다.
+`view.addEventListener()`는 받은 함수를 등록해두었다가 이벤트가 실행되었을 때 `this`에 `view`를 바인딩하여 실행합니다. 위 코드에서 `ColorCheckboxView.prototype.toggle`은 하나의 함수이기 때문에 여러개의 ColorCheckboxView가 만들어지더라도 효율적입니다. 혹은 `'toggle'`과 같이 메서드명을 전달해도 됩니다.
 
 ## 이벤트 등록 데코레이터
 

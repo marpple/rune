@@ -16,10 +16,10 @@ export class ColorCheckboxView extends View<Color> {
   }
 
   override onMount() {
-    this.element().addEventListener('click', () => this._toggle());
+    this.element().addEventListener('click', () => this.toggle());
   }
 
-  private _toggle() {
+  toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
   }
@@ -32,18 +32,18 @@ The above code is not bad, but if there are many instances of `ColorCheckboxView
 export class ColorCheckboxView extends View<Color> {
   ...
   override onMount() {
-    this.addEventListener('click', this._toggle);
-    // or this.addEventListener('click', '_toggle');
+    this.addEventListener('click', this.toggle);
+    // or this.addEventListener('click', 'toggle');
   }
 
-  private _toggle() {
+  toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
   }
 }
 ```
 
-`view.addEventListener()` registers the provided function and binds `view` to `this` when the event is triggered. In the above code, `ColorCheckboxView.prototype._toggle` is a single function, so it remains efficient even when multiple `ColorCheckboxView` instances are created. Alternatively, you can pass the method name like `'_toggle'`.
+`view.addEventListener()` registers the provided function and binds `view` to `this` when the event is triggered. In the above code, `ColorCheckboxView.prototype.toggle` is a single function, so it remains efficient even when multiple `ColorCheckboxView` instances are created. Alternatively, you can pass the method name like `'toggle'`.
 
 ## Event Registration Decorator
 
