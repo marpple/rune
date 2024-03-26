@@ -1,24 +1,15 @@
 import { html, Page } from 'rune-ts';
-import {
-  MarppleShopLayout,
-  type MarppleShopLayoutData,
-} from '../../MarppleShopLayout';
+import { MarppleShopLayout, type MarppleShopLayoutData } from '../../MarppleShopLayout';
 import { main } from './LoungeMain3';
 
 export type Tutorial = Record<string, string>;
 
 export interface TutorialRouter {
-  ['/tutorials']: (
-    data: Tutorial,
-    locals: MarppleShopLayoutData,
-  ) => MarppleShopLayout;
+  ['/tutorials']: (data: Tutorial, locals: MarppleShopLayoutData) => MarppleShopLayout;
 }
 
 export const TutorialRouter: TutorialRouter = {
-  ['/tutorials'](
-    data: Tutorial,
-    locals: MarppleShopLayoutData,
-  ): MarppleShopLayout {
+  ['/tutorials'](data: Tutorial, locals: MarppleShopLayoutData): MarppleShopLayout {
     return new MarppleShopLayout(new TutorialPage(data), locals);
   },
 };

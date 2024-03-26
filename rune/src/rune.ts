@@ -8,11 +8,7 @@ type Constructor = new (...args: any) => any;
 
 class Rune {
   private _weakMap = new WeakMap();
-  set(
-    element: HTMLElement | EventTarget,
-    instance: any,
-    Constructor?: Constructor,
-  ) {
+  set(element: HTMLElement | EventTarget, instance: any, Constructor?: Constructor) {
     return this._weakMap.set(
       element,
       this._getMap(element).set(Constructor ?? instance.constructor, instance),
@@ -24,16 +20,11 @@ class Rune {
     Constructor: T,
   ): InstanceType<typeof Constructor> | undefined {
     const instance = this._getMap(element).get(Constructor);
-    return instance === undefined
-      ? instance
-      : (instance as InstanceType<typeof Constructor>);
+    return instance === undefined ? instance : (instance as InstanceType<typeof Constructor>);
   }
 
   private _getMap(element: HTMLElement | EventTarget) {
-    return (
-      this._weakMap.get(element) ||
-      this._weakMap.set(element, new Map()).get(element)
-    );
+    return this._weakMap.get(element) || this._weakMap.set(element, new Map()).get(element);
   }
 
   getView<T extends Constructor>(

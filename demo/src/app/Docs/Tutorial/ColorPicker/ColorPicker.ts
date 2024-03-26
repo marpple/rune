@@ -13,9 +13,7 @@ export class ColorView extends View<Color> {
 
 export class ColorCheckboxView extends View<Color> {
   override template(color: Color) {
-    return html`
-      <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li>
-    `;
+    return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
   }
 
   override onMount() {

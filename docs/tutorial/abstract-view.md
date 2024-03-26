@@ -14,28 +14,20 @@ export type Color = {
 
 export class ColorView extends View<Color> {
   override template({ code }: Color) {
-    return html`
-      <div style="background-color: ${code}"></div>
-    `;
+    return html` <div style="background-color: ${code}"></div> `;
   }
 }
 
 export class ColorCheckboxView extends View<Color> {
   override template(color: Color) {
-    return html`
-      <li class="${color.checked ? 'checked' : ''}">
-        ${new ColorView(color)}
-      </li>
-    `;
+    return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
   }
 
   @on('click')
   private _toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
-    this.element().dispatchEvent(
-      new CustomEvent('checkbox:change', { bubbles: true })
-    );
+    this.element().dispatchEvent(new CustomEvent('checkbox:change', { bubbles: true }));
   }
 }
 
@@ -53,16 +45,13 @@ export class ColorCheckboxListView extends View<Color[]> {
   }
 
   onChange() {
-    this.element().dispatchEvent(
-      new CustomEvent('checkboxlist:change', { bubbles: true })
-    );
+    this.element().dispatchEvent(new CustomEvent('checkboxlist:change', { bubbles: true }));
   }
 
   checkedColors(): Color[] {
     return this.data.filter(({ checked }) => checked);
   }
 }
-
 ```
 
 ## Abstracted Classes and Generics
@@ -94,9 +83,7 @@ export class CheckboxView<T extends CheckboxData> extends View<T> {
   private _toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
-    this.element().dispatchEvent(
-      new CustomEvent('checkbox:change', { bubbles: true })
-    );
+    this.element().dispatchEvent(new CustomEvent('checkbox:change', { bubbles: true }));
   }
 }
 
@@ -107,9 +94,7 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
   override template(checkBoxDatas: T[]) {
     return html`
       <${this.tagName}>
-        ${checkBoxDatas.map(
-          (checkBoxData) => this.createCheckboxView(checkBoxData)
-        )}
+        ${checkBoxDatas.map((checkBoxData) => this.createCheckboxView(checkBoxData))}
       </${this.tagName}>
     `;
   }
@@ -120,9 +105,7 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
 
   @on('checkbox:change', '> *')
   onChange() {
-    this.element().dispatchEvent(
-      new CustomEvent('checkboxlist:change', { bubbles: true })
-    );
+    this.element().dispatchEvent(new CustomEvent('checkboxlist:change', { bubbles: true }));
   }
 
   checkedData() {
@@ -177,9 +160,7 @@ export type Color = {
 
 export class ColorView extends View<Color> {
   override template({ code }: Color) {
-    return html`
-      <div style="background-color: ${code}"></div>
-    `;
+    return html` <div style="background-color: ${code}"></div> `;
   }
 }
 
@@ -197,9 +178,7 @@ If you don't use `ColorCheckboxView`, you can write the code like this:
 ```typescript
 export class ColorView extends View<Color> {
   template({ code }: Color) {
-    return html`
-        <div style="background-color: ${code}"></div>
-      `;
+    return html` <div style="background-color: ${code}"></div> `;
   }
 }
 
@@ -217,9 +196,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
   CheckboxView = class ColorCheckboxView extends CheckboxView<Color> {
     SubView = class ColorView extends View<Color> {
       template({ code }: Color) {
-        return html`
-          <div style="background-color: ${code}"></div>
-        `;
+        return html` <div style="background-color: ${code}"></div> `;
       }
     };
   };

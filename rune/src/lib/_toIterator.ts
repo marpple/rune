@@ -1,8 +1,6 @@
 import _isIterable from './_isIterable';
 
-export default function* _toIterator<T>(
-  list: Iterable<T> | ArrayLike<T>,
-): IterableIterator<T> {
+export default function* _toIterator<T>(list: Iterable<T> | ArrayLike<T>): IterableIterator<T> {
   if (_isIterable(list)) {
     yield* list;
   } else {

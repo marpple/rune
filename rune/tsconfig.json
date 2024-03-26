@@ -24,11 +24,5 @@
     "verbatimModuleSyntax": true,
     "experimentalDecorators": true
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "taskfile.js",
-    "taskfile-watch.js",
-    "taskfile-swc.js"
-  ]
+  "exclude": ["node_modules", "dist", "taskfile.js", "taskfile-watch.js", "taskfile-swc.js"]
 }

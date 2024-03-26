@@ -50,11 +50,7 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
   }
 
   override onMount() {
-    return this.delegate(
-      'checkbox:change',
-      `> .${this.CheckboxView}`,
-      this.onChange,
-    );
+    return this.delegate('checkbox:change', `> .${this.CheckboxView}`, this.onChange);
   }
 
   onChange() {

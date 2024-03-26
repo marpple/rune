@@ -71,7 +71,7 @@ Web API의 기본 `querySelector`나 `querySelectorAll`는 CSS 선택자의 시�
 
 ```typescript
 try {
-  document.querySelector(".container")!.querySelectorAll("> ul li");
+  document.querySelector('.container')!.querySelectorAll('> ul li');
 } catch (e) {
   console.log(e);
   // DOMException: Failed to execute 'querySelectorAll' on 'Element': '> ul li' is not a valid selector.
@@ -81,36 +81,35 @@ try {
 `find()`나 `findAll()`를 이용하면 `>`를 선택자의 시작으로 사용할 수 있습니다.
 
 ```typescript
-$(".container").findAll("> ul li");
+$('.container').findAll('> ul li');
 // [li.item1, li.item2, li.item3]
 ```
 
 Web API의 기본 `querySelector`나 `querySelectorAll`는 셀렉터의 시작이 항상 부모도 포함한다는 점을 유의해야합니다.
 
 ```typescript
-document.querySelector(".container").querySelectorAll("[active=true] > ul li");
+document.querySelector('.container').querySelectorAll('[active=true] > ul li');
 // [li.item1, li.item2, li.item3, li.item4, li.item5]
 ```
 
 `find()`나 `findAll()`에서는 `&`를 사용하여 부모 `element`에 대한 부모를 포함하여 추가 조건을 붙일 것인지를 명시적으로 구분할 수 있습니다. `&`가 없다면 항상 자식요소부터 찾게 됩니다.
 
 ```typescript
-$(".container").findAll('&[active="true"] li');
+$('.container').findAll('&[active="true"] li');
 // [li.item1, li.item2, li.item3, li.item4, li.item5]
 
-$(".container").findAll('&[active="true"] > ul li');
+$('.container').findAll('&[active="true"] > ul li');
 // [li.item1, li.item2, li.item3]
 
-$(".container").findAll('&[active="false"] li');
+$('.container').findAll('&[active="false"] li');
 // []
 ```
 
-## closest() 
+## closest()
 
 `closest(selector: string): $Element | null;`
 
 자신을 포함하여 셀렉터와 매칭되는 부모 엘리먼트를 찾습니다.
-
 
 ## children()
 
@@ -176,7 +175,7 @@ Web API의 `nextElementSibling`을 하면서 selector와 매칭되는 모든 요
 
 `getValue(): string;`
 
-`element.value`를 가져옵니다. 
+`element.value`를 가져옵니다.
 
 ## setValue()
 
@@ -188,7 +187,7 @@ Web API의 `nextElementSibling`을 하면서 selector와 매칭되는 모든 요
 
 `floatValue(): number;`
 
-`parseFloat(this.getValue())` 입니다. `<input type="number" />`에 사용하면 편리합니다. 
+`parseFloat(this.getValue())` 입니다. `<input type="number" />`에 사용하면 편리합니다.
 
 ## getAttribute()
 
@@ -220,7 +219,6 @@ attributes들을 변경합니다.
 
 [Element: removeAttribute() method](https://developer.mozilla.org/en-US/docs/Web/API/Element/removeAttribute)와 같습니다.
 
-
 ## getInnerHtml()
 
 `getInnerHtml(): string;`
@@ -251,7 +249,6 @@ attributes들을 변경합니다.
 
 [Element: classList property](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList)와 같습니다.
 
-
 ## removeClass()
 
 `removeClass(...classNames: string[]): this;`
@@ -280,7 +277,7 @@ attributes들을 변경합니다.
 
 `offsetFromBody(): { top: number; left: number };`
 
-document 시작으로부터 좌표를 구합니다. 
+document 시작으로부터 좌표를 구합니다.
 
 ```javascript
 offsetFromBody() {
@@ -359,4 +356,3 @@ $('#body')
 ## to()
 
 `to<T>(f: (element: HTMLElement) => T): T;`
-

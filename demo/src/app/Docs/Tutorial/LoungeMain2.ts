@@ -202,8 +202,7 @@ class SwitchView extends View<{
     this.data.on = on;
     Promise.all([
       this.element().animate({ backgroundColor: this.color() }, 150),
-      this.toggleElement().animate({ transform: this.translateX() }, 150)
-        .finished,
+      this.toggleElement().animate({ transform: this.translateX() }, 150).finished,
     ])
       .then(() => {
         this.element().style.backgroundColor = this.color();

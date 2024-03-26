@@ -136,4 +136,3 @@ new ProductView({
 ## Fast SSR, High Portability
 
 The process of generating HTML strings by Rune's components relies on JavaScript's Template Literals, making it concise and fast. Moreover, since it communicates only through JavaScript's built-in values, it's highly portable and can be used anywhere JavaScript runs. If a developer needs to write reusable code within a project that requires high-quality functionality, intricate animation handling, utilization of the latest Web API technologies, direct manipulation of the DOM for internal code, development using a component-based approach, and the need for server-side rendering, and if they want to import and use those components within frameworks like React or Solid.js, then Rune components can serve as an excellent alternative.
-

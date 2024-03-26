@@ -66,9 +66,9 @@ export class View<T extends object> extends VirtualView<T> {
   }
 
   override _onMount() {
-    this._reservedEnables = (
-      this.constructor as HasReservedEnables
-    )._ReservedEnables.map((ReservedEnable) => new ReservedEnable(this).init());
+    this._reservedEnables = (this.constructor as HasReservedEnables)._ReservedEnables.map(
+      (ReservedEnable) => new ReservedEnable(this).init(),
+    );
     rune.set(this.element(), this, View);
     super._onMount();
     this.dispatchEvent(new CustomEvent('view:mountend'));
@@ -103,22 +103,20 @@ export class View<T extends object> extends VirtualView<T> {
 
   redraw(): this {
     return this._makeHtml().safely(() =>
-      this._redrawAttributes()
-        ._setInnerHtmlFromCurrentInnerHtml()
-        .hydrateSubViews(),
+      this._redrawAttributes()._setInnerHtmlFromCurrentInnerHtml().hydrateSubViews(),
     );
   }
 
   async redrawAsync(): Promise<this> {
     return (await this._makeHtmlAsync()).safely(() =>
-      this._redrawAttributes()
-        ._setInnerHtmlFromCurrentInnerHtml()
-        .hydrateSubViews(),
+      this._redrawAttributes()._setInnerHtmlFromCurrentInnerHtml().hydrateSubViews(),
     );
   }
 
   private _subViewSelector(subViewName?: string) {
-    return `[data-rune-parent="${this}"]:not(#${this._getElId()} [data-rune-parent="${this}"] [data-rune-parent="${this}"])${subViewName && subViewName !== 'View' ? `.${subViewName}` : ''}`;
+    return `[data-rune-parent="${this}"]:not(#${this._getElId()} [data-rune-parent="${this}"] [data-rune-parent="${this}"])${
+      subViewName && subViewName !== 'View' ? `.${subViewName}` : ''
+    }`;
   }
 
   private _subViewElements(subViewName?: string): HTMLElement[] {
@@ -129,25 +127,17 @@ export class View<T extends object> extends VirtualView<T> {
     return elements;
   }
 
-  private _subViewElementsIn(
-    selector: string,
-    subViewName: string,
-  ): HTMLElement[] {
+  private _subViewElementsIn(selector: string, subViewName: string): HTMLElement[] {
     const elements = pipe(
       $(this.element()).findAll(selector),
-      flatMap(($el) =>
-        $el.element().querySelectorAll(this._subViewSelector(subViewName)),
-      ),
+      flatMap(($el) => $el.element().querySelectorAll(this._subViewSelector(subViewName))),
       toArray,
     ) as HTMLElement[];
     this._removeTempElId();
     return elements;
   }
 
-  private _subViews<T extends ViewConstructor>(
-    elements: HTMLElement[],
-    SubView: T,
-  ) {
+  private _subViews<T extends ViewConstructor>(elements: HTMLElement[], SubView: T) {
     return elements.map((element) => rune.getView(element, SubView)!);
   }
 
@@ -157,28 +147,17 @@ export class View<T extends object> extends VirtualView<T> {
       : this._subViews(this._subViewElements(SubView.name), SubView);
   }
 
-  protected subViewsIn<T extends ViewConstructor>(
-    selector: string,
-    SubView: T,
-  ) {
-    return this._subViews(
-      this._subViewElementsIn(selector, SubView.name),
-      SubView,
-    );
+  protected subViewsIn<T extends ViewConstructor>(selector: string, SubView: T) {
+    return this._subViews(this._subViewElementsIn(selector, SubView.name), SubView);
   }
 
   private _subViewElement(subViewName?: string): HTMLElement | null {
-    const element = this.element().querySelector(
-      this._subViewSelector(subViewName),
-    );
+    const element = this.element().querySelector(this._subViewSelector(subViewName));
     this._removeTempElId();
     return element as HTMLElement | null;
   }
 
-  private _subViewElementIn(
-    selector: string,
-    subViewName: string,
-  ): HTMLElement | null {
+  private _subViewElementIn(selector: string, subViewName: string): HTMLElement | null {
     const element =
       $(this.element())
         .find(selector)
@@ -188,10 +167,7 @@ export class View<T extends object> extends VirtualView<T> {
     return element as HTMLElement | null;
   }
 
-  private _subView<T extends ViewConstructor>(
-    element: HTMLElement | null,
-    SubView: T,
-  ) {
+  private _subView<T extends ViewConstructor>(element: HTMLElement | null, SubView: T) {
     return element ? rune.getView(element, SubView) ?? null : null;
   }
 
@@ -202,10 +178,7 @@ export class View<T extends object> extends VirtualView<T> {
   }
 
   protected subViewIn<T extends ViewConstructor>(selector: string, SubView: T) {
-    return this._subView(
-      this._subViewElementIn(selector, SubView.name),
-      SubView,
-    );
+    return this._subView(this._subViewElementIn(selector, SubView.name), SubView);
   }
 
   protected redrawOnlySubViews(): this {

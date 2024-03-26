@@ -18,9 +18,7 @@ class Checkable<T extends CheckableData> extends Enable<T> {
   private _toggle() {
     this.view.data.checked = !this.view.data.checked;
     this.view.element().classList.toggle('checked');
-    this.view.element().dispatchEvent(
-      new CustomEvent('checkable:change', { bubbles: true })
-    );
+    this.view.element().dispatchEvent(new CustomEvent('checkable:change', { bubbles: true }));
   }
 }
 
@@ -31,11 +29,10 @@ type Color = {
 
 class CheckableColorView extends View<Color> {
   checkable = new Checkable(this).init();
-  
+
   override template(color: Color) {
     return html`
-      <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}">
-      </div>
+      <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}"></div>
     `;
   }
 }
@@ -60,7 +57,6 @@ _toggle() {
 
 `Enable`에서 `this.view.data === this.data` 이고 `this.view.element() === this.element()` 이기 때문에 toggle 영역을 위 코드처럼 변경할 수 있습니다. 이는 `View`를 작성할 때 만들었던 코드를 `Enable`로 옮겨 재사용가능한 코드로 만들고자 할 때 용이하게 합니다.
 
-
 ## 데이터 공유가 없는 View 확장
 
 `Deletable`을 사용하여 클릭했을 때 삭제되는 `BallView`를 쉽게 만들 수 있습니다. `class Deletable extends Enable` 는 `class Deletable extends Enable<object>`와 같습니다.
@@ -77,25 +73,30 @@ class Deletable extends Enable {
 }
 
 type Ball = {
-  color: string
-}
+  color: string;
+};
 
 class BallView extends View<Ball> {
   deletable = new Deletable(this).init();
 
   override template() {
     return html`
-      <div style="
+      <div
+        style="
          border: 1px solid black; 
          padding: 10px;
          width: 20px; 
          height: 20px;
-         border-radius: 20px;">
-        <div class="remove-target" style="
+         border-radius: 20px;"
+      >
+        <div
+          class="remove-target"
+          style="
            background-color: ${this.data.color}; 
            width: 100%; 
            height: 100%; 
-           border-radius: 10px;"></div>
+           border-radius: 10px;"
+        ></div>
       </div>
     `;
   }
@@ -129,22 +130,27 @@ export class Deletable extends Enable<object, DeletableViewExtraInterface> {
 
 export class BallView extends View<Ball> {
   deletable = new Deletable(this).init();
-  
+
   readonly targetClassName = 'target';
 
   override template() {
     return html`
-      <div style="
+      <div
+        style="
          border: 1px solid black; 
          padding: 10px; 
          width: 20px; 
          height: 20px; 
-         border-radius: 20px;">
-        <div class="${this.targetClassName}" style="
+         border-radius: 20px;"
+      >
+        <div
+          class="${this.targetClassName}"
+          style="
            background-color: ${this.data.color}; 
            width: 100%; 
            height: 100%; 
-           border-radius: 10px;"></div>
+           border-radius: 10px;"
+        ></div>
       </div>
     `;
   }
@@ -180,21 +186,18 @@ export type Ball = {
 
 export class BallView extends View<Ball> {
   deletable = new Deletable(this).init();
-  
+
   readonly targetClassName = 'target';
-  
+
   canRemove() {
     return confirm('삭제하시겠습니까?');
   }
 
   override template() {
-    return html`
-      ...
-    `;
+    return html` ... `;
   }
 }
 ```
-
 
 ## 두 개 이상의 Enable
 
@@ -218,23 +221,21 @@ class Movable extends Enable {
 }
 
 type Ball = {
-  color: string
-}
+  color: string;
+};
 
 export class BallView extends View<Ball> {
   movable = new Movable(this).init();
   deletable = new Deletable(this).init();
-  
+
   readonly targetClassName = 'target';
-  
+
   canRemove() {
     return confirm('삭제하시겠습니까?');
   }
 
   override template() {
-    return html`
-      ...
-    `;
+    return html` ... `;
   }
 }
 ```
@@ -250,7 +251,7 @@ export type Ball = {
 export class BallView extends View<Ball> {
   movable = new Movable(this).init();
   deletable = new Deletable(this).init();
-  
+
   readonly targetClassName = 'target';
 
   canRemove() {
@@ -258,9 +259,7 @@ export class BallView extends View<Ball> {
   }
 
   override template() {
-    return html`
-      ...
-    `;
+    return html` ... `;
   }
 }
 

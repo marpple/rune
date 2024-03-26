@@ -16,14 +16,13 @@ class Checkable<T extends CheckableData> extends Enable<T> {
   private _toggle() {
     this.view.data.checked = !this.view.data.checked;
     this.view.element().classList.toggle('checked');
-    this.view.element().dispatchEvent(
-      new CustomEvent('checkable:change', { bubbles: true })
-    );
+    this.view.element().dispatchEvent(new CustomEvent('checkable:change', { bubbles: true }));
   }
 }
 ```
 
 ## Create & init()
+
 ```
 type ExtendExtraInterface<T, E> = E extends null ? T : T & E;
 
@@ -38,11 +37,10 @@ type Color = {
 
 class CheckableColorView extends View<Color> {
   checkable = new Checkable(this).init();
-  
+
   override template(color: Color) {
     return html`
-      <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}">
-      </div>
+      <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}"></div>
     `;
   }
 }
@@ -73,4 +71,3 @@ class CheckableColorView extends View<Color> {
 ## Event handling
 
 Enable class도 View class 처럼 Base class로부터 Event handling 메서드들을 상속 받았습니다. ([API - Event handling 참고](/ko/api/event.html))
-

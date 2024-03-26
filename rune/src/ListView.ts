@@ -2,10 +2,7 @@ import { View } from './View';
 import { every, map, pipe, reject, reverse, toArray, zip } from '@fxts/core';
 import { html } from './VirtualView';
 
-export class ListView<
-  T extends object,
-  IV extends View<T> = View<T>,
-> extends View<T[]> {
+export class ListView<T extends object, IV extends View<T> = View<T>> extends View<T[]> {
   tagName = 'ul';
   classNameForItemViewsContainer = 'item-views-container';
   ItemView: (new (data: T) => IV) | null = null;
@@ -25,8 +22,7 @@ export class ListView<
 
   itemViewsContainer() {
     return (
-      this.element().querySelector(`.${this.classNameForItemViewsContainer}`) ??
-      this.element()
+      this.element().querySelector(`.${this.classNameForItemViewsContainer}`) ?? this.element()
     );
   }
 
@@ -86,27 +82,19 @@ export class ListView<
       const itemViews = this.createItemViews(items);
       this.data.splice(at, 0, ...items);
       if (this.isRendered()) {
-        this._itemViews[at]
-          .element()
-          .before(...itemViews.map((view) => view.render()));
+        this._itemViews[at].element().before(...itemViews.map((view) => view.render()));
       }
       this._itemViews.splice(at, 0, ...itemViews);
     }
     return this;
   }
 
-  private _append(
-    push: 'push' | 'unshift',
-    append: 'append' | 'prepend',
-    items: T[],
-  ): this {
+  private _append(push: 'push' | 'unshift', append: 'append' | 'prepend', items: T[]): this {
     const itemViews = this.createItemViews(items);
     this.data[push](...items);
     this._itemViews[push](...itemViews);
     if (this.isRendered()) {
-      this.itemViewsContainer()[append](
-        ...itemViews.map((view) => view.render()),
-      );
+      this.itemViewsContainer()[append](...itemViews.map((view) => view.render()));
     }
     return this;
   }
@@ -165,15 +153,11 @@ export class ListView<
   }
 
   removeBy(f: (itemView: IV) => boolean): IV | undefined {
-    return this.removeByIndex(
-      this._itemViews.findIndex((itemView) => f(itemView)),
-    );
+    return this.removeByIndex(this._itemViews.findIndex((itemView) => f(itemView)));
   }
 
   removeAllBy(f: (itemView: IV) => boolean): IV[] {
-    return this.removeAllByItemViews(
-      this._itemViews.filter((itemView) => f(itemView)),
-    );
+    return this.removeAllByItemViews(this._itemViews.filter((itemView) => f(itemView)));
   }
 
   reset(): this {
@@ -199,13 +183,7 @@ export class ListView<
   }
 
   move(at: number, to: number): this {
-    if (
-      at !== to &&
-      -1 < at &&
-      -1 < to &&
-      at < this.data.length &&
-      to < this.data.length
-    ) {
+    if (at !== to && -1 < at && -1 < to && at < this.data.length && to < this.data.length) {
       const targetIdx = at < to ? to - 1 : to;
       const item = this.data.splice(at, 1)[0];
       const itemView = this._itemViews.splice(at, 1)[0];
@@ -220,10 +198,7 @@ export class ListView<
   }
 }
 
-export class ListViewWithOptions<
-  T extends object,
-  O = object,
-> extends ListView<T> {
+export class ListViewWithOptions<T extends object, O = object> extends ListView<T> {
   options?: O;
 
   constructor(data: T[], options?: O) {

@@ -1,13 +1,7 @@
 import { Page, html } from 'rune-ts';
-import {
-  MarppleShopLayout,
-  type MarppleShopLayoutData,
-} from '../../MarppleShopLayout';
+import { MarppleShopLayout, type MarppleShopLayoutData } from '../../MarppleShopLayout';
 import { ColorView } from './ColorPicker/ColorView';
-import {
-  ColorCheckboxListView,
-  ColorCheckboxView,
-} from './ColorPicker/ColorPicker';
+import { ColorCheckboxListView, ColorCheckboxView } from './ColorPicker/ColorPicker';
 
 export type Tutorial = Record<string, string>;
 
@@ -50,9 +44,7 @@ export class TutorialPage extends Page<Tutorial> {
     document.body.appendChild(new ColorView('pink').render());
 
     console.log(new ColorCheckboxView({ code: 'green' }).toHtml());
-    console.log(
-      new ColorCheckboxView({ code: 'yellow', checked: true }).toHtml(),
-    );
+    console.log(new ColorCheckboxView({ code: 'yellow', checked: true }).toHtml());
 
     // new ColorCheckboxListView([
     //   { code: 'red' },
@@ -80,17 +72,11 @@ export class TutorialPage extends Page<Tutorial> {
 }
 
 export interface TutorialRouter {
-  ['/tutorials']: (
-    data: Tutorial,
-    locals: MarppleShopLayoutData,
-  ) => MarppleShopLayout;
+  ['/tutorials']: (data: Tutorial, locals: MarppleShopLayoutData) => MarppleShopLayout;
 }
 
 export const TutorialRouter: TutorialRouter = {
-  ['/tutorials'](
-    data: Tutorial,
-    locals: MarppleShopLayoutData,
-  ): MarppleShopLayout {
+  ['/tutorials'](data: Tutorial, locals: MarppleShopLayoutData): MarppleShopLayout {
     return new MarppleShopLayout(new TutorialPage(data), locals);
   },
 };
