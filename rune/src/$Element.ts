@@ -32,17 +32,11 @@ export class $Element {
   }
 
   find(selector: string): $Element | null {
-    return $(
-      _find('querySelector', selector, this._element),
-      this,
-      this._error,
-    );
+    return $(_find('querySelector', selector, this._element), this, this._error);
   }
 
   findAll(selector: string): $Element[] {
-    return $Element.to$Elements(
-      _find('querySelectorAll', selector, this._element),
-    );
+    return $Element.to$Elements(_find('querySelectorAll', selector, this._element));
   }
 
   closest(selector: string): $Element | null {
@@ -130,9 +124,7 @@ export class $Element {
 
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   setAttributes(attributes: Record<string, any>) {
-    Object.entries(attributes).forEach(([name, value]) =>
-      $(this).setAttribute(name, value),
-    );
+    Object.entries(attributes).forEach(([name, value]) => $(this).setAttribute(name, value));
     return this;
   }
 
@@ -181,9 +173,7 @@ export class $Element {
     ];
   }
 
-  getComputedStyles(
-    properties: (keyof CSSStyleDeclaration)[],
-  ): Record<string, string> {
+  getComputedStyles(properties: (keyof CSSStyleDeclaration)[]): Record<string, string> {
     return Object.fromEntries(
       properties.map((property) => [
         _toCamel(property.toString()),
@@ -290,9 +280,7 @@ export class $Element {
     return $(elementFromHtml(htmlStr));
   };
 
-  static to$Elements = <T>(
-    elements: Iterable<T> | ArrayLike<T>,
-  ): $Element[] => {
+  static to$Elements = <T>(elements: Iterable<T> | ArrayLike<T>): $Element[] => {
     return [..._toIterator(elements)].map((element) => $(element));
   };
 
@@ -304,19 +292,11 @@ export class $Element {
     element: HTMLElement | Element | $Element,
     throwIfNullError?: Error,
   ): $Element => {
-    return $(
-      element,
-      undefined,
-      throwIfNullError || new Error('HTMLElement not found.'),
-    );
+    return $(element, undefined, throwIfNullError || new Error('HTMLElement not found.'));
   };
 }
 
-function $(
-  element: null,
-  prev$Element?: $Element,
-  throwIfNullError?: Error,
-): null;
+function $(element: null, prev$Element?: $Element, throwIfNullError?: Error): null;
 function $<T>(
   element: string | HTMLElement | Element | $Element | T,
   prev$Element?: $Element,
@@ -341,8 +321,8 @@ function $<T>(
   return element === null
     ? null
     : element instanceof $Element
-      ? element
-      : new $Element(element as HTMLElement, prev$Element, throwIfNullError);
+    ? element
+    : new $Element(element as HTMLElement, prev$Element, throwIfNullError);
 }
 
 $.all = $Element.all;

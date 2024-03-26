@@ -25,9 +25,7 @@ function createEscaper(map: Record<string, string>) {
 
   return function (string: string) {
     string = string === null ? '' : '' + string;
-    return testRegexp.test(string)
-      ? string.replace(replaceRegexp, escaper)
-      : string;
+    return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
   };
 }
 

@@ -39,6 +39,7 @@ class DessertListView extends ListView<Dessert, DessertView> {
 Define the ItemView class to be used inside ListView and pass the type of data used by ItemView as a type argument to the ListView class, like `ListView<Dessert, DessertView>`.
 
 ## Create
+
 `new (data: T) => ListView<T, IV>;`
 
 ```typescript
@@ -69,7 +70,7 @@ dessertListView.toHtml();
 
 ```typescript
 class DessertListView extends ListView<Dessert, DessertView> {
-  override tagName = 'ol'; 
+  override tagName = 'ol';
   override ItemView = DessertView;
 }
 
@@ -89,7 +90,6 @@ new DessertListView([
 ## ItemView
 
 `ItemView: (new (data: T) => IV);`
-
 
 ## itemViews
 
@@ -112,8 +112,8 @@ Adds the passed data to `this.data` and creates ItemViews accordingly, reflectin
 
 ```typescript
 dessertListView.add([
-  { name: 'Coffee', rating: 4.2 }, 
-  { name: 'Decaf', rating: 2.1 }
+  { name: 'Coffee', rating: 4.2 },
+  { name: 'Decaf', rating: 2.1 },
 ]);
 ```
 
@@ -211,4 +211,3 @@ Removes all items and refreshes the screen with the new items passed.
 `move(at: number, to: number): this;`
 
 Moves the item with index `at` to the position `to`.
-

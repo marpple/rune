@@ -13,9 +13,7 @@ export type Color = {
 
 export class ColorView extends View<Color> {
   override template({ code }: Color) {
-    return html`
-      <div style="background-color: ${code}"></div>
-    `;
+    return html` <div style="background-color: ${code}"></div> `;
   }
 }
 
@@ -45,9 +43,7 @@ colorView.toHtml();
 같은 코드를 메서드 체이닝으로 표현할 수 있습니다.
 
 ```typescript
-colorView
-  .chain((view) => view.data.code = 'blue')
-  .toHtml();
+colorView.chain((view) => (view.data.code = 'blue')).toHtml();
 ```
 
 ## HTMLElement 생성하기
@@ -55,17 +51,16 @@ colorView
 `colorView.render();` 를 실행하면 HTMLElement 생성하여 리턴합니다. `render` 메서드는 브라우저단에서만 사용하는 것을 권장합니다.
 
 ```typescript
-document.body.appendChild(
-  new ColorView({ code: 'pink' }).render()
-);
+document.body.appendChild(new ColorView({ code: 'pink' }).render());
 ```
+
 ```html
 <html>
-...
-<body>
-...
-<div class="ColorView" style="background-color: pink"></div>
-</body>
+  ...
+  <body>
+    ...
+    <div class="ColorView" style="background-color: pink"></div>
+  </body>
 </html>
 ```
 
@@ -81,17 +76,11 @@ export type Color = {
 
 export class ColorCheckboxView extends View<Color> {
   override template(color: Color) {
-    return html`
-      <li class="${color.checked ? 'checked' : ''}">
-        ${new ColorView(color)}
-      </li>
-    `;
+    return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
   }
 }
 
-new ColorCheckboxView(
-  { code: 'yellow', checked: true }
-).toHtml();
+new ColorCheckboxView({ code: 'yellow', checked: true }).toHtml();
 ```
 
 ```html
@@ -99,6 +88,7 @@ new ColorCheckboxView(
   <div class="ColorView" style="background-color: green"></div>
 </li>
 ```
+
 이와 같이 `ColorView`를 가지는 `ColorCheckboxView`를 만들 수 있습니다. 아래는 배열을 전달하여 여러개의 `ColorCheckboxView`를 가지는 `ColorCheckboxListView`를 만드는 예시입니다.
 
 ```typescript
@@ -106,21 +96,19 @@ export class ColorCheckboxListView extends View<Color[]> {
   override template(colors: Color[]) {
     return html`
       <ul>
-        ${colors.map(
-          (color) => new ColorCheckboxView(color)
-        )}
+        ${colors.map((color) => new ColorCheckboxView(color))}
       </ul>
     `;
   }
 }
 
 document.body.appendChild(
-    new ColorCheckboxListView([
-      { code: 'red' },
-      { code: 'green', checked: true },
-      { code: 'blue' },
-      { code: 'yellow' },
-    ]).render(),
+  new ColorCheckboxListView([
+    { code: 'red' },
+    { code: 'green', checked: true },
+    { code: 'blue' },
+    { code: 'yellow' },
+  ]).render(),
 );
 ```
 
@@ -135,4 +123,3 @@ document.body.appendChild(
   ...
 </ul>
 ```
-

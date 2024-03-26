@@ -52,11 +52,8 @@ export class VirtualView<T extends object> extends Base {
     html = startTag.includes('class="')
       ? html.replace('class="', `${runeDataset} class="${this} `)
       : startTag.includes("class='")
-        ? html.replace("class='", `${runeDataset} class='${this} `)
-        : html.replace(
-            `<${startTagName}`,
-            `<${startTagName} ${runeDataset} class="${this}"`,
-          );
+      ? html.replace("class='", `${runeDataset} class='${this} `)
+      : html.replace(`<${startTagName}`, `<${startTagName} ${runeDataset} class="${this}"`);
     return html;
   }
 
@@ -99,10 +96,7 @@ export class VirtualView<T extends object> extends Base {
   }
 }
 
-export function html(
-  templateStrs: TemplateStringsArray,
-  ...templateVals: unknown[]
-): Html {
+export function html(templateStrs: TemplateStringsArray, ...templateVals: unknown[]): Html {
   return new Html(templateStrs, templateVals);
 }
 
@@ -143,10 +137,7 @@ export class Html {
   private *_make(
     virtualView: VirtualView<object>,
     toHtml: (virtualView: VirtualView<object>) => string | Promise<string>,
-    make: (
-      html: Html,
-      virtualView: VirtualView<object>,
-    ) => string | Promise<string>,
+    make: (html: Html, virtualView: VirtualView<object>) => string | Promise<string>,
   ): Generator<string | Promise<string>> {
     const end = this._templateStrs.length - 1;
     for (let i = 0; i < end; i++) {
@@ -155,10 +146,10 @@ export class Html {
         yield this._isSubView(templateVal, virtualView)
           ? toHtml(this._addSubViewsFromTemplate(templateVal, virtualView))
           : templateVal instanceof Html
-            ? make(templateVal, virtualView)
-            : templateVal instanceof UnsafeHtml
-              ? templateVal.toString()
-              : _escape(templateVal as string);
+          ? make(templateVal, virtualView)
+          : templateVal instanceof UnsafeHtml
+          ? templateVal.toString()
+          : _escape(templateVal as string);
       }
     }
     yield this._templateStrs[end];

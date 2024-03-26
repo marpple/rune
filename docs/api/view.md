@@ -4,7 +4,7 @@ outline: deep
 
 # View class
 
-View is a class used for creating UI components, providing tools for HTML template generation, HTMLElement creation, and event handling. 
+View is a class used for creating UI components, providing tools for HTML template generation, HTMLElement creation, and event handling.
 
 ## Definition
 
@@ -27,6 +27,7 @@ class SwitchView extends View<SwitchData> {
 ```
 
 ## Create
+
 `new (data: T) => View<T>;`
 
 The data passed as an argument is registered in `this.data`, and it is passed to the `template()` method as `data: T;`.
@@ -36,6 +37,7 @@ new SwitchView({ on: false });
 ```
 
 ## template()
+
 `protected template(): Html;`
 
 Inside the `template` method, HTML templates are created using the `html` function. (See [Template API](/api/template.html) for more details.)
@@ -43,14 +45,14 @@ Inside the `template` method, HTML templates are created using the `html` functi
 ```typescript
 import { View, html } from 'rune-ts';
 
-class DessertView extends View<{ name: string, rating: number }> {
+class DessertView extends View<{ name: string; rating: number }> {
   override template() {
     return html`
       <div>
         <div class="name">${this.data.name}</div>
         <div class="rating">${this.data.rating}</div>
       </div>
-    `
+    `;
   }
 }
 ```
@@ -63,6 +65,7 @@ class DessertView extends View<{ name: string, rating: number }> {
 const dessertView = new DessertView({ name: 'Choco', rating: 2.8 });
 dessertView.toHtml();
 ```
+
 ```html
 <div class="DessertView">
   <div class="name">Choco</div>
@@ -79,6 +82,7 @@ dessertView.data.name = 'Latte';
 dessertView.data.rating = 3.5;
 dessertView.toHtml();
 ```
+
 ```html
 <div class="DessertView">
   <div class="name">Latte</div>
@@ -90,7 +94,7 @@ dessertView.toHtml();
 
 `public render(): HTMLElement;`
 
-Internally, the `template` method constructs an HTML string using `this.template(this.data)`, generates an HTMLElement, and then assigns it to `this._element` before returning it. 
+Internally, the `template` method constructs an HTML string using `this.template(this.data)`, generates an HTMLElement, and then assigns it to `this._element` before returning it.
 
 ```typescript
 const element: HTMLElement = dessertView.render();
@@ -151,7 +155,7 @@ class PhotoView extends View<{ src: string; alt: string }> {
   override template({ src, alt }) {
     return html`<div><img src="${src}" alt="${alt}" /></div>`;
   }
-  
+
   override redraw() {
     const img = this.element().querySelector('img')!;
     img.setAttribute('src', this.data.src);
@@ -172,7 +176,7 @@ override redraw() {
 
 ```
 protected subView<T extends ViewConstructor>(
-  SubView: T, 
+  SubView: T,
   selector?: string
 ): InstanceType<T> | null;
 ```
@@ -190,7 +194,7 @@ class ProductView extends View<Product> {
       </div>
     `;
   }
-  
+
   override onMount() {
     console.log(this.subView(PhotoView)!.data.src);
   }
@@ -201,7 +205,7 @@ class ProductView extends View<Product> {
 
 ```
 protected subViews<T extends ViewConstructor>(
-  SubView: T, 
+  SubView: T,
   selector?: string
 ): InstanceType<T>[];
 ```
@@ -212,7 +216,7 @@ It returns an array of subViews.
 
 ```
 protected subViewIn<T extends ViewConstructor>(
-  selector: string, 
+  selector: string,
   SubView: T
 ): InstanceType<T> | null;
 ```
@@ -230,7 +234,6 @@ protected subViewsIn<T extends ViewConstructor>(
 
 It returns an array of subViews drawn inside the parent element found by the selector.
 
-
 ## redrawOnlySubViews()
 
 `protected redrawOnlySubViews(): this;`
@@ -242,15 +245,11 @@ It iterates through the subViews and executes `redraw()` on each one.
 `chain(f: (this: this, view: this) => void): this;`
 
 ```typescript
-view
-  .chain((view) => view.data.quantity++)
-  .redraw();
+view.chain((view) => view.data.quantity++).redraw();
 ```
 
 ```typescript
-view
-  .chain((view) => view.data.quantity++)
-  .redraw();
+view.chain((view) => view.data.quantity++).redraw();
 ```
 
 ## safely()
@@ -264,7 +263,6 @@ safely(f: (this: this, view: this) => void): this {
 ```
 
 The implementation of `safely` is as shown above. It is used to chain code that should only execute when the element has been rendered.
-
 
 ## toString()
 

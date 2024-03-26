@@ -18,9 +18,7 @@ export abstract class Base {
 
   element(): HTMLElement {
     if (this._element === null) {
-      throw new TypeError(
-        "element is not created. call 'view.render' or 'view.hydrateFromSSR'.",
-      );
+      throw new TypeError("element is not created. call 'view.render' or 'view.hydrateFromSSR'.");
     }
     return this._element;
   }
@@ -34,9 +32,7 @@ export abstract class Base {
     return this;
   }
 
-  async chainAsync(
-    f: (this: this, view: this) => Promise<void>,
-  ): Promise<this> {
+  async chainAsync(f: (this: this, view: this) => Promise<void>): Promise<this> {
     await f.call(this, this);
     return this;
   }
@@ -45,9 +41,7 @@ export abstract class Base {
     return this.isRendered() ? this.chain(f) : this;
   }
 
-  async safelyAsync(
-    f: (this: this, view: this) => Promise<void>,
-  ): Promise<this> {
+  async safelyAsync(f: (this: this, view: this) => Promise<void>): Promise<this> {
     return this.isRendered() ? this.chainAsync(f) : this;
   }
 
@@ -102,20 +96,15 @@ export abstract class Base {
       | M,
     options?: boolean | AddEventListenerOptions,
   ): this {
-    eventHelper.addEventListener(
-      this,
-      this._element,
-      eventType,
-      listener,
-      options,
-    );
+    eventHelper.addEventListener(this, this._element, eventType, listener, options);
     return this;
   }
 
-  removeEventListener<
-    K extends keyof HTMLElementEventMap,
-    M extends keyof this,
-  >(eventType: K, listener: M, options?: boolean | EventListenerOptions): this;
+  removeEventListener<K extends keyof HTMLElementEventMap, M extends keyof this>(
+    eventType: K,
+    listener: M,
+    options?: boolean | EventListenerOptions,
+  ): this;
   removeEventListener<M extends keyof this>(
     eventType: string,
     listener: M,
@@ -131,10 +120,7 @@ export abstract class Base {
     listener: (this: this, ev: T) => any,
     options?: boolean | EventListenerOptions,
   ): this;
-  removeEventListener<
-    K extends keyof HTMLElementEventMap,
-    M extends keyof this,
-  >(
+  removeEventListener<K extends keyof HTMLElementEventMap, M extends keyof this>(
     eventType: K | string,
     listener:
       | ((this: this, ev: HTMLElementEventMap[K]) => any)
@@ -142,13 +128,7 @@ export abstract class Base {
       | M,
     options?: boolean | EventListenerOptions,
   ): this {
-    eventHelper.removeEventListener(
-      this,
-      this._element,
-      eventType,
-      listener,
-      options,
-    );
+    eventHelper.removeEventListener(this, this._element, eventType, listener, options);
     return this;
   }
 
@@ -157,11 +137,7 @@ export abstract class Base {
     selector: string,
     listener: M,
   ): this;
-  delegate<M extends keyof this>(
-    eventType: string,
-    selector: string,
-    listener: M,
-  ): this;
+  delegate<M extends keyof this>(eventType: string, selector: string, listener: M): this;
   delegate<K extends keyof HTMLElementEventMap>(
     eventType: K,
     selector: string,

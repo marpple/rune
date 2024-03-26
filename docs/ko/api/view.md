@@ -4,7 +4,7 @@ outline: deep
 
 # View class
 
-View는 HTML 템플릿, HTMLElement 생성, 이벤트 핸들링에 필요한 도구를 지원하며 UI 컴포넌트를 만들 때 사용하는 클래스입니다. 
+View는 HTML 템플릿, HTMLElement 생성, 이벤트 핸들링에 필요한 도구를 지원하며 UI 컴포넌트를 만들 때 사용하는 클래스입니다.
 
 ## Definition
 
@@ -27,6 +27,7 @@ class SwitchView extends View<SwitchData> {
 ```
 
 ## Create
+
 `new (data: T) => View<T>;`
 
 인자로 넘긴 `data`는 `this.data`에 등록되며 `this.template(data: T);`과 같이 `template()` 메서드로 전달됩니다.
@@ -36,6 +37,7 @@ new SwitchView({ on: false });
 ```
 
 ## template()
+
 `protected template(): Html;`
 
 `template` 메서드안에서는 `html`을 사용하여 HTML 템플릿을 만듭니다. ([템플릿 API 더보기](/ko/api/template.html))
@@ -43,14 +45,14 @@ new SwitchView({ on: false });
 ```typescript
 import { View, html } from 'rune-ts';
 
-class DessertView extends View<{ name: string, rating: number }> {
+class DessertView extends View<{ name: string; rating: number }> {
   override template() {
     return html`
       <div>
         <div class="name">${this.data.name}</div>
         <div class="rating">${this.data.rating}</div>
       </div>
-    `
+    `;
   }
 }
 ```
@@ -63,6 +65,7 @@ class DessertView extends View<{ name: string, rating: number }> {
 const dessertView = new DessertView({ name: 'Choco', rating: 2.8 });
 dessertView.toHtml();
 ```
+
 ```html
 <div class="DessertView">
   <div class="name">Choco</div>
@@ -79,6 +82,7 @@ dessertView.data.name = 'Latte';
 dessertView.data.rating = 3.5;
 dessertView.toHtml();
 ```
+
 ```html
 <div class="DessertView">
   <div class="name">Latte</div>
@@ -90,7 +94,7 @@ dessertView.toHtml();
 
 `public render(): HTMLElement;`
 
-내부에서 `this.template(this.data)`로 HTML문자열을 만들고 HTMLElement를 생성하여 `this._element`에 등록하고 리턴합니다. 
+내부에서 `this.template(this.data)`로 HTML문자열을 만들고 HTMLElement를 생성하여 `this._element`에 등록하고 리턴합니다.
 
 ```typescript
 const element: HTMLElement = dessertView.render();
@@ -114,12 +118,11 @@ const element: HTMLElement = dessertView.element();
 
 `isRendered()`는 View 내부에 HTMLElement를 생성한적이 있는지를 체크합니다. 렌더링된 상태에서만 실행하고자 하는 코드를 구분하고자 할 때 유용합니다.
 
-
 ## renderCount
+
 `public renderCount: number;`
 
-내부에서 `template()` 함수를 실행한 수입니다. 이 프로퍼티를 활용하여 부분적으로만 렌더링하도록 `template()` 함수를 정의하는 식으로 지연적인 렌더링을 구현할 수 있습니다. 
-
+내부에서 `template()` 함수를 실행한 수입니다. 이 프로퍼티를 활용하여 부분적으로만 렌더링하도록 `template()` 함수를 정의하는 식으로 지연적인 렌더링을 구현할 수 있습니다.
 
 ## hydrateFromSSR()
 
@@ -145,14 +148,14 @@ new ProductView({
 
 `public redraw(): this;`
 
-View 객체의 현재 data 상태로 자신을 다시 그립니다. 기본 동작은 가장 바깥 엘리먼트의 html attributes를 갱신하고 내부는 `innerHTML`로 변경합니다. 각 컴포넌트를 만드는 개발자가 `redraw` 함수를 최적화하여 오버라이드 해두면 좋습니다.  
+View 객체의 현재 data 상태로 자신을 다시 그립니다. 기본 동작은 가장 바깥 엘리먼트의 html attributes를 갱신하고 내부는 `innerHTML`로 변경합니다. 각 컴포넌트를 만드는 개발자가 `redraw` 함수를 최적화하여 오버라이드 해두면 좋습니다.
 
 ```typescript
 class PhotoView extends View<{ src: string; alt: string }> {
   override template({ src, alt }) {
     return html`<div><img src="${src}" alt="${alt}" /></div>`;
   }
-  
+
   override redraw() {
     const img = this.element().querySelector('img')!;
     img.setAttribute('src', this.data.src);
@@ -173,7 +176,7 @@ override redraw() {
 
 ```
 protected subView<T extends ViewConstructor>(
-  SubView: T, 
+  SubView: T,
   selector?: string
 ): InstanceType<T> | null;
 ```
@@ -191,7 +194,7 @@ class ProductView extends View<Product> {
       </div>
     `;
   }
-  
+
   override onMount() {
     console.log(this.subView(PhotoView)!.data.src);
   }
@@ -202,7 +205,7 @@ class ProductView extends View<Product> {
 
 ```
 protected subViews<T extends ViewConstructor>(
-  SubView: T, 
+  SubView: T,
   selector?: string
 ): InstanceType<T>[];
 ```
@@ -213,7 +216,7 @@ subViews 배열을 리턴합니다.
 
 ```
 protected subViewIn<T extends ViewConstructor>(
-  selector: string, 
+  selector: string,
   SubView: T
 ): InstanceType<T> | null;
 ```
@@ -231,7 +234,6 @@ protected subViewsIn<T extends ViewConstructor>(
 
 selector로 찾아지는 부모 엘리먼트 내부에 그려진 subViews 배열을 리턴합니다.
 
-
 ## redrawOnlySubViews()
 
 `protected redrawOnlySubViews(): this;`
@@ -243,15 +245,11 @@ subView를 순회하면서 `redraw()`를 실행합니다.
 `chain(f: (this: this, view: this) => void): this;`
 
 ```typescript
-view
-  .chain((view) => view.data.quantity++)
-  .redraw();
+view.chain((view) => view.data.quantity++).redraw();
 ```
 
 ```typescript
-view
-  .chain((view) => view.data.quantity++)
-  .redraw();
+view.chain((view) => view.data.quantity++).redraw();
 ```
 
 ## safely()
@@ -266,7 +264,6 @@ safely(f: (this: this, view: this) => void): this {
 
 `safely`의 구현은 위와 같습니다. 엘리먼트가 렌더링 된 상태에서만 동작했으면 하는 코드를 체이닝할 때 사용합니다.
 
-
 ## toString()
 
 View의 클래스이름을 리턴합니다.
@@ -275,6 +272,7 @@ View의 클래스이름을 리턴합니다.
 new MyView('hi').toString();
 // MyView
 ```
+
 ## onMount()
 
 View가 `document`에 `append` 된 이후에 실행됩니다.

@@ -8,9 +8,7 @@ interface CheckboxData {
 export class CheckboxView<T extends CheckboxData> extends View<T> {
   override template() {
     return html`
-      <div class="${this.data.checked ? 'checked' : ''}">
-        ${this.makeSubViewHtml()}
-      </div>
+      <div class="${this.data.checked ? 'checked' : ''}">${this.makeSubViewHtml()}</div>
     `;
   }
 
@@ -36,11 +34,7 @@ export class CheckboxView<T extends CheckboxData> extends View<T> {
 export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
   override template() {
     return html`
-      <div>
-        ${this.data.map((checkboxData) =>
-          this.makeCheckboxViewHtml(checkboxData),
-        )}
-      </div>
+      <div>${this.data.map((checkboxData) => this.makeCheckboxViewHtml(checkboxData))}</div>
     `;
   }
 
@@ -92,11 +86,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 
 export function main() {
-  const colors = [
-    { code: 'red' },
-    { code: 'green', checked: true },
-    { code: 'blue' },
-  ];
+  const colors = [{ code: 'red' }, { code: 'green', checked: true }, { code: 'blue' }];
 
   const colorCheckboxListView = new ColorCheckboxListView(colors);
   document.body.appendChild(colorCheckboxListView.render());

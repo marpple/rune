@@ -5,14 +5,9 @@
 `onMount()`는 `document.body` 내에 렌더링된 직후 실행되며 이벤트를 등록하기 적합한 시점입니다. `this.element()`는 `View`와 매핑된 `HTMLElement`를 리턴하며 Web API의 `addEventListener()`를 이용하여 이벤트를 등록할 수 있습니다.
 
 ```typescript
-
 export class ColorCheckboxView extends View<Color> {
   override template(color: Color) {
-    return html`
-      <li class="${color.checked ? 'checked' : ''}">
-        ${new ColorView(color)}
-      </li>
-    `;
+    return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
   }
 
   override onMount() {
@@ -105,7 +100,7 @@ class MyView extends View<{ val: number }> {
   override onMount() {
     this.delegate('click', '.target', () => this.remove());
   }
-  
+
   remove() {
     this.element().remove();
   }
@@ -136,9 +131,7 @@ export class ColorCheckboxListView extends View<Color[]> {
   }
 
   onChange() {
-    this.element().dispatchEvent(
-      new CustomEvent('checkboxlist:change', { bubbles: true }),
-    );
+    this.element().dispatchEvent(new CustomEvent('checkboxlist:change', { bubbles: true }));
   }
 
   checkedColors(): Color[] {

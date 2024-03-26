@@ -60,7 +60,7 @@ export class MarppleShopLayout extends Layout<MarppleShopLayoutData> {
 
   override template(data: MarppleShopLayoutData) {
     return html`
-      <!doctype html>
+      <!DOCTYPE html>
       <html>
         <head>
           <meta charset="utf-8" />

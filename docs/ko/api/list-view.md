@@ -39,6 +39,7 @@ class DessertListView extends ListView<Dessert, DessertView> {
 ListView 안에서 사용할 ItemView 클래스를 정의하고 ItemView에서 사용하는 데이터의 타입을 `ListView<Dessert, DessertView>`와 같이 ListView 클래스의 타입 인자로 전달하면 됩니다.
 
 ## Create
+
 `new (data: T) => ListView<T, IV>;`
 
 ```typescript
@@ -69,7 +70,7 @@ dessertListView.toHtml();
 
 ```typescript
 class DessertListView extends ListView<Dessert, DessertView> {
-  override tagName = 'ol'; 
+  override tagName = 'ol';
   override ItemView = DessertView;
 }
 
@@ -89,7 +90,6 @@ new DessertListView([
 ## ItemView
 
 `ItemView: (new (data: T) => IV);`
-
 
 ## itemViews
 
@@ -112,8 +112,8 @@ dessertListView.length === dessertListView.itemViews.length;
 
 ```typescript
 dessertListView.add([
-  { name: 'Coffee', rating: 4.2 }, 
-  { name: 'Decaf', rating: 2.1 }
+  { name: 'Coffee', rating: 4.2 },
+  { name: 'Decaf', rating: 2.1 },
 ]);
 ```
 
@@ -140,13 +140,11 @@ dessertListView.add([
 
 전달 받은 데이터를 `this.data`에 추가하고 `ItemView`를 생성하여 화면과 `itemViews`에 반영합니다.
 
-
 ## prepend()
 
 `prepend(item: T): this;`
 
 전달 받은 데이터를 `this.data`에 추가하고 `ItemView`를 생성하여 화면과 `itemViews`에 반영합니다.
-
 
 ## prependAll()
 
@@ -154,13 +152,11 @@ dessertListView.add([
 
 전달 받은 데이터를 `this.data`에 추가하고 `ItemView`를 생성하여 화면과 `itemViews`에 반영합니다.
 
-
 ## remove()
 
 `remove(item: T): IV | undefined;`
 
-레퍼런스가 동일한 `item` 을 받아 `this.data`에서 `item`을 삭제하고 `itemViews`와 화면에서 `ItemView` 객체를 삭제하고 삭제를 성공하면 삭제된 `ItemView` 객체를 리턴합니다. 
-
+레퍼런스가 동일한 `item` 을 받아 `this.data`에서 `item`을 삭제하고 `itemViews`와 화면에서 `ItemView` 객체를 삭제하고 삭제를 성공하면 삭제된 `ItemView` 객체를 리턴합니다.
 
 ## removeAll()
 
@@ -168,13 +164,11 @@ dessertListView.add([
 
 `remove()`와 동일하게 동작하며 배열을 받아 모두 삭제합니다.
 
-
 ## removeByItemView()
 
 `removeByItemView(itemView: IV): IV | undefined;`
 
 `remove()`와 동일하게 동작하며 `itemView`와 레퍼런스가 동일한 값을 삭제합니다.
-
 
 ## removeAllByItemViews()
 
@@ -182,13 +176,11 @@ dessertListView.add([
 
 `removeByItemView()`와 동일하게 동작하며 배열을 받아 모두 삭제합니다.
 
-
 ## removeByIndex()
 
 `removeByIndex(idx: number): IV | undefined;`
 
 `remove()`와 동일하게 동작하며 `idx` 값으로 삭제합니다.
-
 
 ## removeBy()
 
@@ -196,21 +188,17 @@ dessertListView.add([
 
 `itemView`를 순회하면서 `f` 함수에게 전달하여 참이 조건이 되는 첫 번째 `ItemView` 객체를 삭제합니다.
 
-
 ## removeAllBy()
 
 `removeAllBy(f: (itemView: IV) => boolean): IV[];`
 
 `removeBy()`와 동일하게 동작하며 참이 되는 모든 `ItemView` 객체들을 삭제합니다.
 
-
-
 ## reset()
 
 `reset(): this;`
 
 모두 삭제합니다.
-
 
 ## set()
 
