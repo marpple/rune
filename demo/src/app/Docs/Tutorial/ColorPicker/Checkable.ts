@@ -1,33 +1,6 @@
 import { View, Enable, html } from 'rune-ts';
 
-// export class Deletable extends Enable<unknown> {
-//   override onMount() {
-//     this.addEventListener('mousedown', this.remove);
-//   }
-//
-//   remove() {
-//     this.element().remove();
-//   }
-// }
-
-// export type Color = {
-//   code: string;
-// };
-//
-// class ColorView extends View<Color> {
-//   override template({ code }: Color) {
-//     return this.html`
-//       <div style="background-color: ${code}"></div>
-//     `;
-//   }
-// }
-
-// export class BallView extends ColorView {
-//   removable = new Deletable(this);
-//   movable = new Movable(this);
-// }
-
-export class Movable extends Enable<unknown> {
+export class Movable extends Enable {
   override onMount() {
     this.element().animate(
       [
@@ -48,7 +21,7 @@ interface DeletableExtraViewInterface {
   canRemove(): boolean;
 }
 
-export class Deletable extends Enable<unknown, DeletableExtraViewInterface> {
+export class Deletable extends Enable<object, DeletableExtraViewInterface> {
   override onMount() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }

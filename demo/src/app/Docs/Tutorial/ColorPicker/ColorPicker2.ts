@@ -69,7 +69,7 @@ export interface Color {
 
 export class ColorCheckboxView extends CheckboxView<Color> {
   override subViewHtml() {
-    return html`${new ColorView(this.data.value.colorCode)}`;
+    return html`${new ColorView({ colorCode: this.data.value.colorCode })}`;
   }
 }
 

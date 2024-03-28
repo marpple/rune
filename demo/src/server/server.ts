@@ -1,6 +1,6 @@
 import { app } from '@rune-ts/server';
 import { ClientRouter } from '../app/ClientRouter';
-import { type TutorialLayoutData } from '../app/TutorialLayoutData';
+import { type TutorialLayoutData } from '../app/TutorialLayout';
 import runeConfig from '../../rune.config.js';
 
 const server = app();

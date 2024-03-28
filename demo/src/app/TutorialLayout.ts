@@ -26,8 +26,8 @@ export class TutorialLayout extends Layout<TutorialLayoutData> {
   dataScript: () => UnsafeHtml;
   entryScript: () => UnsafeHtml;
 
-  constructor(page: Page<any>, data: TutorialLayoutData) {
-    super(page, data);
+  constructor(data: TutorialLayoutData, page: Page<any>) {
+    super(data, page);
 
     this.styleSheet = () =>
       manifest?.['main.css']
