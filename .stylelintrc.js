@@ -12,9 +12,9 @@ module.exports = {
     'block-no-empty': true,
     'at-rule-no-unknown': null,
     'selector-class-pattern': [
-      "^([a-z][a-zA-Z0-9]*)(__[a-z][a-zA-Z0-9]*)*(--[a-z][a-zA-Z0-9]*)?$",
+      '^([a-z][a-zA-Z0-9]*)(__[a-z][a-zA-Z0-9]*)*(--[a-z][a-zA-Z0-9]*)?$',
       {
-        "message": "BEM 네이밍 규칙을 따르고 camelCase를 사용하세요.",
+        message: 'BEM 네이밍 규칙을 따르고 camelCase를 사용하세요.',
         resolveNestedSelectors: true,
       },
     ],

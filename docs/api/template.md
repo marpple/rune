@@ -5,6 +5,7 @@ outline: deep
 # Template
 
 ## view.template()
+
 `protected template(): Html;`
 
 The `template()` method is executed internally within `view.toHtml()`, `view.render()`, etc., and it takes the `data: T` passed as an argument when creating the `View<T>`. Inside the `template` method, HTML templates are constructed using the `html` function.
@@ -27,9 +28,7 @@ class ProductView extends View<Product> {
         <div class="name">${product.name}</div>
         <div class="price">$${product.price}</div>
         <select>
-          ${product.options.map(
-            ({ id, name }) => html`<option value="${id}">${name}</option>`,
-          )}
+          ${product.options.map(({ id, name }) => html`<option value="${id}">${name}</option>`)}
         </select>
       </div>
     `;
@@ -61,22 +60,16 @@ type Data = { value: string };
 
 class MyView extends View<Data> {
   override template({ value }: Data) {
-    return html`
-      <div>
-        ${value}
-        ${html.preventEscape(value)}
-      </div>
-    `;
+    return html` <div>${value} ${html.preventEscape(value)}</div> `;
   }
 }
 
 new MyView({ value: '<marquee>Hello, world!</marquee>' }).toHtml();
 ```
+
 ```html
 <div class="MyView">
   &lt;marquee&gt;Hello, world!&lt;/marquee&gt;
   <marquee>Hello, world!</marquee>
 </div>
 ```
-
-

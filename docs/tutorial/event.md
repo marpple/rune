@@ -5,14 +5,9 @@
 `onMount()` is executed immediately after rendering within `document.body`, making it an appropriate time to register events. `this.element()` returns the `HTMLElement` associated with the `View`, enabling event registration using Web API's `addEventListener()`.
 
 ```typescript
-
 export class ColorCheckboxView extends View<Color> {
   override template(color: Color) {
-    return html`
-      <li class="${color.checked ? 'checked' : ''}">
-        ${new ColorView(color)}
-      </li>
-    `;
+    return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
   }
 
   override onMount() {
@@ -105,7 +100,7 @@ class MyView extends View<{ val: number }> {
   override onMount() {
     this.delegate('click', '.target', () => this.remove());
   }
-  
+
   remove() {
     this.element().remove();
   }
@@ -136,9 +131,7 @@ export class ColorCheckboxListView extends View<Color[]> {
   }
 
   onChange() {
-    this.element().dispatchEvent(
-      new CustomEvent('checkboxlist:change', { bubbles: true }),
-    );
+    this.element().dispatchEvent(new CustomEvent('checkboxlist:change', { bubbles: true }));
   }
 
   checkedColors(): Color[] {

@@ -5,6 +5,7 @@ outline: deep
 # Template
 
 ## view.template()
+
 `protected template(): Html;`
 
 `template()` 메서드는 `view.toHtml()`, `view.render()` 등의 내부에서 실행되며 `View<T>`를 생성할 때 인자로 넘겼던 `data: T`를 인자로 받습니다. `template` 메서드안에서는 `html`을 사용하여 HTML 템플릿을 만듭니다.
@@ -27,9 +28,7 @@ class ProductView extends View<Product> {
         <div class="name">${product.name}</div>
         <div class="price">$${product.price}</div>
         <select>
-          ${product.options.map(
-            ({ id, name }) => html`<option value="${id}">${name}</option>`,
-          )}
+          ${product.options.map(({ id, name }) => html`<option value="${id}">${name}</option>`)}
         </select>
       </div>
     `;
@@ -45,7 +44,7 @@ class PhotoView extends View<{ src: string; alt: string }> {
 
 ## html
 
-html`` 사이의 `${}`로 넘어오는 값은 내부에서 다음과 같이 처리하며 중첩 컴포넌트 사용이 가능합니다.
+html``사이의`${}`로 넘어오는 값은 내부에서 다음과 같이 처리하며 중첩 컴포넌트 사용이 가능합니다.
 
 - (view: View) => view.toHtml();
 - (arr: Array) => arr.join('');
@@ -61,25 +60,16 @@ type Data = { value: string };
 
 class MyView extends View<Data> {
   override template({ value }: Data) {
-    return html`
-      <div>
-        ${value}
-        ${html.preventEscape(value)}
-      </div>
-    `;
+    return html` <div>${value} ${html.preventEscape(value)}</div> `;
   }
 }
 
 new MyView({ value: '<marquee>Hello, world!</marquee>' }).toHtml();
 ```
+
 ```html
 <div class="MyView">
   &lt;marquee&gt;Hello, world!&lt;/marquee&gt;
   <marquee>Hello, world!</marquee>
 </div>
 ```
-
-
-
-
-

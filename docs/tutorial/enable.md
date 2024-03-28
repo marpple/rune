@@ -6,7 +6,6 @@ Rune provides the Enable pattern, which allows multiple functionalities to be ad
 
 Enable is designed to share both `View` and data. In TypeScript, you can pass the same type to `Enable<T>`'s type argument as the `view.data` of `View<T>`. When utilizing Enable with the previously created `CheckboxView`, you can implement it using the following pattern. `Checkable<T extends CheckableData>` constrains the type of `View`'s data passed when creating `Checkable`.
 
-
 ```typescript
 import { View, html, Enable } from 'rune-ts';
 
@@ -19,9 +18,7 @@ class Checkable<T extends CheckableData> extends Enable<T> {
   private _toggle() {
     this.view.data.checked = !this.view.data.checked;
     this.view.element().classList.toggle('checked');
-    this.view.element().dispatchEvent(
-      new CustomEvent('checkable:change', { bubbles: true })
-    );
+    this.view.element().dispatchEvent(new CustomEvent('checkable:change', { bubbles: true }));
   }
 }
 
@@ -32,11 +29,10 @@ type Color = {
 
 class CheckableColorView extends View<Color> {
   checkable = new Checkable(this).init();
-  
+
   override template(color: Color) {
     return html`
-      <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}">
-      </div>
+      <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}"></div>
     `;
   }
 }
@@ -61,7 +57,6 @@ _toggle() {
 
 In `Enable`, since `this.view.data === this.data` and `this.view.element() === this.element()`, the toggle section can be modified as shown in the code above. This facilitates the process of transferring the code written for `View` to `Enable` to create reusable code.
 
-
 ## Extending Views without Data Sharing
 
 Using `Deletable`, you can easily create a `BallView` that is deleted when clicked. `class Deletable extends Enable` is equivalent to `class Deletable extends Enable<object>`.
@@ -78,25 +73,30 @@ class Deletable extends Enable {
 }
 
 type Ball = {
-  color: string
-}
+  color: string;
+};
 
 class BallView extends View<Ball> {
   deletable = new Deletable(this).init();
 
   override template() {
     return html`
-      <div style="
+      <div
+        style="
          border: 1px solid black; 
          padding: 10px;
          width: 20px; 
          height: 20px;
-         border-radius: 20px;">
-        <div class="remove-target" style="
+         border-radius: 20px;"
+      >
+        <div
+          class="remove-target"
+          style="
            background-color: ${this.data.color}; 
            width: 100%; 
            height: 100%; 
-           border-radius: 10px;"></div>
+           border-radius: 10px;"
+        ></div>
       </div>
     `;
   }
@@ -130,22 +130,27 @@ export class Deletable extends Enable<object, DeletableViewExtraInterface> {
 
 export class BallView extends View<Ball> {
   deletable = new Deletable(this).init();
-  
+
   readonly targetClassName = 'target';
 
   override template() {
     return html`
-      <div style="
+      <div
+        style="
          border: 1px solid black; 
          padding: 10px; 
          width: 20px; 
          height: 20px; 
-         border-radius: 20px;">
-        <div class="${this.targetClassName}" style="
+         border-radius: 20px;"
+      >
+        <div
+          class="${this.targetClassName}"
+          style="
            background-color: ${this.data.color}; 
            width: 100%; 
            height: 100%; 
-           border-radius: 10px;"></div>
+           border-radius: 10px;"
+        ></div>
       </div>
     `;
   }
@@ -181,17 +186,15 @@ export type Ball = {
 
 export class BallView extends View<Ball> {
   deletable = new Deletable(this).init();
-  
+
   readonly targetClassName = 'target';
-  
+
   canRemove() {
     return confirm('삭제하시겠습니까?');
   }
 
   override template() {
-    return html`
-      ...
-    `;
+    return html` ... `;
   }
 }
 ```
@@ -218,23 +221,21 @@ class Movable extends Enable {
 }
 
 type Ball = {
-  color: string
-}
+  color: string;
+};
 
 export class BallView extends View<Ball> {
   movable = new Movable(this).init();
   deletable = new Deletable(this).init();
-  
+
   readonly targetClassName = 'target';
-  
+
   canRemove() {
     return confirm('삭제하시겠습니까?');
   }
 
   override template() {
-    return html`
-      ...
-    `;
+    return html` ... `;
   }
 }
 ```
@@ -250,7 +251,7 @@ export type Ball = {
 export class BallView extends View<Ball> {
   movable = new Movable(this).init();
   deletable = new Deletable(this).init();
-  
+
   readonly targetClassName = 'target';
 
   canRemove() {
@@ -258,9 +259,7 @@ export class BallView extends View<Ball> {
   }
 
   override template() {
-    return html`
-      ...
-    `;
+    return html` ... `;
   }
 }
 

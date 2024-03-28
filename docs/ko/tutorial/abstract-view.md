@@ -14,28 +14,20 @@ export type Color = {
 
 export class ColorView extends View<Color> {
   override template({ code }: Color) {
-    return html`
-      <div style="background-color: ${code}"></div>
-    `;
+    return html` <div style="background-color: ${code}"></div> `;
   }
 }
 
 export class ColorCheckboxView extends View<Color> {
   override template(color: Color) {
-    return html`
-      <li class="${color.checked ? 'checked' : ''}">
-        ${new ColorView(color)}
-      </li>
-    `;
+    return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
   }
 
   @on('click')
   private _toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
-    this.element().dispatchEvent(
-      new CustomEvent('checkbox:change', { bubbles: true })
-    );
+    this.element().dispatchEvent(new CustomEvent('checkbox:change', { bubbles: true }));
   }
 }
 
@@ -53,16 +45,13 @@ export class ColorCheckboxListView extends View<Color[]> {
   }
 
   onChange() {
-    this.element().dispatchEvent(
-      new CustomEvent('checkboxlist:change', { bubbles: true })
-    );
+    this.element().dispatchEvent(new CustomEvent('checkboxlist:change', { bubbles: true }));
   }
 
   checkedColors(): Color[] {
     return this.data.filter(({ checked }) => checked);
   }
 }
-
 ```
 
 ## 추상화된 클래스와 제네릭
@@ -94,9 +83,7 @@ export class CheckboxView<T extends CheckboxData> extends View<T> {
   private _toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
-    this.element().dispatchEvent(
-      new CustomEvent('checkbox:change', { bubbles: true })
-    );
+    this.element().dispatchEvent(new CustomEvent('checkbox:change', { bubbles: true }));
   }
 }
 
@@ -107,9 +94,7 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
   override template(checkBoxDatas: T[]) {
     return html`
       <${this.tagName}>
-        ${checkBoxDatas.map(
-          (checkBoxData) => this.createCheckboxView(checkBoxData)
-        )}
+        ${checkBoxDatas.map((checkBoxData) => this.createCheckboxView(checkBoxData))}
       </${this.tagName}>
     `;
   }
@@ -120,9 +105,7 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
 
   @on('checkbox:change', '> *')
   onChange() {
-    this.element().dispatchEvent(
-      new CustomEvent('checkboxlist:change', { bubbles: true })
-    );
+    this.element().dispatchEvent(new CustomEvent('checkboxlist:change', { bubbles: true }));
   }
 
   checkedData() {
@@ -133,7 +116,6 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
 
 제네릭을 활용하여 `CheckboxListView`, `CheckboxView`를 확장할 코드들에서 `data`의
 타입을 추론할 수 있도록 하였습니다. `CheckboxView<T extends CheckboxData>`는 `CheckboxView`을 확장할 새로운 `View`의 `data`의 타입을 제약합니다. 또한 `tagName`, `SubView`, `CheckboxView` 등을 확장할 수 있도록 프로퍼티를 추가했습니다.
-
 
 ## 상속으로 확장하기
 
@@ -179,9 +161,7 @@ export type Color = {
 
 export class ColorView extends View<Color> {
   override template({ code }: Color) {
-    return html`
-      <div style="background-color: ${code}"></div>
-    `;
+    return html` <div style="background-color: ${code}"></div> `;
   }
 }
 
@@ -199,9 +179,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 ```typescript
 export class ColorView extends View<Color> {
   template({ code }: Color) {
-    return html`
-        <div style="background-color: ${code}"></div>
-      `;
+    return html` <div style="background-color: ${code}"></div> `;
   }
 }
 
@@ -219,9 +197,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
   CheckboxView = class ColorCheckboxView extends CheckboxView<Color> {
     SubView = class ColorView extends View<Color> {
       template({ code }: Color) {
-        return html`
-          <div style="background-color: ${code}"></div>
-        `;
+        return html` <div style="background-color: ${code}"></div> `;
       }
     };
   };

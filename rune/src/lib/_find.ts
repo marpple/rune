@@ -16,9 +16,7 @@ export default function _find(
   element.id = id || createId();
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
   const res = (element as any)[querySelectorMethodName](
-    '#' +
-      element.id +
-      (selector.startsWith('&') ? selector.substring(1) : ' ' + selector),
+    '#' + element.id + (selector.startsWith('&') ? selector.substring(1) : ' ' + selector),
   );
   if (!id) element.removeAttribute('id');
   return res;

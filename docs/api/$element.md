@@ -71,7 +71,7 @@ The default Web API's `querySelector` and `querySelectorAll` do not support usin
 
 ```typescript
 try {
-  document.querySelector(".container")!.querySelectorAll("> ul li");
+  document.querySelector('.container')!.querySelectorAll('> ul li');
 } catch (e) {
   console.log(e);
   // DOMException: Failed to execute 'querySelectorAll' on 'Element': '> ul li' is not a valid selector.
@@ -81,27 +81,27 @@ try {
 When using `find()` or `findAll()`, you can use `>` at the beginning of the selector:
 
 ```typescript
-$(".container").findAll("> ul li");
+$('.container').findAll('> ul li');
 // [li.item1, li.item2, li.item3]
 ```
 
 The default behavior of `querySelector` and `querySelectorAll` in the Web API is to include the parent element when the selector starts with `>`. It's important to note this behavior:
 
 ```typescript
-document.querySelector(".container").querySelectorAll("[active=true] > ul li");
+document.querySelector('.container').querySelectorAll('[active=true] > ul li');
 // [li.item1, li.item2, li.item3, li.item4, li.item5]
 ```
 
 In `find()` or `findAll()`, you can use `&` to explicitly indicate whether to include the parent element in additional conditions. If `&` is absent, it always starts searching from the child elements:
 
 ```typescript
-$(".container").findAll('&[active="true"] li');
+$('.container').findAll('&[active="true"] li');
 // [li.item1, li.item2, li.item3, li.item4, li.item5]
 
-$(".container").findAll('&[active="true"] > ul li');
+$('.container').findAll('&[active="true"] > ul li');
 // [li.item1, li.item2, li.item3]
 
-$(".container").findAll('&[active="false"] li');
+$('.container').findAll('&[active="false"] li');
 // []
 ```
 
@@ -360,4 +360,3 @@ $('#body')
 ## to()
 
 `to<T>(f: (element: HTMLElement) => T): T;`
-

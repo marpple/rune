@@ -26,10 +26,7 @@ export class EventHelper {
     }
   }
 
-  private _reservedListenerMap = new WeakMap<
-    any,
-    ((instance: any, element: any) => void)[]
-  >();
+  private _reservedListenerMap = new WeakMap<any, ((instance: any, element: any) => void)[]>();
 
   private _getReservedListener(instance: any) {
     return (
@@ -43,19 +40,9 @@ export class EventHelper {
     return this;
   }
 
-  addEventListener(
-    instance: any,
-    element: any,
-    eventType: string,
-    listener: any,
-    options?: any,
-  ) {
+  addEventListener(instance: any, element: any, eventType: string, listener: any, options?: any) {
     if (element) {
-      element.addEventListener(
-        eventType,
-        this._makeListener(instance, listener),
-        options,
-      );
+      element.addEventListener(eventType, this._makeListener(instance, listener), options);
     } else {
       this._getReservedListener(instance).push((instance: any, element: any) =>
         this.addEventListener(instance, element, eventType, listener, options),
@@ -71,27 +58,13 @@ export class EventHelper {
     listener: any,
     options?: any,
   ) {
-    element.removeEventListener(
-      eventType,
-      this._makeListener(instance, listener),
-      options,
-    );
+    element.removeEventListener(eventType, this._makeListener(instance, listener), options);
     return this;
   }
 
-  delegate(
-    instance: any,
-    element: any,
-    eventType: string,
-    selector: string,
-    listener: any,
-  ) {
+  delegate(instance: any, element: any, eventType: string, selector: string, listener: any) {
     if (element) {
-      $(element).delegate(
-        eventType,
-        selector,
-        this._makeListener(instance, listener),
-      );
+      $(element).delegate(eventType, selector, this._makeListener(instance, listener));
     } else {
       this._getReservedListener(instance).push((instance: any, element: any) =>
         this.delegate(instance, element, eventType, selector, listener),

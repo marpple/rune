@@ -33,7 +33,7 @@ addEventListener<T extends Event>(
 
 The View class and the Enable class provide extended methods for `addEventListener`. When you use `view.addEventListener()`, the provided function is registered and executed with `this` bound to the `view` when the event occurs. All other behaviors are consistent with the Web API's `addEventListener`. ([Tutorial - Handling Events](/tutorial/event.html))
 
-## removeEventListener() 
+## removeEventListener()
 
 ```
 removeEventListener<
@@ -93,7 +93,7 @@ export class CheckboxView extends View<{ checked: boolean }> {
   override onMount() {
     this.addEventListener('click', () => this._toggle());
   }
-  
+
   private _toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
@@ -109,14 +109,14 @@ export class CheckboxView extends View<{ checked: boolean }> {
 }
 ```
 
-When passing only one argument to the `@on` decorator, it utilizes `addEventListener`, while passing a second argument, a CSS selector, to `@on` indicates the use of `delegate`. 
+When passing only one argument to the `@on` decorator, it utilizes `addEventListener`, while passing a second argument, a CSS selector, to `@on` indicates the use of `delegate`.
 
 ```typescript
 class MyView extends View<object> {
   override onMount() {
     this.delegate('click', 'button', () => this.remove());
   }
-  
+
   remove() {
     this.element().remove();
   }
@@ -129,5 +129,3 @@ class MyView extends View<object> {
   }
 }
 ```
-
-

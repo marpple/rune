@@ -16,14 +16,13 @@ class Checkable<T extends CheckableData> extends Enable<T> {
   private _toggle() {
     this.view.data.checked = !this.view.data.checked;
     this.view.element().classList.toggle('checked');
-    this.view.element().dispatchEvent(
-      new CustomEvent('checkable:change', { bubbles: true })
-    );
+    this.view.element().dispatchEvent(new CustomEvent('checkable:change', { bubbles: true }));
   }
 }
 ```
 
 ## Create & init()
+
 ```
 type ExtendExtraInterface<T, E> = E extends null ? T : T & E;
 
@@ -38,11 +37,10 @@ type Color = {
 
 class CheckableColorView extends View<Color> {
   checkable = new Checkable(this).init();
-  
+
   override template(color: Color) {
     return html`
-      <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}">
-      </div>
+      <div class="${color.checked ? 'checked' : ''}" style="background-color: ${color.code}"></div>
     `;
   }
 }
@@ -73,4 +71,3 @@ When `enable.init()` is called, `onMount()` is executed when the `element` of th
 ## Event handling
 
 Enable class inherits Event handling methods from the Base class, just like the View class. (Refer to [API - Event handling](/api/event.html))
-
