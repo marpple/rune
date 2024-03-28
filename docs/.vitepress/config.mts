@@ -23,6 +23,11 @@ export default defineConfig({
     ],
     ['meta', { property: 'og:description', content: 'Web API based Front-end SDK' }],
   ],
+  themeConfig: {
+    search: {
+      provider: 'local',
+    },
+  },
   locales: {
     root: {
       label: 'English',
@@ -72,7 +77,7 @@ export default defineConfig({
               { text: 'Creating a View', link: '/tutorial/view' },
               { text: 'Event Handling', link: '/tutorial/event' },
               { text: 'Abstracting View', link: '/tutorial/abstract-view' },
-              // { text: 'Enable Pattern', link: '/tutorial/enable' },
+              { text: 'Enable Pattern', link: '/tutorial/enable' },
               { text: 'Solo Component SSR', link: '/tutorial/solo-component-ssr' },
             ],
           },
@@ -82,16 +87,13 @@ export default defineConfig({
               { text: 'View class', link: '/api/view' },
               { text: 'Template', link: '/api/template' },
               { text: 'Event handling', link: '/api/event' },
-              // { text: 'Enable class', link: '/api/enable' },
+              { text: 'Enable class', link: '/api/enable' },
               { text: 'ListView class', link: '/api/list-view' },
               { text: 'DOM Manipulation', link: '/api/$element' },
             ],
           },
         ],
         socialLinks: [{ icon: 'github', link: 'https://github.com/marpple/rune' }],
-        search: {
-          provider: 'local',
-        },
         footer: {
           copyright:
             'Copyright © 2024 <a href="https://www.marpplecorp.com/" target="_blank">Marpple Corporation ↗</a>',
@@ -146,7 +148,7 @@ export default defineConfig({
               { text: 'View 만들기', link: '/ko/tutorial/view' },
               { text: 'Event 다루기', link: '/ko/tutorial/event' },
               { text: 'View 추상화', link: '/ko/tutorial/abstract-view' },
-              // { text: 'Enable 패턴', link: '/ko/tutorial/enable' },
+              { text: 'Enable 패턴', link: '/ko/tutorial/enable' },
               { text: 'Solo Component SSR', link: '/ko/tutorial/solo-component-ssr' },
             ],
           },
@@ -156,16 +158,13 @@ export default defineConfig({
               { text: 'View class', link: '/ko/api/view' },
               { text: 'Template', link: '/ko/api/template' },
               { text: 'Event handling', link: '/ko/api/event' },
-              // { text: 'Enable class', link: '/ko/api/enable' },
+              { text: 'Enable class', link: '/ko/api/enable' },
               { text: 'ListView class', link: '/ko/api/list-view' },
               { text: 'DOM Manipulation', link: '/ko/api/$element' },
             ],
           },
         ],
         socialLinks: [{ icon: 'github', link: 'https://github.com/marpple/rune' }],
-        search: {
-          provider: 'local',
-        },
         footer: {
           copyright:
             'Copyright © 2024 <a href="https://www.marpplecorp.com/" target="_blank">Marpple Corporation ↗</a>',
