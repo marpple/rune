@@ -21,7 +21,7 @@ class Checkable<T extends CheckableData> extends Enable<T> {
 }
 ```
 
-## Create & init()
+## Create
 
 ```
 type ExtendExtraInterface<T, E> = E extends null ? T : T & E;
@@ -36,7 +36,7 @@ type Color = {
 };
 
 class CheckableColorView extends View<Color> {
-  checkable = new Checkable(this).init();
+  checkable = new Checkable(this);
 
   override template(color: Color) {
     return html`
@@ -66,7 +66,7 @@ The `view.data` associated with the `view` received as an argument during creati
 
 ## onMount()
 
-When `enable.init()` is called, `onMount()` is executed when the `element` of the `view` passed as an argument during creation is appended to the `document`. If the element is already appended, `onMount()` is executed immediately upon calling `init()`.
+When creating an `enable`, if the `element` of the `view` passed as an argument is appended to the `document`, the `onMount()` function is executed. If the `element` is already appended, `onMount()` is executed immediately.
 
 ## Event handling
 

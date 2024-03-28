@@ -28,7 +28,7 @@ type Color = {
 };
 
 class CheckableColorView extends View<Color> {
-  checkable = new Checkable(this).init();
+  checkable = new Checkable(this);
 
   override template(color: Color) {
     return html`

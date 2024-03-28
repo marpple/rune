@@ -28,7 +28,7 @@ type Color = {
 };
 
 class CheckableColorView extends View<Color> {
-  checkable = new Checkable(this).init();
+  checkable = new Checkable(this);
 
   override template(color: Color) {
     return html`
@@ -77,7 +77,7 @@ type Ball = {
 };
 
 class BallView extends View<Ball> {
-  deletable = new Deletable(this).init();
+  deletable = new Deletable(this);
 
   override template() {
     return html`
@@ -129,7 +129,7 @@ export class Deletable extends Enable<object, DeletableViewExtraInterface> {
 }
 
 export class BallView extends View<Ball> {
-  deletable = new Deletable(this).init();
+  deletable = new Deletable(this);
 
   readonly targetClassName = 'target';
 
@@ -185,7 +185,7 @@ export type Ball = {
 };
 
 export class BallView extends View<Ball> {
-  deletable = new Deletable(this).init();
+  deletable = new Deletable(this);
 
   readonly targetClassName = 'target';
 
@@ -225,8 +225,8 @@ type Ball = {
 };
 
 export class BallView extends View<Ball> {
-  movable = new Movable(this).init();
-  deletable = new Deletable(this).init();
+  movable = new Movable(this);
+  deletable = new Deletable(this);
 
   readonly targetClassName = 'target';
 
@@ -249,8 +249,8 @@ export type Ball = {
 };
 
 export class BallView extends View<Ball> {
-  movable = new Movable(this).init();
-  deletable = new Deletable(this).init();
+  movable = new Movable(this);
+  deletable = new Deletable(this);
 
   readonly targetClassName = 'target';
 
