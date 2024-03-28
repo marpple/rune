@@ -3,17 +3,17 @@ import { Base } from './Base';
 
 type ExtendExtraInterface<T, E> = E extends null ? T : T & E;
 
-export abstract class Enable<T extends object = object, E = null> extends Base {
+export abstract class BaseEnable<T extends object = object, E = null> extends Base {
   view: ExtendExtraInterface<View<T>, E>;
   data: T;
 
-  constructor(view: ExtendExtraInterface<View<T>, E>) {
+  protected constructor(view: ExtendExtraInterface<View<T>, E>) {
     super();
     this.view = view;
     this.data = view.data;
   }
 
-  init(): this {
+  protected init(): this {
     if (this.view.isRendered()) {
       this._onMount();
     } else {
@@ -34,15 +34,23 @@ export abstract class Enable<T extends object = object, E = null> extends Base {
   }
 }
 
+export abstract class Enable<T extends object = object, E = null> extends BaseEnable<T, E> {
+  constructor(view: ExtendExtraInterface<View<T>, E>) {
+    super(view);
+    this.init();
+  }
+}
+
 export abstract class EnableWithOptions<
   T extends object = object,
   O = object,
   E = null,
-> extends Enable<T, E> {
-  options?: O;
+> extends BaseEnable<T, E> {
+  options: O;
 
-  constructor(view: ExtendExtraInterface<View<T>, E>, options?: O) {
+  constructor(view: ExtendExtraInterface<View<T>, E>, options: O) {
     super(view);
     this.options = options;
+    this.init();
   }
 }

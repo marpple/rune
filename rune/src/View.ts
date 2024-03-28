@@ -67,7 +67,7 @@ export class View<T extends object> extends VirtualView<T> {
 
   override _onMount() {
     this._reservedEnables = (this.constructor as HasReservedEnables)._ReservedEnables.map(
-      (ReservedEnable) => new ReservedEnable(this).init(),
+      (ReservedEnable) => new ReservedEnable(this),
     );
     rune.set(this.element(), this, View);
     super._onMount();
