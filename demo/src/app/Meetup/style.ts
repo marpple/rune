@@ -1,6 +1,6 @@
 import { html, rune, View } from 'rune-ts';
 
-export class StyleView extends View<Record<string, string>> {
+export class StyleView extends View<object> {
   override template() {
     return html`<style>
       #tutorial {
