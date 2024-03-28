@@ -6,7 +6,7 @@ interface DeletableViewExtraInterface {
   canRemove(): boolean;
 }
 
-export class Deletable extends Enable<unknown, DeletableViewExtraInterface> {
+export class Deletable extends Enable<object, DeletableViewExtraInterface> {
   asd = 1;
 
   override onMount() {
@@ -22,7 +22,7 @@ export class Deletable extends Enable<unknown, DeletableViewExtraInterface> {
   }
 }
 
-export class Movable extends Enable<unknown> {
+export class Movable extends Enable {
   override onMount() {
     this.start();
   }
@@ -47,10 +47,10 @@ interface Ball {
   count: number;
 }
 
-@enable(Movable, Deletable)
+// @enable(Movable, Deletable)
 export class BallView extends View<Ball> {
-  // movable = new Movable(this).init();
-  // deletable = new Deletable(this).init();
+  movable = new Movable(this);
+  deletable = new Deletable(this);
   targetClassName = 'target';
 
   @on('click')

@@ -1,7 +1,7 @@
 import { Layout, Page, UnsafeHtml, html } from 'rune-ts';
 import { manifest } from '@rune-ts/server';
 
-export interface MarppleShopLayoutData {
+export interface TutorialLayoutData {
   __host_name: string;
   __bundle_port: number;
   title: string;
@@ -21,12 +21,12 @@ export const ESCAPE_REGEX = /[&><\u2028\u2029]/g;
 export function htmlEscapeJsonString(str: string): string {
   return str.replace(ESCAPE_REGEX, (match) => ESCAPE_LOOKUP[match]);
 }
-export class MarppleShopLayout extends Layout<MarppleShopLayoutData> {
+export class TutorialLayout extends Layout<TutorialLayoutData> {
   styleSheet: () => UnsafeHtml;
   dataScript: () => UnsafeHtml;
   entryScript: () => UnsafeHtml;
 
-  constructor(page: Page<any>, data: MarppleShopLayoutData) {
+  constructor(page: Page<any>, data: TutorialLayoutData) {
     super(page, data);
 
     this.styleSheet = () =>
@@ -58,9 +58,9 @@ export class MarppleShopLayout extends Layout<MarppleShopLayoutData> {
         <script crossorigin="anonymous" src="${manifest['runtime.js']}"></script>`);
   }
 
-  override template(data: MarppleShopLayoutData) {
+  override template(data: TutorialLayoutData) {
     return html`
-      <!DOCTYPE html>
+      <!doctype html>
       <html>
         <head>
           <meta charset="utf-8" />

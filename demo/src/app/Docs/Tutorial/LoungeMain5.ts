@@ -1,5 +1,4 @@
-import { View, Enable, html, on, enable, ListView, rune, $ } from 'rune-ts';
-import { each, filter, map, pipe } from '@fxts/core';
+import { View, html, on, ListView } from 'rune-ts';
 
 interface Product {
   name: string;
@@ -42,10 +41,6 @@ class PhotoView extends View<{
   }
 }
 
-class MyMyView extends View<object> {}
-
-class MyMyView3 extends Enable {}
-
 export function main() {
   console.log(
     new ProductView({
@@ -73,7 +68,7 @@ export function main() {
   // click button -> $39
 
   document.querySelector('#tutorial')!.appendChild(
-    new SettingsView([
+    new SettingController([
       { title: 'Wi-fi', on: true },
       { title: 'Bluetooth', on: false },
       { title: 'Airplane mode', on: true },
@@ -87,6 +82,51 @@ export function main() {
   }
 
   console.log(new MyView({ value: '<marquee>Hello, world!</marquee>' }).toHtml());
+
+  const dessertListView = new DessertListView([
+    { name: 'Choco', rating: 3.8 },
+    { name: 'Latte', rating: 4.5 },
+  ]);
+
+  console.log(dessertListView.toHtml());
+
+  dessertListView.add(
+    [
+      { name: 'Coffee', rating: 4.2 },
+      { name: 'Decaf', rating: 2.1 },
+    ],
+    2,
+  );
+
+  console.log(dessertListView.toHtml());
+
+  const itemView = dessertListView
+    .append({ name: 'Coffee', rating: 4.2 })
+    .prepend({ name: 'Decaf', rating: 2.1 })
+    .removeByIndex(1)!;
+
+  dessertListView.append(itemView.data);
+  dessertListView.move(3, 0);
+  //
+  // dessertListView.data.pop();
+  // dessertListView.set([...dessertListView.data]);
+
+  document.querySelector('#tutorial')!.append(dessertListView.render());
+}
+
+interface Dessert {
+  name: string;
+  rating: number;
+}
+
+class DessertView extends View<Dessert> {
+  override template({ name, rating }: Dessert) {
+    return html` <li>${name} (${rating})</li> `;
+  }
+}
+
+class DessertListView extends ListView<Dessert, DessertView> {
+  override ItemView = DessertView;
 }
 
 interface Setting {
@@ -94,39 +134,50 @@ interface Setting {
   on: boolean;
 }
 
-class SettingsView extends View<Setting[]> {
+class SettingView extends View<Setting> {
+  switchView = new SwitchView(this.data);
+
+  override template(setting: Setting) {
+    return html`
+      <li>
+        <span class="title">${setting.title}</span>
+        ${this.switchView}
+      </li>
+    `;
+  }
+}
+
+class SettingListView extends ListView<Setting, SettingView> {
+  override ItemView = SettingView;
+}
+
+class SettingController extends View<Setting[]> {
+  private checkAllSwitchView = new SwitchView({ on: this.isAllChecked() });
+  private settingListview = new SettingListView(this.data);
+
   override template() {
     return html`
       <div>
         <div class="header">
           <span class="title">Check All</span>
-          ${new SwitchView({ on: this.isAllChecked() })}
+          ${this.checkAllSwitchView}
         </div>
-        <ul class="body">
-          ${this.data.map(
-            (setting) => html`
-              <li>
-                <span class="title">${setting.title}</span>
-                ${new SwitchView(setting)}
-              </li>
-            `,
-          )}
-        </ul>
+        ${this.settingListview}
       </div>
     `;
   }
 
   @on('switch:change', '> .header')
   checkAll() {
-    const { on } = this.subViewIn('> .header', SwitchView)!.data;
-    this.subViewsIn('> .body', SwitchView)
+    const { on } = this.checkAllSwitchView.data;
+    this.settingListview.itemViews
       .filter((view) => on !== view.data.on)
-      .forEach((view) => view.setOn(on));
+      .forEach((view) => view.switchView.setOn(on));
   }
 
-  @on('switch:change', '> .body')
+  @on('switch:change', `> .${SettingListView}`)
   private _changed() {
-    this.subViewIn('> .header', SwitchView)!.setOn(this.isAllChecked());
+    this.checkAllSwitchView.setOn(this.isAllChecked());
   }
 
   isAllChecked() {

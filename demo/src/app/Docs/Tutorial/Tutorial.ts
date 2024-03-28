@@ -1,5 +1,5 @@
 import { Page, html } from 'rune-ts';
-import { MarppleShopLayout, type MarppleShopLayoutData } from '../../MarppleShopLayout';
+import { TutorialLayoutData, type TutorialLayoutData } from '../../TutorialLayoutData';
 import { ColorView } from './ColorPicker/ColorView';
 import { ColorCheckboxListView, ColorCheckboxView } from './ColorPicker/ColorPicker';
 
@@ -28,7 +28,7 @@ export class TutorialPage extends Page<Tutorial> {
         </style>
 
         <h1>컬러피커</h1>
-        ${new ColorView('red')} ${new ColorView('red').setData('blue')}
+        ${new ColorView('red')}
 
         <ul>
           ${new ColorCheckboxView({ code: 'green' })}
@@ -72,11 +72,11 @@ export class TutorialPage extends Page<Tutorial> {
 }
 
 export interface TutorialRouter {
-  ['/tutorials']: (data: Tutorial, locals: MarppleShopLayoutData) => MarppleShopLayout;
+  ['/tutorials']: (data: Tutorial, locals: TutorialLayoutData) => TutorialLayoutData;
 }
 
 export const TutorialRouter: TutorialRouter = {
-  ['/tutorials'](data: Tutorial, locals: MarppleShopLayoutData): MarppleShopLayout {
-    return new MarppleShopLayout(new TutorialPage(data), locals);
+  ['/tutorials'](data: Tutorial, locals: TutorialLayoutData): TutorialLayoutData {
+    return new TutorialLayout(new TutorialPage(data), locals);
   },
 };

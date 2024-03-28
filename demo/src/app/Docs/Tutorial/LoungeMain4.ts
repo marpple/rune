@@ -1,11 +1,11 @@
-import { View, Enable, html, on, enable, ListView, rune, $ } from 'rune-ts';
-import { each, filter, map, pipe } from '@fxts/core';
+import { View, html, on } from 'rune-ts';
 
 interface Product {
   name: string;
   price: number;
   quantity: number;
   thumbnail: string;
+  options: { id: number; name: string }[];
 }
 
 class ProductView extends View<Product> {
@@ -16,78 +16,21 @@ class ProductView extends View<Product> {
         <div class="name">${product.name}</div>
         <div class="price">$${product.price}</div>
         <div class="quantity">${product.quantity}</div>
-        <button>Total Price</button>
+        <select>
+          ${product.options.map(({ id, name }) => html`<option value="${id}">${name}</option>`)}
+        </select>
       </div>
     `;
   }
-
-  @on('click', 'button')
-  showTotalPrice() {
-    console.log(`$${this.data.price * this.data.quantity}`);
-  }
 }
 
-class PhotoView extends View<{
-  src: string;
-  originalSrc?: string;
-  alt: string;
-}> {
+class PhotoView extends View<{ src: string; alt: string }> {
   override template({ src, alt }) {
     return html`<img src="${src}" alt="${alt}" />`;
   }
-
-  @on('click')
-  showOriginalImg() {
-    console.log(this.data.originalSrc ?? this.data.src);
-  }
 }
 
-class MyMyView extends View<object> {}
-
-class MyMyView3 extends Enable {}
-
-export function main() {
-  console.log(
-    new ProductView({
-      name: 'Phone Case',
-      price: 13,
-      quantity: 3,
-      thumbnail: 'phone-case.png',
-    }).toHtml(),
-  );
-
-  document.querySelector('#tutorial')!.innerHTML = new ProductView({
-    name: 'Phone Case',
-    price: 13,
-    quantity: 3,
-    thumbnail: 'phone-case.png',
-  }).toHtml();
-
-  new ProductView({
-    name: 'Phone Case',
-    price: 13,
-    quantity: 3,
-    thumbnail: 'phone-case.png',
-  }).hydrateFromSSR(document.querySelector('.ProductView')!);
-
-  // click button -> $39
-
-  document.querySelector('#tutorial')!.appendChild(
-    new SettingsView([
-      { title: 'Wi-fi', on: true },
-      { title: 'Bluetooth', on: false },
-      { title: 'Airplane mode', on: true },
-    ]).render(),
-  );
-
-  class MyView extends View<{ value: string }> {
-    override template({ value }: { value: string }) {
-      return html` <div>${value}${html.preventEscape(value)}</div> `;
-    }
-  }
-
-  console.log(new MyView({ value: '<marquee>Hello, world!</marquee>' }).toHtml());
-}
+export function main() {}
 
 interface Setting {
   title: string;

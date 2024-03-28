@@ -1,8 +1,8 @@
 import { LayoutHelper } from 'rune-ts';
-import { TutorialRouter } from './Docs/Tutorial/LoungeTutorial';
+import { MeetupRouter } from './Meetup/index';
 
-export type ClientRouter = TutorialRouter;
+export type ClientRouter = MeetupRouter;
 
 export const ClientRouter: ClientRouter = LayoutHelper.createRouter<ClientRouter>({
-  ...TutorialRouter,
+  ...MeetupRouter,
 });
