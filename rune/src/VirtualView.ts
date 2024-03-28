@@ -3,12 +3,12 @@ import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
 
 export class VirtualView<T extends object> extends Base {
-  root = false;
   private readonly _data: T;
 
   parentView: VirtualView<object> | null = null;
   subViewsFromTemplate: VirtualView<object>[] = [];
 
+  readonly isLayout: boolean = false;
   renderCount = 0;
   protected _currentHtml: string | null = null;
 
@@ -46,14 +46,14 @@ export class VirtualView<T extends object> extends Base {
   }
 
   private _addRuneAttrs(html: string): string {
-    if (this.root) return html;
+    if (this.isLayout) return html;
     const { startTag, startTagName } = this._matchStartTag(html);
     const runeDataset = `data-rune="${this}" data-rune-parent="${this.parentView}"`;
     html = startTag.includes('class="')
       ? html.replace('class="', `${runeDataset} class="${this} `)
       : startTag.includes("class='")
-      ? html.replace("class='", `${runeDataset} class='${this} `)
-      : html.replace(`<${startTagName}`, `<${startTagName} ${runeDataset} class="${this}"`);
+        ? html.replace("class='", `${runeDataset} class='${this} `)
+        : html.replace(`<${startTagName}`, `<${startTagName} ${runeDataset} class="${this}"`);
     return html;
   }
 
@@ -146,10 +146,10 @@ export class Html {
         yield this._isSubView(templateVal, virtualView)
           ? toHtml(this._addSubViewsFromTemplate(templateVal, virtualView))
           : templateVal instanceof Html
-          ? make(templateVal, virtualView)
-          : templateVal instanceof UnsafeHtml
-          ? templateVal.toString()
-          : _escape(templateVal as string);
+            ? make(templateVal, virtualView)
+            : templateVal instanceof UnsafeHtml
+              ? templateVal.toString()
+              : _escape(templateVal as string);
       }
     }
     yield this._templateStrs[end];
