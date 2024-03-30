@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fxts/core": "^0.28.0",
     "@rune-ts/server": "^0.0.20",
-    "rune-ts": "^0.1.0",
-    "@fxts/core": "^0.28.0"
+    "rune-ts": "^0.2.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
