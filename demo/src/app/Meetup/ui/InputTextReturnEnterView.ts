@@ -1,6 +1,6 @@
 import { CustomEventWithDetail, html, on, View } from 'rune-ts';
 
-export class InputTextReturn extends CustomEventWithDetail<string> {}
+export class InputTextReturned extends CustomEventWithDetail<string> {}
 
 export class InputTextReturnEnterView extends View<{ value?: string }> {
   returnValue = this.data.value ?? '';
@@ -16,7 +16,7 @@ export class InputTextReturnEnterView extends View<{ value?: string }> {
       if (input.value) {
         this.returnValue = input.value;
         input.value = '';
-        this.dispatchEvent(InputTextReturn, { detail: this.returnValue, bubbles: true });
+        this.dispatchEvent(InputTextReturned, { detail: this.returnValue, bubbles: true });
       }
     }
   }

@@ -1,17 +1,16 @@
-import { html, on, View, ListView, SafeCustomEvent } from 'rune-ts';
+import { html, on, View, ListView } from 'rune-ts';
 import { CheckView } from './ui/CheckView';
 import { CheckListManager } from './ui/CheckListManager';
-import { InputTextReturn, InputTextReturnEnterView } from './ui/InputTextReturnEnterView';
-import { SegmentControlView, SegmentSelect } from './ui/SegmentControlView';
-import { ToggleChange } from './ui/ToggleView';
+import { InputTextReturned, InputTextReturnEnterView } from './ui/InputTextReturnEnterView';
+import { SegmentControlView, SegmentSelected } from './ui/SegmentControlView';
+import { Toggled } from './ui/ToggleView';
 
 interface Todo {
   title: string;
   completed: boolean;
 }
 
-class RequestRemove extends CustomEvent<undefined> {}
-class RequestRemove2 extends SafeCustomEvent {}
+class RemoveRequested extends CustomEvent<undefined> {}
 
 class TodoItemView extends View<Todo> {
   private checkView = new CheckView({ on: this.data.completed });
@@ -26,7 +25,7 @@ class TodoItemView extends View<Todo> {
     `;
   }
 
-  @on(ToggleChange)
+  @on(Toggled)
   private _syncData() {
     this.data.completed = this.checkView.data.on;
   }
@@ -39,7 +38,8 @@ class TodoItemView extends View<Todo> {
 
   @on('click', '.remove')
   private _remove() {
-    this.dispatchEvent(RequestRemove, { bubbles: true });
+    this.dispatchEvent(RemoveRequested, { bubbles: true });
+    this.dispatchEvent(RemoveRequested, { bubbles: true });
   }
 }
 
@@ -55,8 +55,6 @@ class TodoPage extends View<Todo[]> {
     (itemView, bool) => itemView.setCompleted(bool),
   );
 
-  inputTextView = new InputTextReturnEnterView({});
-
   filterView = new SegmentControlView([
     { title: 'All', value: 'all', selected: true },
     { title: 'Active', value: 'active' },
@@ -66,7 +64,9 @@ class TodoPage extends View<Todo[]> {
   override template() {
     return html`
       <div>
-        <div class="header">${this.checkListManager.checkAllView} ${this.inputTextView}</div>
+        <div class="header">
+          ${this.checkListManager.checkAllView} ${new InputTextReturnEnterView({})}
+        </div>
         ${this.checkListManager.listView}
         <div class="filter">${this.filterView}</div>
       </div>
@@ -74,27 +74,27 @@ class TodoPage extends View<Todo[]> {
   }
 
   override onMount() {
-    this.inputTextView.addEventListener(InputTextReturn, () => this._append());
-    this.addEventListener(ToggleChange, () => this.redraw());
-    this.addEventListener(SegmentSelect, () => this.redraw());
-    this.checkListManager.listView.delegate(
-      RequestRemove,
-      TodoItemView,
-      (e, todoItemView: TodoItemView) => {
-        this.data.splice(this.data.indexOf(todoItemView.data), 1);
-        this.checkListManager.listView.removeByItemView(todoItemView);
-      },
-    );
+    this.addEventListener(InputTextReturned, (e: InputTextReturned) => this._append(e.detail));
+    this.addEventListener(Toggled, () => this.redraw());
+    this.addEventListener(SegmentSelected, () => this.redraw());
+    this.delegate(RemoveRequested, TodoItemView, (_, todoItemView: TodoItemView) => {
+      this._remove(todoItemView.data);
+    });
   }
 
-  private _append() {
+  private _append(title: string) {
     const todo = {
-      title: this.inputTextView.returnValue,
+      title,
       completed: false,
     };
     this.data.push(todo);
     this.checkListManager.listView.append(todo);
     this.checkListManager.syncCheckAll();
+  }
+
+  private _remove(todo: Todo) {
+    this.data.splice(this.data.indexOf(todo), 1);
+    this.checkListManager.listView.remove(todo);
   }
 
   override redraw() {

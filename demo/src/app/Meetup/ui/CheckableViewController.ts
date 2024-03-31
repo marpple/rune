@@ -1,6 +1,6 @@
 import { View, type ListView } from 'rune-ts';
 import type { ToggleView } from './ToggleView';
-import { ToggleChange } from './ToggleView';
+import { Toggled } from './ToggleView';
 
 interface CheckableViewInterface<T extends object, IV extends View<T>> {
   checkAllView: ToggleView;
@@ -12,12 +12,11 @@ interface CheckableViewInterface<T extends object, IV extends View<T>> {
 export class CheckableViewController<T extends object, IV extends View<T>> {
   constructor(public view: CheckableViewInterface<T, IV>) {
     this.view.checkAllView.data.on = this.isCheckAll();
-    this.view.checkAllView.addEventListener(ToggleChange, () => this._checkAll());
-    this.view.listView.addEventListener(ToggleChange, () => this.syncCheckAll());
+    this.view.checkAllView.addEventListener(Toggled, (e: Toggled) => this._checkAll(e.detail));
+    this.view.listView.addEventListener(Toggled, () => this.syncCheckAll());
   }
 
-  private _checkAll() {
-    const { on } = this.view.checkAllView.data;
+  private _checkAll(on: boolean) {
     this.view.listView.itemViews
       .filter((itemView) => this.view.getItemViewChecked(itemView) !== on)
       .forEach((itemView) => this.view.setItemViewChecked(itemView, on));

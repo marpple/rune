@@ -6,7 +6,7 @@ interface Segment {
   selected?: boolean;
 }
 
-export class SegmentSelect extends CustomEventWithDetail<Segment> {}
+export class SegmentSelected extends CustomEventWithDetail<Segment> {}
 
 export class SegmentControlView extends View<Segment[]> {
   selectedIndex = this.data.findIndex((segment) => segment.selected);
@@ -30,7 +30,7 @@ export class SegmentControlView extends View<Segment[]> {
     const buttons = [...this.element().querySelectorAll('button')];
     buttons[this.selectedIndex].classList.remove('selected');
     this.selectedIndex = buttons.indexOf(button);
-    this.dispatchEvent(SegmentSelect, { detail: this.selectedSegment(), bubbles: true });
+    this.dispatchEvent(SegmentSelected, { detail: this.selectedSegment(), bubbles: true });
   }
 
   selectedSegment() {
