@@ -109,16 +109,20 @@ class BallView extends View<Ball> {
   });
 ```
 
-## ViewExtraInterface
+## EnableViewInterface
 
 위 코드에서는 `Deletable`의 삭제를 트리거하는 엘리먼트의 클래스명을 `remove-target`라는 문자열로 약속을 했습니다. `interface`를 활용하면 객체간 통신의 규약을 더 확장성이 있으면서도 안전하게 추상화할 수 있습니다.
 
 ```typescript
-interface DeletableViewExtraInterface {
+interface DeletableViewInterface extends View<object> {
   readonly targetClassName: string;
 }
 
-export class Deletable extends Enable<object, DeletableViewExtraInterface> {
+export class Deletable extends Enable {
+  constructor(public override view: DeletableViewInterface) {
+    super(view);
+  }
+  
   override onMount() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }
@@ -129,7 +133,7 @@ export class Deletable extends Enable<object, DeletableViewExtraInterface> {
 }
 
 export class BallView extends View<Ball> {
-  deletable = new Deletable(this).init();
+  deletable = new Deletable(this);
 
   readonly targetClassName = 'target';
 
@@ -157,17 +161,21 @@ export class BallView extends View<Ball> {
 }
 ```
 
-이제 `BallView`에서 `targetClassName`를 구현하지 않는다면 `Argument of type this is not assignable to parameter of type View<unknown> & DeletableViewExtraInterface`와 같은 에러메시지가 출력되어 개발자가 반드시 구현하도록 가이드를 줄 수 있습니다.
+이제 `BallView`에서 `targetClassName`를 구현하지 않는다면 `TS2345: Argument of type this is not assignable to parameter of type DeletableViewInterface. Property targetClassName is missing in type BallView but required in type DeletableViewInterface`와 같은 에러메시지가 출력되기 때문에 개발자가 반드시 구현하도록 가이드를 줄 수 있습니다.
 
 다음은 객체간 통신의 예시로 `Deletable`이 `View`에게 `canRemove()`를 물어보고 삭제하도록 인터페이스와 구현을 추가했습니다.
 
 ```typescript
-interface DeletableViewExtraInterface {
-  readonly targetClassName: string;
+interface DeletableViewInterface extends View<object> {
+  targetClassName: string;
   canRemove(): boolean;
 }
 
-export class Deletable extends Enable<object, DeletableViewExtraInterface> {
+export class Deletable extends Enable {
+  constructor(public override view: DeletableViewInterface) {
+    super(view);
+  }
+  
   override onMount() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }
@@ -225,8 +233,8 @@ type Ball = {
 };
 
 export class BallView extends View<Ball> {
-  movable = new Movable(this).init();
-  deletable = new Deletable(this).init();
+  movable = new Movable(this);
+  deletable = new Deletable(this);
 
   readonly targetClassName = 'target';
 
@@ -249,8 +257,8 @@ export type Ball = {
 };
 
 export class BallView extends View<Ball> {
-  movable = new Movable(this).init();
-  deletable = new Deletable(this).init();
+  movable = new Movable(this);
+  deletable = new Deletable(this);
 
   readonly targetClassName = 'target';
 
@@ -276,5 +284,3 @@ balls
 ```
 
 이제 횡으로 반복하는 공을 여러번 클릭해야 터지는 간단한 게임이 완성되었습니다.
-
-위 코드들은 간결하며 재사용성이 높습니다. 다만 너무 많은 객체간의 통신은 부작용을 조심해야하며 개발자는 객체들이 서로 간섭하지 않도록 유의해야합니다. 본 문서에서는 Rune의 기능과 코딩 패턴을 소개하기 위해 의도적으로 작은 컴포넌트를 만들었습니다. 문제를 작게 만들어 해결하는 것은 좋지만 하나의 컴포넌트가 충분한 역할을 가지도록 설계할 필요가 있습니다.

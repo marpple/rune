@@ -109,16 +109,20 @@ class BallView extends View<Ball> {
   });
 ```
 
-## ViewExtraInterface
+## EnableViewInterface
 
 In the above code, we've agreed to use the class name "remove-target" for elements that trigger deletion in `Deletable`. By utilizing interfaces, we can further abstract and safely extend the protocol of communication between objects with greater scalability.
 
 ```typescript
-interface DeletableViewExtraInterface {
+interface DeletableViewInterface extends View<object> {
   readonly targetClassName: string;
 }
 
-export class Deletable extends Enable<object, DeletableViewExtraInterface> {
+export class Deletable extends Enable {
+  constructor(public override view: DeletableViewInterface) {
+    super(view);
+  }
+
   override onMount() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }
@@ -157,17 +161,21 @@ export class BallView extends View<Ball> {
 }
 ```
 
-Now, if `BallView` does not implement `targetClassName`, developers will receive an error message like "Argument of type this is not assignable to parameter of type `View<unknown> & DeletableViewExtraInterface`". This guides developers to implement it.
+Now, if `BallView` does not implement `targetClassName`, developers will receive an error message like "S2345: Argument of type this is not assignable to parameter of type DeletableViewInterface. Property targetClassName is missing in type BallView but required in type DeletableViewInterface." This guides developers to implement it.
 
 Below is an example of inter-object communication, where `Deletable` asks `View` if it can be removed and deletes accordingly, with interfaces and implementations added:
 
 ```typescript
-interface DeletableViewExtraInterface {
-  readonly targetClassName: string;
+interface DeletableViewInterface extends View<object> {
+  targetClassName: string;
   canRemove(): boolean;
 }
 
-export class Deletable extends Enable<object, DeletableViewExtraInterface> {
+export class Deletable extends Enable {
+  constructor(public override view: DeletableViewInterface) {
+    super(view);
+  }
+
   override onMount() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
   }
@@ -276,5 +284,3 @@ balls
 ```
 
 Now, a simple game is completed where you have to click multiple times on the balls moving horizontally to pop them.
-
-The above codes are concise and highly reusable. However, too much communication between objects should be approached with caution, and developers should be careful to ensure that objects do not interfere with each other. In this document, we intentionally created small components to introduce Rune's features and coding patterns. While solving problems by breaking them down into smaller ones is good, it's important to design components that have sufficient roles on their own.
