@@ -1,6 +1,3 @@
-import { rune } from './rune';
-import { _camelToColonSeparated } from './lib/_camelToColonSeparated';
-
 export interface CustomEventWithDetailInit<T> extends EventInit {
   detail: T;
 }
