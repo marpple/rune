@@ -4,7 +4,7 @@ import { each, flatMap, pipe, toArray, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
 
-export class View<T extends object> extends VirtualView<T> {
+export class View<T extends object = object> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
   ignoreRefreshOnlySubViewFromParent = false;
 
