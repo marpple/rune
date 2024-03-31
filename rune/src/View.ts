@@ -199,12 +199,3 @@ export interface HasReservedEnables extends ViewConstructor {
   _ReservedEnables: (new (...args: any[]) => Enable<object>)[];
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
-
-export class ViewWithOptions<T extends object, O = object> extends View<T> {
-  options?: O;
-
-  constructor(data: T, options?: O) {
-    super(data);
-    this.options = options;
-  }
-}

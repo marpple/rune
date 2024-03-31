@@ -1,5 +1,7 @@
 import { eventHelper } from './EventHelper';
 import { rune } from './rune';
+import type { CustomEventInitFromClass } from './CustomEventWithDetail';
+import { _camelToColonSeparated } from './lib/_camelToColonSeparated';
 
 export abstract class Base {
   protected _element: HTMLElement | null = null;
@@ -8,7 +10,7 @@ export abstract class Base {
 
   protected onMount() {}
 
-  protected _onMount() {
+  protected _onMount(): this {
     rune.set(this.element(), this);
     eventHelper.addDecoratedListeners(this, this.element());
     this.onMount();
@@ -68,14 +70,9 @@ export abstract class Base {
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  addEventListener<K extends keyof HTMLElementEventMap, M extends keyof this>(
-    eventType: K,
-    listener: M,
-    options?: boolean | AddEventListenerOptions,
-  ): this;
-  addEventListener<M extends keyof this>(
-    eventType: string,
-    listener: M,
+  addEventListener<T extends new (...args: any[]) => Event>(
+    eventType: T,
+    listener: (this: this, ev: InstanceType<T>) => any,
     options?: boolean | AddEventListenerOptions,
   ): this;
   addEventListener<K extends keyof HTMLElementEventMap>(
@@ -83,86 +80,80 @@ export abstract class Base {
     listener: (this: this, ev: HTMLElementEventMap[K]) => any,
     options?: boolean | AddEventListenerOptions,
   ): this;
-  addEventListener<T extends Event>(
+  addEventListener(
     eventType: string,
-    listener: (this: this, ev: T) => any,
+    listener: (this: this, ev: Event) => any,
     options?: boolean | AddEventListenerOptions,
   ): this;
-  addEventListener<K extends keyof HTMLElementEventMap, M extends keyof this>(
-    eventType: K | string,
-    listener:
-      | ((this: this, ev: HTMLElementEventMap[K]) => any)
-      | ((this: this, ev: Event) => any)
-      | M,
-    options?: boolean | AddEventListenerOptions,
-  ): this {
+  addEventListener(eventType: any, listener: any, options?: any): this {
     eventHelper.addEventListener(this, this._element, eventType, listener, options);
     return this;
   }
 
-  removeEventListener<K extends keyof HTMLElementEventMap, M extends keyof this>(
-    eventType: K,
-    listener: M,
-    options?: boolean | EventListenerOptions,
-  ): this;
-  removeEventListener<M extends keyof this>(
-    eventType: string,
-    listener: M,
-    options?: boolean | EventListenerOptions,
+  removeEventListener<T extends new (...args: any[]) => Event>(
+    eventType: T,
+    listener: (this: this, ev: InstanceType<T>) => any,
+    options?: boolean | AddEventListenerOptions,
   ): this;
   removeEventListener<K extends keyof HTMLElementEventMap>(
     eventType: K,
     listener: (this: this, ev: HTMLElementEventMap[K]) => any,
     options?: boolean | EventListenerOptions,
   ): this;
-  removeEventListener<T extends Event>(
+  removeEventListener(
     eventType: string,
-    listener: (this: this, ev: T) => any,
+    listener: (this: this, ev: Event) => any,
     options?: boolean | EventListenerOptions,
   ): this;
-  removeEventListener<K extends keyof HTMLElementEventMap, M extends keyof this>(
-    eventType: K | string,
-    listener:
-      | ((this: this, ev: HTMLElementEventMap[K]) => any)
-      | ((this: this, ev: Event) => any)
-      | M,
-    options?: boolean | EventListenerOptions,
-  ): this {
+  removeEventListener(eventType: any, listener: any, options?: any): this {
     eventHelper.removeEventListener(this, this._element, eventType, listener, options);
     return this;
   }
 
-  delegate<K extends keyof HTMLElementEventMap, M extends keyof this>(
-    eventType: K,
-    selector: string,
-    listener: M,
+  delegate<K extends new (...args: any[]) => Event, T extends new (...args: any[]) => Base>(
+    eventClass: K,
+    View: T,
+    listener: (this: this, e: InstanceType<K>, targetView: InstanceType<T>) => void,
   ): this;
-  delegate<M extends keyof this>(eventType: string, selector: string, listener: M): this;
+  delegate<K extends new (...args: any[]) => Event, T extends new (...args: any[]) => Base>(
+    eventClass: K,
+    View: T,
+    listener: (this: this, e: InstanceType<K>, targetView: InstanceType<T>) => void,
+  ): this;
   delegate<K extends keyof HTMLElementEventMap>(
     eventType: K,
     selector: string,
     listener: (this: this, e: HTMLElementEventMap[K]) => void,
   ): this;
-  delegate<T extends Event>(
-    eventType: string,
-    selector: string,
-    listener: (this: this, ev: T) => any,
-  ): this;
-  delegate<K extends keyof HTMLElementEventMap, M extends keyof this>(
-    eventType: K | string,
-    selector: string,
-    listener:
-      | M
-      | ((this: this, e: HTMLElementEventMap[K]) => void)
-      | ((this: this, ev: Event) => any),
-  ): this {
+  delegate(eventType: string, selector: string, listener: (this: this, ev: Event) => any): this;
+  delegate(eventType: any, selector: any, listener: any): this {
     eventHelper.delegate(this, this._element, eventType, selector, listener);
     return this;
   }
+
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
-  dispatchEvent(event: Event): this {
-    this.element().dispatchEvent(event);
+  createEvent<T extends new (...args: any[]) => Event, U extends CustomEventInitFromClass<T>>(
+    EventClass: T,
+    options: U,
+  ): InstanceType<T> {
+    return new EventClass(_camelToColonSeparated(EventClass.name), options) as InstanceType<T>;
+  }
+
+  dispatchEvent(event: Event): this;
+  dispatchEvent<T extends new (...args: any[]) => Event, U extends CustomEventInitFromClass<T>>(
+    event: T,
+    eventInitDict: U,
+  ): this;
+  dispatchEvent<T extends new (...args: any[]) => Event, U extends CustomEventInitFromClass<T>>(
+    event: Event | T,
+    eventInitDict?: U,
+  ): this {
+    if (event instanceof Event) {
+      this.element().dispatchEvent(event);
+    } else {
+      this.element().dispatchEvent(this.createEvent(event, eventInitDict!));
+    }
     return this;
   }
 

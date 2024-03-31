@@ -1,9 +1,15 @@
 export { rune } from './rune';
 export { $Element, $ } from './$Element';
-export { View, ViewWithOptions } from './View';
-export { ListView, ListViewWithOptions } from './ListView';
-export { Enable, EnableWithOptions } from './Enable';
-export { ListEnable, ListEnableWithOptions } from './ListEnable';
+export {
+  CustomEventWithDetail,
+  type CustomEventWithDetailInit,
+  type CustomEventDetailType,
+  type CustomEventInitFromClass,
+} from './CustomEventWithDetail';
+export { View } from './View';
+export { ListView } from './ListView';
+export { Enable } from './Enable';
+export { ListEnable } from './ListEnable';
 export { Layout } from './Layout';
 export { LayoutHelper } from './LayoutHelper';
 export { Page } from './Page';

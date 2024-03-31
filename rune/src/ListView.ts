@@ -6,10 +6,7 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
   tagName = 'div';
   abstract ItemView: new (data: T) => IV;
   readonly _itemViews: IV[] = [];
-
-  protected override ready() {
-    this._itemViews.push(...this.createItemViews(this.data));
-  }
+  private _initialized = false;
 
   createItemView(item: T): IV {
     return new this.ItemView(item);
@@ -24,6 +21,10 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
   }
 
   get itemViews() {
+    if (!this._initialized) {
+      this._itemViews.push(...this.createItemViews(this.data));
+      this._initialized = true;
+    }
     return this._itemViews;
   }
 
@@ -181,18 +182,5 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
       }
     }
     return this;
-  }
-}
-
-export abstract class ListViewWithOptions<
-  T extends object,
-  IV extends View<T>,
-  O = object,
-> extends ListView<T, IV> {
-  options?: O;
-
-  constructor(data: T[], options?: O) {
-    super(data);
-    this.options = options;
   }
 }
