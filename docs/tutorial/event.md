@@ -70,7 +70,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-## Event Delegate
+## Event Delegation
 
 As shown above, you can trigger events using `dispatchEvent()`. `checkbox:` is a kind of convention to avoid duplication and doesn't have any functionality. Additionally, you can listen to events using the instance method `delegate()` of the `View` as follows.
 

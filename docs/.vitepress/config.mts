@@ -76,6 +76,7 @@ export default defineConfig({
             items: [
               { text: 'Creating a View', link: '/tutorial/view' },
               { text: 'Event Handling', link: '/tutorial/event' },
+              { text: 'Type-safe Custom Event', link: '/tutorial/type-safe-event' },
               { text: 'Abstracting View', link: '/tutorial/abstract-view' },
               { text: 'Enable Pattern', link: '/tutorial/enable' },
               { text: 'Solo Component SSR', link: '/tutorial/solo-component-ssr' },
@@ -147,6 +148,7 @@ export default defineConfig({
             items: [
               { text: 'View 만들기', link: '/ko/tutorial/view' },
               { text: 'Event 다루기', link: '/ko/tutorial/event' },
+              { text: '타입 안전한 커스텀 이벤트', link: '/tutorial/type-safe-event' },
               { text: 'View 추상화', link: '/ko/tutorial/abstract-view' },
               { text: 'Enable 패턴', link: '/ko/tutorial/enable' },
               { text: 'Solo Component SSR', link: '/ko/tutorial/solo-component-ssr' },

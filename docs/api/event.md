@@ -82,7 +82,7 @@ delegate<T extends Event>(
 ): this;
 ```
 
-([Tutorial - Event Delegate](/tutorial/event.html#event-delegate))
+([Tutorial - Event Delegation](/tutorial/event.html#event-delegate))
 
 ## @on decorator
 

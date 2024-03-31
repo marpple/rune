@@ -70,7 +70,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-## 이벤트 델리게이트
+## 이벤트 델리게이션
 
 위와 같이`dispatchEvent()`를 사용하여 이벤트를 발생시킬 수 있습니다. `checkbox:`는 중복을 피하기위한 일종의 컨벤션이며 기능은 없습니다. 또한 아래처럼 `View`의 인스턴스 메서드 `delegate()`를 통해 이벤트를 들을 수 있습니다.
 
