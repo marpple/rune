@@ -85,7 +85,7 @@ class TodoPage extends View<Todo[]> {
   private _append(title: string) {
     const todo = {
       title,
-      completed: false,
+      completed: this.currentFilter === 'completed',
     };
     this.data.push(todo);
     this.checkListManager.listView.append(todo);
