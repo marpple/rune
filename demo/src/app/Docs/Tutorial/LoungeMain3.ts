@@ -68,18 +68,9 @@ export function main() {
     price: 13,
     quantity: 3,
     thumbnail: 'phone-case.png',
-  }).hydrateFromSSR(document.querySelector('.ProductView')!);
+  }).hydrateFromSSR(document.querySelector('.ProductView'));
 
   // click button -> $39
-
-  document.querySelector('#tutorial')!.appendChild(
-    new SettingsView([
-      { title: 'Wi-fi', on: true },
-      { title: 'Bluetooth', on: false },
-      { title: 'Airplane mode', on: true },
-    ]).render(),
-  );
-
   class MyView extends View<{ value: string }> {
     override template({ value }: { value: string }) {
       return html` <div>${value}${html.preventEscape(value)}</div> `;
@@ -87,81 +78,4 @@ export function main() {
   }
 
   console.log(new MyView({ value: '<marquee>Hello, world!</marquee>' }).toHtml());
-}
-
-interface Setting {
-  title: string;
-  on: boolean;
-}
-
-class SettingsView extends View<Setting[]> {
-  override template() {
-    return html`
-      <div>
-        <div class="header">
-          <span class="title">Check All</span>
-          ${new SwitchView({ on: this.isAllChecked() })}
-        </div>
-        <ul class="body">
-          ${this.data.map(
-            (setting) => html`
-              <li>
-                <span class="title">${setting.title}</span>
-                ${new SwitchView(setting)}
-              </li>
-            `,
-          )}
-        </ul>
-      </div>
-    `;
-  }
-
-  @on('switch:change', '> .header')
-  checkAll() {
-    const { on } = this.subViewIn('> .header', SwitchView)!.data;
-    this.subViewsIn('> .body', SwitchView)
-      .filter((view) => on !== view.data.on)
-      .forEach((view) => view.setOn(on));
-  }
-
-  @on('switch:change', '> .body')
-  private _changed() {
-    this.subViewIn('> .header', SwitchView)!.setOn(this.isAllChecked());
-  }
-
-  isAllChecked() {
-    return this.data.every(({ on }) => on);
-  }
-}
-
-interface SwitchData {
-  on: boolean;
-}
-
-class SwitchView extends View<SwitchData> {
-  override template() {
-    return html`
-      <button class="${this.data.on ? 'on' : ''}">
-        <div class="toggle"></div>
-      </button>
-    `;
-  }
-
-  @on('click')
-  private _toggle() {
-    this.setOn(!this.data.on);
-    this.redraw();
-    this.dispatchEvent(new CustomEvent('switch:change', { bubbles: true }));
-  }
-
-  setOn(on: boolean) {
-    this.data.on = on;
-    return this.redraw();
-  }
-
-  override redraw() {
-    const { classList } = this.element();
-    this.data.on ? classList.add('on') : classList.remove('on');
-    return this;
-  }
 }

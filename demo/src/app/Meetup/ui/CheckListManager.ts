@@ -1,5 +1,6 @@
 import { type View, type ListView } from 'rune-ts';
 import type { ToggleView } from './ToggleView';
+import { ToggleChange } from './ToggleView';
 
 export class CheckListManager<T extends object, IV extends View<T>> {
   constructor(
@@ -9,8 +10,8 @@ export class CheckListManager<T extends object, IV extends View<T>> {
     private setItemViewChecked: (itemView: IV, bool: boolean) => void,
   ) {
     this.checkAllView.data.on = this.isCheckAll();
-    this.checkAllView.addEventListener('change', () => this._checkAll());
-    this.listView.addEventListener('change', () => this.syncCheckAll());
+    this.checkAllView.addEventListener(ToggleChange, () => this._checkAll());
+    this.listView.addEventListener(ToggleChange, () => this.syncCheckAll());
   }
 
   private _checkAll() {

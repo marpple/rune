@@ -2,6 +2,7 @@ import { Page, html } from 'rune-ts';
 import { TutorialLayout, type TutorialLayoutData } from '../../TutorialLayout';
 import { ColorView } from './ColorPicker/ColorView';
 import { ColorCheckboxListView, ColorCheckboxView } from './ColorPicker/ColorPicker';
+import { main } from './LoungeMain2';
 
 export type Tutorial = Record<string, string>;
 
@@ -66,6 +67,8 @@ export class TutorialPage extends Page<Tutorial> {
       console.log(this.checkedColors().map(({ code }) => code));
       // ['blue', 'green']
     });
+
+    main();
 
     return this;
   }

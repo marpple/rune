@@ -170,8 +170,15 @@ export class StyleView extends View<object> {
         text-decoration: line-through;
       }
 
-      .TodoItemView:active {
-        color: #1d75ff;
+      .TodoItemView .remove {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: none;
+        border: 0 none;
+        font-size: 18px;
+        padding: 8px 12px;
+        color: #666;
       }
 
       .TodoItemView .CheckView {

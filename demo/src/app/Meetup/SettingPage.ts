@@ -1,7 +1,6 @@
-import { html, on, View } from 'rune-ts';
+import { html, on, View, ListView } from 'rune-ts';
 import { each, pipe, zip } from '@fxts/core';
 import { SwitchView } from './ui/SwitchView';
-import { ListView } from './ui/ListView';
 import { CheckableViewController } from './ui/CheckableViewController';
 
 interface Setting {
@@ -23,9 +22,7 @@ class SettingItemView extends View<Setting> {
 }
 
 class SettingListView extends ListView<Setting, SettingItemView> {
-  override createItemView(item: Setting) {
-    return new SettingItemView(item);
-  }
+  ItemView = SettingItemView;
 }
 
 class SettingPage extends View<Setting[]> {

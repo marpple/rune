@@ -1,4 +1,6 @@
-import { html, on, View } from 'rune-ts';
+import { CustomEventWithDetail, html, on, View } from 'rune-ts';
+
+export class InputTextReturn extends CustomEventWithDetail<string> {}
 
 export class InputTextReturnEnterView extends View<{ value?: string }> {
   returnValue = this.data.value ?? '';
@@ -11,9 +13,11 @@ export class InputTextReturnEnterView extends View<{ value?: string }> {
   private _keypress(e: KeyboardEvent) {
     if (e.code === 'Enter') {
       const input = e.target as HTMLInputElement;
-      this.returnValue = input.value;
-      input.value = '';
-      this.element().dispatchEvent(new CustomEvent('return', { bubbles: true }));
+      if (input.value) {
+        this.returnValue = input.value;
+        input.value = '';
+        this.dispatchEvent(InputTextReturn, { detail: this.returnValue, bubbles: true });
+      }
     }
   }
 }

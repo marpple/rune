@@ -1,13 +1,12 @@
-import { View } from 'rune-ts';
+import { CustomEventWithDetail, on, View } from 'rune-ts';
+
+export class ToggleChange extends CustomEventWithDetail<boolean> {}
 
 export abstract class ToggleView extends View<{ on: boolean }> {
-  override onMount() {
-    this.element().addEventListener('click', () => this._toggle());
-  }
-
+  @on('click')
   private _toggle() {
     this.setOn(!this.data.on);
-    this.element().dispatchEvent(new Event('change', { bubbles: true }));
+    this.dispatchEvent(ToggleChange, { detail: this.data.on, bubbles: true });
   }
 
   setOn(bool: boolean) {

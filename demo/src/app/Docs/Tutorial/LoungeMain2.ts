@@ -1,18 +1,18 @@
 import { View, Enable, html, on, enable, ListView, rune } from 'rune-ts';
 import { each, filter, map, pipe } from '@fxts/core';
 
-interface DeletableViewExtraInterface {
+interface DeletableViewInterface extends View<object> {
   targetClassName: string;
   canRemove(): boolean;
 }
 
-export class Deletable extends Enable<object, DeletableViewExtraInterface> {
-  asd = 1;
+export class Deletable extends Enable {
+  constructor(public override view: DeletableViewInterface) {
+    super(view);
+  }
 
   override onMount() {
-    // this.addEventListener('mousedown', 'remove');
-    this.delegate('mousedown', `.${this.view.targetClassName}`, function () {});
-    this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
+    this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
   }
 
   remove() {
@@ -47,21 +47,10 @@ interface Ball {
   count: number;
 }
 
-// @enable(Movable, Deletable)
 export class BallView extends View<Ball> {
   movable = new Movable(this);
   deletable = new Deletable(this);
   targetClassName = 'target';
-
-  @on('click')
-  hi() {
-    console.log('addEventLi.. ~~~~~~click', this);
-  }
-
-  @on('mouseover', '.target')
-  hi2() {
-    console.log('delegate deco ---- over', this);
-  }
 
   canRemove() {
     return --this.data.count === 0;

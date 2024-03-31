@@ -1,34 +1,45 @@
-import { html, on, View, ListView } from 'rune-ts';
+import { html, on, View, ListView, SafeCustomEvent } from 'rune-ts';
 import { CheckView } from './ui/CheckView';
 import { CheckListManager } from './ui/CheckListManager';
-import { InputTextReturnEnterView } from './ui/InputTextReturnEnterView';
-import { SegmentControlView } from './ui/SegmentControlView';
+import { InputTextReturn, InputTextReturnEnterView } from './ui/InputTextReturnEnterView';
+import { SegmentControlView, SegmentSelect } from './ui/SegmentControlView';
+import { ToggleChange } from './ui/ToggleView';
 
 interface Todo {
   title: string;
   completed: boolean;
 }
 
+class RequestRemove extends CustomEvent<undefined> {}
+class RequestRemove2 extends SafeCustomEvent {}
+
 class TodoItemView extends View<Todo> {
   private checkView = new CheckView({ on: this.data.completed });
 
   override template() {
     return html`
-      <div>
+      <div class="${this.data.completed ? 'completed' : ''}">
         ${this.checkView}
         <span class="title">${this.data.title}</span>
+        <button class="remove">x</button>
       </div>
     `;
   }
 
-  @on('change')
-  _syncData() {
+  @on(ToggleChange)
+  private _syncData() {
     this.data.completed = this.checkView.data.on;
   }
 
   setCompleted(bool: boolean) {
     this.data.completed = bool;
+    this.element().classList.toggle('completed', bool);
     this.checkView.setOn(bool);
+  }
+
+  @on('click', '.remove')
+  private _remove() {
+    this.dispatchEvent(RequestRemove, { bubbles: true });
   }
 }
 
@@ -63,8 +74,17 @@ class TodoPage extends View<Todo[]> {
   }
 
   override onMount() {
-    this.inputTextView.addEventListener('return', () => this._append());
-    this.addEventListener('change', () => this.redraw());
+    this.inputTextView.addEventListener(InputTextReturn, () => this._append());
+    this.addEventListener(ToggleChange, () => this.redraw());
+    this.addEventListener(SegmentSelect, () => this.redraw());
+    this.checkListManager.listView.delegate(
+      RequestRemove,
+      TodoItemView,
+      (e, todoItemView: TodoItemView) => {
+        this.data.splice(this.data.indexOf(todoItemView.data), 1);
+        this.checkListManager.listView.removeByItemView(todoItemView);
+      },
+    );
   }
 
   private _append() {
