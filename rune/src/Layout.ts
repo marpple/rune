@@ -3,7 +3,6 @@ import { Page } from './Page';
 
 export class Layout<T extends object> extends VirtualView<T> {
   override readonly isLayout: boolean = true;
-  path = '';
 
   constructor(
     data: T,
