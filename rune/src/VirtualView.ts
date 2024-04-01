@@ -3,6 +3,7 @@ import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
 
 export class VirtualView<T extends object> extends Base {
+  key = '';
   private readonly _data: T;
 
   parentView: VirtualView<object> | null = null;
