@@ -64,7 +64,7 @@ _toggle() {
 ```typescript
 class Deletable extends Enable {
   override onMount() {
-    this.delegate('mousedown', '.remove-target', 'remove');
+    this.delegate('mousedown', '.remove-target', this.remove);
   }
 
   remove() {
@@ -124,7 +124,7 @@ export class Deletable extends Enable {
   }
   
   override onMount() {
-    this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
+    this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
   }
 
   remove() {
@@ -177,7 +177,7 @@ export class Deletable extends Enable {
   }
   
   override onMount() {
-    this.delegate('mousedown', `.${this.view.targetClassName}`, 'remove');
+    this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
   }
 
   remove() {
