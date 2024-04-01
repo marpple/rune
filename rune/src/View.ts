@@ -4,7 +4,7 @@ import { each, flatMap, pipe, toArray, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
 
-export class View<T extends object> extends VirtualView<T> {
+export class View<T extends object = object> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
   ignoreRefreshOnlySubViewFromParent = false;
 
@@ -67,7 +67,7 @@ export class View<T extends object> extends VirtualView<T> {
 
   override _onMount() {
     this._reservedEnables = (this.constructor as HasReservedEnables)._ReservedEnables.map(
-      (ReservedEnable) => new ReservedEnable(this).init(),
+      (ReservedEnable) => new ReservedEnable(this),
     );
     rune.set(this.element(), this, View);
     super._onMount();
@@ -199,12 +199,3 @@ export interface HasReservedEnables extends ViewConstructor {
   _ReservedEnables: (new (...args: any[]) => Enable<object>)[];
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
-
-export class ViewWithOptions<T extends object, O = object> extends View<T> {
-  options?: O;
-
-  constructor(data: T, options?: O) {
-    super(data);
-    this.options = options;
-  }
-}

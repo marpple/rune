@@ -21,7 +21,7 @@ class Checkable<T extends CheckableData> extends Enable<T> {
 }
 ```
 
-## Create & init()
+## Create
 
 ```
 type ExtendExtraInterface<T, E> = E extends null ? T : T & E;
@@ -36,7 +36,7 @@ type Color = {
 };
 
 class CheckableColorView extends View<Color> {
-  checkable = new Checkable(this).init();
+  checkable = new Checkable(this);
 
   override template(color: Color) {
     return html`
@@ -66,7 +66,7 @@ class CheckableColorView extends View<Color> {
 
 ## onMount()
 
-`enable.init()`을 실행하면 `enable`을 생성시 인자로 받았던 `view`의 `element`가 `document`에 `append` 되었을 때 `onMount()`가 실행됩니다. 이미 `append` 되어있던 상태라면 `init()` 실행시 바로 `onMount()`가 실행됩니다.
+Enable을 생성할 때 인자로 받았던 `view`의 `element`가 `document`에 `append` 되었을 때 `onMount()`가 실행됩니다. 이미 `append` 되어있던 상태라면 바로 `onMount()`가 실행됩니다.
 
 ## Event handling
 

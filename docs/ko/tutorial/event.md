@@ -28,7 +28,6 @@ export class ColorCheckboxView extends View<Color> {
   ...
   override onMount() {
     this.addEventListener('click', this.toggle);
-    // or this.addEventListener('click', 'toggle');
   }
 
   toggle() {
@@ -38,7 +37,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-`view.addEventListener()`는 받은 함수를 등록해두었다가 이벤트가 실행되었을 때 `this`에 `view`를 바인딩하여 실행합니다. 위 코드에서 `ColorCheckboxView.prototype.toggle`은 하나의 함수이기 때문에 여러개의 ColorCheckboxView가 만들어지더라도 효율적입니다. 혹은 `'toggle'`과 같이 메서드명을 전달해도 됩니다.
+`view.addEventListener()`는 받은 함수를 등록해두었다가 이벤트가 실행되었을 때 `this`에 `view`를 바인딩하여 실행합니다. 위 코드에서 `ColorCheckboxView.prototype.toggle`은 하나의 함수이기 때문에 여러개의 ColorCheckboxView가 만들어지더라도 효율적입니다.
 
 ## 이벤트 등록 데코레이터
 
@@ -70,7 +69,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-## 이벤트 델리게이트
+## 이벤트 델리게이션
 
 위와 같이`dispatchEvent()`를 사용하여 이벤트를 발생시킬 수 있습니다. `checkbox:`는 중복을 피하기위한 일종의 컨벤션이며 기능은 없습니다. 또한 아래처럼 `View`의 인스턴스 메서드 `delegate()`를 통해 이벤트를 들을 수 있습니다.
 

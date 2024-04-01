@@ -2,13 +2,14 @@ import { html, VirtualView } from './VirtualView';
 import { Page } from './Page';
 
 export class Layout<T extends object> extends VirtualView<T> {
-  override root = true;
-  page: Page<object>;
+  override readonly isLayout: boolean = true;
   path = '';
 
-  constructor(page: Page<object>, layoutData: T) {
-    super(layoutData);
-    this.page = page;
+  constructor(
+    data: T,
+    public page: Page<object>,
+  ) {
+    super(data);
   }
 
   override template(data: T) {

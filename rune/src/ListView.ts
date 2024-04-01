@@ -1,18 +1,30 @@
 import { View } from './View';
-import { every, map, pipe, reject, reverse, toArray, zip } from '@fxts/core';
+import { each, every, map, pipe, reject, reverse, toArray, zip } from '@fxts/core';
 import { html } from './VirtualView';
 
-export class ListView<T extends object, IV extends View<T> = View<T>> extends View<T[]> {
-  tagName = 'ul';
-  classNameForItemViewsContainer = 'item-views-container';
-  ItemView: (new (data: T) => IV) | null = null;
+export abstract class ListView<T extends object, IV extends View<T>> extends View<T[]> {
+  tagName = 'div';
+  abstract ItemView: new (data: T) => IV;
   readonly _itemViews: IV[] = [];
+  private _initialized = false;
+
+  createItemView(item: T): IV {
+    return new this.ItemView(item);
+  }
+
+  createItemViews(items: T[]): IV[] {
+    return items.map((item) => this.createItemView(item));
+  }
 
   get length() {
     return this._itemViews.length;
   }
 
   get itemViews() {
+    if (!this._initialized) {
+      this._itemViews.push(...this.createItemViews(this.data));
+      this._initialized = true;
+    }
     return this._itemViews;
   }
 
@@ -20,28 +32,15 @@ export class ListView<T extends object, IV extends View<T> = View<T>> extends Vi
     throw TypeError("'itemViews' property is readonly.");
   }
 
-  itemViewsContainer() {
-    return (
-      this.element().querySelector(`.${this.classNameForItemViewsContainer}`) ?? this.element()
-    );
-  }
-
   override template() {
     return html`
-      <${this.tagName} class="${this.classNameForItemViewsContainer}">
+      <${this.tagName}>
         ${this.itemViews}
       </${this.tagName}>
     `;
   }
 
-  protected override ready() {
-    this._sync();
-  }
-
   override redraw(): this {
-    if (!this.isRendered()) {
-      return this._sync();
-    }
     if (
       this.data.length &&
       this.data.length === this.itemViews.length &&
@@ -49,28 +48,23 @@ export class ListView<T extends object, IV extends View<T> = View<T>> extends Vi
         ([a, b]) => a === b,
         zip(
           this.data,
-          this.itemViews.map((view) => view.data),
+          this.itemViews.map((itemView) => itemView.data),
         ),
       )
     ) {
-      this.itemViews.forEach((view) => view.redraw());
+      this.itemViews.forEach((itemView) => itemView.redraw());
     } else {
-      this._sync();
-      super.redraw();
+      const itemViewMap = new Map(this.itemViews.map((itemView) => [itemView.data, itemView]));
+      const newItemViews = this.data.map(
+        (item) => itemViewMap.get(item) ?? this.createItemView(item),
+      );
+      this.itemViews.length = 0;
+      this.element().innerHTML = '';
+      this.itemViews.push(...newItemViews);
+      each((itemView) => itemView.render(), itemViewMap.values());
+      this.element().append(...newItemViews.map((itemView) => itemView.render()));
     }
     return this;
-  }
-
-  createItemView(item: T): IV {
-    if (this.ItemView === null) {
-      throw TypeError('Override ItemView please.');
-    } else {
-      return new this.ItemView(item);
-    }
-  }
-
-  createItemViews(items: T[]): IV[] {
-    return items.map((item) => this.createItemView(item));
   }
 
   add(items: T[], at?: number): this {
@@ -94,7 +88,7 @@ export class ListView<T extends object, IV extends View<T> = View<T>> extends Vi
     this.data[push](...items);
     this._itemViews[push](...itemViews);
     if (this.isRendered()) {
-      this.itemViewsContainer()[append](...itemViews.map((view) => view.render()));
+      this.element()[append](...itemViews.map((view) => view.render()));
     }
     return this;
   }
@@ -164,7 +158,7 @@ export class ListView<T extends object, IV extends View<T> = View<T>> extends Vi
     this.data.length = 0;
     this._itemViews.length = 0;
     if (this.isRendered()) {
-      this.itemViewsContainer().innerHTML = '';
+      this.element().innerHTML = '';
     }
     return this;
   }
@@ -172,14 +166,7 @@ export class ListView<T extends object, IV extends View<T> = View<T>> extends Vi
   set(items: T[]): this {
     this.reset();
     this.data.push(...items);
-    this._sync();
-    return super.redraw();
-  }
-
-  private _sync(): this {
-    this._itemViews.length = 0;
-    this._itemViews.push(...this.createItemViews(this.data));
-    return this;
+    return this.redraw();
   }
 
   move(at: number, to: number): this {
@@ -195,14 +182,5 @@ export class ListView<T extends object, IV extends View<T> = View<T>> extends Vi
       }
     }
     return this;
-  }
-}
-
-export class ListViewWithOptions<T extends object, O = object> extends ListView<T> {
-  options?: O;
-
-  constructor(data: T[], options?: O) {
-    super(data);
-    this.options = options;
   }
 }

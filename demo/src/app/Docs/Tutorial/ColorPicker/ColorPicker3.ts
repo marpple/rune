@@ -5,7 +5,7 @@ interface CheckboxData {
   checked?: boolean;
 }
 
-class CheckboxView<T extends CheckboxData> extends View<T> {
+abstract class CheckboxView<T extends CheckboxData> extends View<T> {
   tagName = 'li';
   override template(data: T) {
     return html`
@@ -15,9 +15,7 @@ class CheckboxView<T extends CheckboxData> extends View<T> {
     `;
   }
 
-  createSubView(): View<unknown> {
-    return {} as View<unknown>; /*new MyInnerView({})*/
-  }
+  abstract createSubView(): View<object>;
 
   override onMount() {
     this.element().addEventListener('click', () => this.onClick());
@@ -31,7 +29,7 @@ class CheckboxView<T extends CheckboxData> extends View<T> {
   }
 }
 
-export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
+abstract class CheckboxListView<T extends CheckboxData> extends View<T[]> {
   tagName = 'ul';
   override template(checkBoxDatas: T[]) {
     return html`
@@ -41,9 +39,7 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
     `;
   }
 
-  createCheckboxView(data: T): View<T> {
-    return new CheckboxView(data);
-  }
+  abstract createCheckboxView(data: T): View<T>;
 
   override onMount() {
     return this.delegate('change', '> *', this.onChange);
@@ -61,16 +57,4 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
 interface Color {
   checked?: boolean;
   colorCode: string;
-}
-
-export class ColorCheckboxView extends CheckboxView<Color> {
-  override createSubView() {
-    return new ColorView(this.data.colorCode);
-  }
-}
-
-export class ColorCheckboxListView extends CheckboxListView<Color> {
-  override createCheckboxView(data: Color) {
-    return new ColorCheckboxView(data);
-  }
 }

@@ -26,7 +26,7 @@ hero:
 
 features:
   - title: Front-end SDK & Library
-    details: Type-safe Generic Views & Enable,<br>이벤트 델리게이트, DOM 조작 라이브러리
+    details: Type-safe Generic Views & Enable,<br>이벤트 델리게이션, DOM 조작 라이브러리
   - title: Pure JS based SSR & Hydration
     details: TS만으로 구현하고 JS만으로 동작하여<br>빠르고 조합성 높은 Server Side Rendering
   - title: Class based Component Builder

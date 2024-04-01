@@ -26,7 +26,7 @@ hero:
 
 features:
   - title: Front-end SDK & Library
-    details: Type-safe Generic Views & Enable,<br>Event Delegate, DOM Manipulation
+    details: Type-safe Generic Views & Enable,<br>Event Delegation, DOM Manipulation
   - title: Pure JS based SSR & Hydration
     details: Fast and highly composable SSR,<br>functioning solely with TS and JS.
   - title: Class based Component Builder

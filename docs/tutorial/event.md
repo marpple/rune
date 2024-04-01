@@ -28,7 +28,6 @@ export class ColorCheckboxView extends View<Color> {
   ...
   override onMount() {
     this.addEventListener('click', this.toggle);
-    // or this.addEventListener('click', 'toggle');
   }
 
   toggle() {
@@ -38,7 +37,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-`view.addEventListener()` registers the provided function and binds `view` to `this` when the event is triggered. In the above code, `ColorCheckboxView.prototype.toggle` is a single function, so it remains efficient even when multiple `ColorCheckboxView` instances are created. Alternatively, you can pass the method name like `'toggle'`.
+`view.addEventListener()` registers the provided function and binds `view` to `this` when the event is triggered. In the above code, `ColorCheckboxView.prototype.toggle` is a single function, so it remains efficient even when multiple `ColorCheckboxView` instances are created.
 
 ## Event Registration Decorator
 
@@ -70,7 +69,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-## Event Delegate
+## Event Delegation
 
 As shown above, you can trigger events using `dispatchEvent()`. `checkbox:` is a kind of convention to avoid duplication and doesn't have any functionality. Additionally, you can listen to events using the instance method `delegate()` of the `View` as follows.
 

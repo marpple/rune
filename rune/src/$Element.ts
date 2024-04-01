@@ -6,6 +6,7 @@ import { _nextOrPrevAll } from './lib/_nextOrPrevAll';
 import { _nextOrPrev } from './lib/_nextOrPrev';
 import _toCamel from './lib/_toCamel';
 import _toDash from './lib/_toDash';
+import { _entries } from './lib/_entries';
 
 export class $Element {
   private _element: HTMLElement;
@@ -252,7 +253,7 @@ export class $Element {
         }),
         each(($currentTarget: $Element) => {
           listener.call(this._element, {
-            ...(e as HTMLElementEventMap[K]),
+            ...(Object.fromEntries(_entries(e)) as HTMLElementEventMap[K]),
             target: e.target,
             currentTarget: $currentTarget._element,
           } as HTMLElementEventMap[K]);
@@ -321,8 +322,8 @@ function $<T>(
   return element === null
     ? null
     : element instanceof $Element
-    ? element
-    : new $Element(element as HTMLElement, prev$Element, throwIfNullError);
+      ? element
+      : new $Element(element as HTMLElement, prev$Element, throwIfNullError);
 }
 
 $.all = $Element.all;

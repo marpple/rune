@@ -1,12 +1,12 @@
 import { app } from '@rune-ts/server';
 import { ClientRouter } from '../app/ClientRouter';
-import { type MarppleShopLayoutData } from '../app/MarppleShopLayout';
+import { type TutorialLayoutData } from '../app/TutorialLayout';
 import runeConfig from '../../rune.config.js';
 
 const server = app();
 
 server.use((req, res, next) => {
-  const layoutData: MarppleShopLayoutData = {
+  const layoutData: TutorialLayoutData = {
     __host_name: runeConfig.hostname || 'localhost',
     __bundle_port: runeConfig.port || Number(process.env.PORT) || 4000,
     title: '',
@@ -17,7 +17,7 @@ server.use((req, res, next) => {
 });
 
 server.get(ClientRouter['/tutorials'].toString(), function (req, res) {
-  res.locals.layoutData.title = '상품상세';
+  res.locals.layoutData.title = '밋업';
   res.send(ClientRouter['/tutorials']({}, res.locals.layoutData).toHtml());
 });
 

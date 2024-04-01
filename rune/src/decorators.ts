@@ -4,7 +4,7 @@ import { type Enable } from './Enable';
 import { type HasReservedEnables } from './View';
 
 export function on(
-  eventType: string,
+  eventType: string | (new (...args: any[]) => Event),
   selector?: string | ((self: any) => string),
 ): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {

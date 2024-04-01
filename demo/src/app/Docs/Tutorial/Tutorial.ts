@@ -1,7 +1,8 @@
 import { Page, html } from 'rune-ts';
-import { MarppleShopLayout, type MarppleShopLayoutData } from '../../MarppleShopLayout';
+import { TutorialLayout, type TutorialLayoutData } from '../../TutorialLayout';
 import { ColorView } from './ColorPicker/ColorView';
 import { ColorCheckboxListView, ColorCheckboxView } from './ColorPicker/ColorPicker';
+import { main } from './LoungeMain2';
 
 export type Tutorial = Record<string, string>;
 
@@ -28,7 +29,7 @@ export class TutorialPage extends Page<Tutorial> {
         </style>
 
         <h1>컬러피커</h1>
-        ${new ColorView('red')} ${new ColorView('red').setData('blue')}
+        ${new ColorView({ colorCode: 'red' })}
 
         <ul>
           ${new ColorCheckboxView({ code: 'green' })}
@@ -41,7 +42,7 @@ export class TutorialPage extends Page<Tutorial> {
   override onMount() {
     const parentElement = this.element();
 
-    document.body.appendChild(new ColorView('pink').render());
+    document.body.appendChild(new ColorView({ colorCode: 'pink' }).render());
 
     console.log(new ColorCheckboxView({ code: 'green' }).toHtml());
     console.log(new ColorCheckboxView({ code: 'yellow', checked: true }).toHtml());
@@ -67,16 +68,18 @@ export class TutorialPage extends Page<Tutorial> {
       // ['blue', 'green']
     });
 
+    main();
+
     return this;
   }
 }
 
 export interface TutorialRouter {
-  ['/tutorials']: (data: Tutorial, locals: MarppleShopLayoutData) => MarppleShopLayout;
+  ['/tutorials']: (layoutData: TutorialLayoutData, pageData: Tutorial) => TutorialLayout;
 }
 
 export const TutorialRouter: TutorialRouter = {
-  ['/tutorials'](data: Tutorial, locals: MarppleShopLayoutData): MarppleShopLayout {
-    return new MarppleShopLayout(new TutorialPage(data), locals);
+  ['/tutorials'](layoutData: TutorialLayoutData, pageData: Tutorial): TutorialLayout {
+    return new TutorialLayout(layoutData, new TutorialPage(pageData));
   },
 };

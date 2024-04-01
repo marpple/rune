@@ -3,6 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { View } from './View';
+import { Page } from './Page';
+import type { VirtualView } from './VirtualView';
 
 type Constructor = new (...args: any) => any;
 
@@ -36,6 +38,36 @@ class Rune {
 
   getUnknownView(element: HTMLElement | EventTarget) {
     return this.get(element, View);
+  }
+
+  protected _getPageByParentView(currentView: VirtualView<object>) {
+    do {
+      if (currentView instanceof Page) {
+        return currentView as Page<object>;
+      }
+    } while ((currentView = currentView.parentView!));
+  }
+
+  getPage(currentView: VirtualView<object>): Page<object> {
+    let page: View<object> | undefined;
+    if (currentView) {
+      page = this._getPageByParentView(currentView);
+    }
+    if (!page && typeof window !== 'undefined') {
+      const element = document.querySelector(`body [data-rune]`);
+      if (element) {
+        page = this.getUnknownView(element);
+      }
+    }
+    if (page && page instanceof Page) {
+      return page as Page<object>;
+    } else {
+      throw Error('rune.Page not found.');
+    }
+  }
+
+  getSharedData(currentView: VirtualView<object>): Record<string, any> | undefined {
+    return this.getPage(currentView).sharedData;
   }
 }
 

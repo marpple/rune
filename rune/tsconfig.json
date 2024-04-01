@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
     "sourceRoot": "./src",
     "sourceMap": true,
     "allowJs": true,

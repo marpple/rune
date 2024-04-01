@@ -9,14 +9,9 @@ The View class and the Enable class inherit event handling methods implemented i
 ## addEventListener()
 
 ```
-addEventListener<K extends keyof HTMLElementEventMap, M extends keyof this>(
-  eventType: K,
-  listener: M,
-  options?: boolean | AddEventListenerOptions,
-): this;
-addEventListener<M extends keyof this>(
-  eventType: string,
-  listener: M,
+addEventListener<T extends new (...args: any[]) => Event>(
+  eventType: T,
+  listener: (this: this, ev: InstanceType<T>) => any,
   options?: boolean | AddEventListenerOptions,
 ): this;
 addEventListener<K extends keyof HTMLElementEventMap>(
@@ -24,9 +19,9 @@ addEventListener<K extends keyof HTMLElementEventMap>(
   listener: (this: this, ev: HTMLElementEventMap[K]) => any,
   options?: boolean | AddEventListenerOptions,
 ): this;
-addEventListener<T extends Event>(
+addEventListener(
   eventType: string,
-  listener: (this: this, ev: T) => any,
+  listener: (this: this, ev: Event) => any,
   options?: boolean | AddEventListenerOptions,
 ): this;
 ```
@@ -36,23 +31,19 @@ The View class and the Enable class provide extended methods for `addEventListen
 ## removeEventListener()
 
 ```
-removeEventListener<
-  K extends keyof HTMLElementEventMap,
-  M extends keyof this,
->(eventType: K, listener: M, options?: boolean | EventListenerOptions): this;
-removeEventListener<M extends keyof this>(
-  eventType: string,
-  listener: M,
-  options?: boolean | EventListenerOptions,
+removeEventListener<T extends new (...args: any[]) => Event>(
+  eventType: T,
+  listener: (this: this, ev: InstanceType<T>) => any,
+  options?: boolean | AddEventListenerOptions,
 ): this;
 removeEventListener<K extends keyof HTMLElementEventMap>(
   eventType: K,
   listener: (this: this, ev: HTMLElementEventMap[K]) => any,
   options?: boolean | EventListenerOptions,
 ): this;
-removeEventListener<T extends Event>(
+removeEventListener(
   eventType: string,
-  listener: (this: this, ev: T) => any,
+  listener: (this: this, ev: Event) => any,
   options?: boolean | EventListenerOptions,
 ): this;
 ```
@@ -60,29 +51,30 @@ removeEventListener<T extends Event>(
 ## delegate()
 
 ```
-delegate<K extends keyof HTMLElementEventMap, M extends keyof this>(
-  eventType: K,
-  selector: string,
-  listener: M,
-): this;
-delegate<M extends keyof this>(
-  eventType: string,
-  selector: string,
-  listener: M,
+delegate<K extends new (...args: any[]) => Event, T extends new (...args: any[]) => Base>(
+  eventClass: K,
+  View: T,
+  listener: (this: this, e: InstanceType<K>, targetView: InstanceType<T>) => void,
 ): this;
 delegate<K extends keyof HTMLElementEventMap>(
   eventType: K,
   selector: string,
   listener: (this: this, e: HTMLElementEventMap[K]) => void,
 ): this;
-delegate<T extends Event>(
-  eventType: string,
-  selector: string,
-  listener: (this: this, ev: T) => any,
-): this;
+delegate(eventType: string, selector: string, listener: (this: this, ev: Event) => any): this;
 ```
 
-([Tutorial - Event Delegate](/tutorial/event.html#event-delegate))
+([Tutorial - Event Delegation](/tutorial/event.html#event-delegate))
+
+## dispatchEvent()
+
+```
+dispatchEvent(event: Event): this;
+dispatchEvent<T extends new (...args: any[]) => Event, U extends CustomEventInitFromClass<T>>(
+  event: T,
+  eventInitDict: U,
+): this;
+```
 
 ## @on decorator
 
