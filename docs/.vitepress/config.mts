@@ -148,7 +148,7 @@ export default defineConfig({
             items: [
               { text: 'View 만들기', link: '/ko/tutorial/view' },
               { text: 'Event 다루기', link: '/ko/tutorial/event' },
-              { text: '타입 안전한 커스텀 이벤트', link: '/tutorial/type-safe-event' },
+              { text: '타입 안전한 커스텀 이벤트', link: '/ko/tutorial/type-safe-event' },
               { text: 'View 추상화', link: '/ko/tutorial/abstract-view' },
               { text: 'Enable 패턴', link: '/ko/tutorial/enable' },
               { text: 'Solo Component SSR', link: '/ko/tutorial/solo-component-ssr' },
