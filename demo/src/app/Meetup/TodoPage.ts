@@ -82,6 +82,7 @@ class TodoPage extends View<Todo[]> {
       TodoItemView,
       (e: RemoveRequested, todoItemView: TodoItemView) => {
         this._remove(todoItemView.data);
+        this.checkListManager.syncCheckAll();
       },
     );
   }
