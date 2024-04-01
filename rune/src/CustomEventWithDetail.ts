@@ -1,13 +1,13 @@
-if (typeof window === 'undefined') {
-  class Event {
-    constructor() {
-      throw Error(
-        'In Node.js, only class declarations are supported, and instance creation is not supported.',
-      );
-    }
-  }
-
-  class CustomEvent extends Event {}
+if (typeof global !== 'undefined') {
+  global.CustomEvent =
+    global.CustomEvent ||
+    class CustomEvent {
+      constructor() {
+        throw Error(
+          'In Node.js, only class declarations are supported, and instance creation is not supported.',
+        );
+      }
+    };
 }
 
 export interface CustomEventWithDetailInit<T> extends EventInit {
