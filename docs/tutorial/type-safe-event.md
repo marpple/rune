@@ -102,10 +102,11 @@ this.addEventListener(SegmentSelected, (e: SegmentSelected) => {
 Using `delegate` is also powerful. By providing the event class in the first argument and the SubView class to which the event will be sent in the second argument, you can filter events occurring within subviews and provide inference such as `(e: RemoveRequested, todoItemView: TodoItemView)`, which also passes the `TodoItemView` object that triggered the event.
 
 ```typescript
-this.delegate(RemoveRequested, TodoItemView, (
-  e: RemoveRequested, 
-  todoItemView: TodoItemView
-) => {
-  this.remove(todoItemView.data);
-});
+this.delegate(
+  RemoveRequested, 
+  TodoItemView, 
+  (e: RemoveRequested, todoItemView: TodoItemView) => {
+    this.remove(todoItemView.data);
+  },
+);
 ```
