@@ -39,7 +39,6 @@ class TodoItemView extends View<Todo> {
   @on('click', '.remove')
   private _remove() {
     this.dispatchEvent(RemoveRequested, { bubbles: true });
-    this.dispatchEvent(RemoveRequested, { bubbles: true });
   }
 }
 
