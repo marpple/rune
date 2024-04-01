@@ -77,9 +77,13 @@ class TodoPage extends View<Todo[]> {
     this.addEventListener(InputTextReturned, (e: InputTextReturned) => this._append(e.detail));
     this.addEventListener(Toggled, () => this.redraw());
     this.addEventListener(SegmentSelected, () => this.redraw());
-    this.delegate(RemoveRequested, TodoItemView, (_, todoItemView: TodoItemView) => {
-      this._remove(todoItemView.data);
-    });
+    this.delegate(
+      RemoveRequested,
+      TodoItemView,
+      (e: RemoveRequested, todoItemView: TodoItemView) => {
+        this._remove(todoItemView.data);
+      },
+    );
   }
 
   private _append(title: string) {
