@@ -65,11 +65,14 @@ detail 프로퍼티를 필수로 설정하면 아래와 같이 이벤트를 전�
 ```typescript
 export class SegmentControlView extends View<Segment[]> {
   // ...
-  
+
   @on('click', 'button:not(.selected)')
   private _select(e: MouseEvent) {
     //...
-    this.dispatchEvent(SegmentSelected, { detail: this.selectedSegment(), bubbles: true });
+    this.dispatchEvent(SegmentSelected, {
+      detail: this.selectedSegment(),
+      bubbles: true
+    });
     // ok
     this.dispatchEvent(SegmentSelected, { bubbles: true });
     // TS2345: Property detail is missing in type { bubbles: true; } but required in type CustomEventWithDetailInit<Segment>
@@ -94,7 +97,10 @@ this.addEventListener(SegmentSelected, (e: SegmentSelected) => {
 아래처럼 `delegate`와 사용할 때에도 강력합니다. 첫 번째 인자인 이벤트 타입 자리에는 이벤트 클래스를, 두 번째 인자인 CSS 선택자 자리에는 이벤트를 보내줄 SubView 클래스를 넣어줍니다. 그렇게하면 하위 뷰 안에서 일어난 이벤트로 필터링도 하고 `(e: RemoveRequested, todoItemView: TodoItemView)`와 같이 추론을 제공하고, 이벤트를 발생시킨 `TodoItemView` 객체도 전달해줍니다. 
 
 ```typescript
-this.delegate(RemoveRequested, TodoItemView, (e: RemoveRequested, todoItemView: TodoItemView) => {
+this.delegate(RemoveRequested, TodoItemView, (
+  e: RemoveRequested, 
+  todoItemView: TodoItemView
+) => {
   this.remove(todoItemView.data);
 });
 ```

@@ -39,9 +39,16 @@ export class DataLoaderView extends View {
       this.dispatchEvent(DataLoaded, { bubbles: true });
       // ok  
     } else {
-      this.dispatchEvent(DataLoaded, { detail: { body: '...', loadedAt: new Date() } });
+      this.dispatchEvent(DataLoaded, { 
+        detail: { 
+          body: '...', 
+          loadedAt: new Date() 
+        } 
+      });
       // ok
-      this.dispatchEvent(DataLoaded, { detail: { body: '...' } });
+      this.dispatchEvent(DataLoaded, { 
+        detail: { body: '...' } 
+      });
       // TS2741: Property loadedAt is missing in type { body: string; } but required in type { body: string; loadedAt: Date; }  
     }
   }
@@ -67,7 +74,10 @@ export class SegmentControlView extends View<Segment[]> {
   @on('click', 'button:not(.selected)')
   private _select(e: MouseEvent) {
     //...
-    this.dispatchEvent(SegmentSelected, { detail: this.selectedSegment(), bubbles: true });
+    this.dispatchEvent(SegmentSelected, { 
+      detail: this.selectedSegment(), 
+      bubbles: true
+    });
     // ok
     this.dispatchEvent(SegmentSelected, { bubbles: true });
     // TS2345: Property detail is missing in type { bubbles: true; } but required in type CustomEventWithDetailInit<Segment>
@@ -92,7 +102,10 @@ this.addEventListener(SegmentSelected, (e: SegmentSelected) => {
 Using `delegate` is also powerful. By providing the event class in the first argument and the SubView class to which the event will be sent in the second argument, you can filter events occurring within subviews and provide inference such as `(e: RemoveRequested, todoItemView: TodoItemView)`, which also passes the `TodoItemView` object that triggered the event.
 
 ```typescript
-this.delegate(RemoveRequested, TodoItemView, (e: RemoveRequested, todoItemView: TodoItemView) => {
+this.delegate(RemoveRequested, TodoItemView, (
+  e: RemoveRequested, 
+  todoItemView: TodoItemView
+) => {
   this.remove(todoItemView.data);
 });
 ```
