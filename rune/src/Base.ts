@@ -115,11 +115,6 @@ export abstract class Base {
     View: T,
     listener: (this: this, e: InstanceType<K>, targetView: InstanceType<T>) => void,
   ): this;
-  delegate<K extends new (...args: any[]) => Event, T extends new (...args: any[]) => Base>(
-    eventClass: K,
-    View: T,
-    listener: (this: this, e: InstanceType<K>, targetView: InstanceType<T>) => void,
-  ): this;
   delegate<K extends keyof HTMLElementEventMap>(
     eventType: K,
     selector: string,
@@ -133,10 +128,10 @@ export abstract class Base {
 
   /* eslint-enable @typescript-eslint/no-explicit-any */
 
-  createEvent<T extends new (...args: any[]) => Event, U extends CustomEventInitFromClass<T>>(
-    EventClass: T,
-    options: U,
-  ): InstanceType<T> {
+  private _createEvent<
+    T extends new (...args: any[]) => Event,
+    U extends CustomEventInitFromClass<T>,
+  >(EventClass: T, options: U): InstanceType<T> {
     return new EventClass(_camelToColonSeparated(EventClass.name), options) as InstanceType<T>;
   }
 
@@ -152,7 +147,7 @@ export abstract class Base {
     if (event instanceof Event) {
       this.element().dispatchEvent(event);
     } else {
-      this.element().dispatchEvent(this.createEvent(event, eventInitDict!));
+      this.element().dispatchEvent(this._createEvent(event, eventInitDict!));
     }
     return this;
   }
