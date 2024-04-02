@@ -8,4 +8,5 @@ module.exports = {
   clientEntry: './src/app/client.ts',
   serverEntry: './src/server/server.ts',
   showBundleAnalyzer: false,
+  watchToReloadPaths: ['../rune'],
 };

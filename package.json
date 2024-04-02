@@ -11,6 +11,11 @@
     "prepare": "husky"
   },
   "author": "",
+  "pnpm": {
+    "overrides": {
+      "rune-ts": "workspace:^"
+    }
+  },
   "devDependencies": {
     "@types/node": "^20.11.20",
     "@typescript-eslint/eslint-plugin": "^7.0.2",

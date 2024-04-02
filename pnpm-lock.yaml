@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  rune-ts: workspace:^
+
 importers:
 
   .:
@@ -72,8 +75,8 @@ importers:
         specifier: ^0.28.0
         version: 0.28.0
       '@rune-ts/server':
-        specifier: ^0.2.9
-        version: 0.2.9
+        specifier: ^0.3.0
+        version: 0.3.0
       rune-ts:
         specifier: ^0.5.2
         version: link:../rune
@@ -833,8 +836,8 @@ packages:
     dev: true
     optional: true
 
-  /@rune-ts/server@0.2.9:
-    resolution: {integrity: sha512-6tBpKSW3pi8L9KeQZHNxVUKDWit37c96hHHjU04ATyP8UfqNVQBB8qxXB4RphWReYhO/KaOITzQgCAToHQxyAQ==}
+  /@rune-ts/server@0.3.0:
+    resolution: {integrity: sha512-ObOM2yfUzrODpsdu3GEiBXJb7Z8xds2XRgUWdWFzz39LoiP7+4dLm3XbR7u0ZD9c5jP39BydTwTDZ2Fr9Z3MAA==}
     hasBin: true
     dependencies:
       '@swc/core': 1.4.8
@@ -844,7 +847,7 @@ packages:
       file-loader: 6.2.0(webpack@5.91.0)
       mini-css-extract-plugin: 2.8.1(webpack@5.91.0)
       morgan: 1.10.0
-      rune-ts: 0.5.1
+      rune-ts: link:rune
       sass: 1.72.0
       semver: 7.6.0
       watchpack: 2.4.1
@@ -4100,13 +4103,6 @@ packages:
     dependencies:
       queue-microtask: 1.2.3
     dev: true
-
-  /rune-ts@0.5.1:
-    resolution: {integrity: sha512-iOvdPGdDkFXYjI+OH7hLZWpFoNQBf1EebyyEMbrEeGXK0QON7aPWkO89wWiiy59XK341HtP1GyCWhSCBGKsP0w==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@fxts/core': 0.24.0
-    dev: false
 
   /safe-array-concat@1.1.2:
     resolution: {integrity: sha512-vj6RsCsWBCf19jIeHEfkRMw8DPiBb+DMXklQ/1SGDHOMlHdPUkZXFQ2YdplS23zESTijAcurb1aSgJA3AgMu1Q==}

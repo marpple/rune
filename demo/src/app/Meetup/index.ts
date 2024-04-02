@@ -1,5 +1,4 @@
 import { html, Page } from 'rune-ts';
-import { TutorialLayout, type TutorialLayoutData } from '../TutorialLayout';
 import { main } from './SettingPage';
 import { main as main2 } from './TodoPage';
 import { StyleView } from './style';
