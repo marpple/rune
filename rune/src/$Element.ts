@@ -50,7 +50,7 @@ export class $Element {
 
   prevAll(selector: string): $Element[] {
     return $Element.to$Elements(
-      _nextOrPrevAll('prevElementSibling', 'unshift', selector, this._element),
+      _nextOrPrevAll('previousElementSibling', 'unshift', selector, this._element),
     );
   }
 
@@ -61,7 +61,7 @@ export class $Element {
   }
 
   prev(selector: string): $Element {
-    return $(_nextOrPrev('prevElementSibling', selector, this._element));
+    return $(_nextOrPrev('previousElementSibling', selector, this._element));
   }
 
   next(selector: string): $Element {
