@@ -1,5 +1,3 @@
-import { LayoutHelper } from 'rune-ts';
-
 // import { TutorialRouter } from './Docs/Tutorial/Tutorial';
 //
 // export type ClientRouter = TutorialRouter;
@@ -8,10 +6,11 @@ import { LayoutHelper } from 'rune-ts';
 //   ...TutorialRouter,
 // });
 
-import { MeetupRouter } from './Meetup/index';
+import { createRouter } from '@rune-ts/server';
+import { MeetupRouter } from './Meetup';
 
 export type ClientRouter = MeetupRouter;
 
-export const ClientRouter: ClientRouter = LayoutHelper.createRouter<ClientRouter>({
+export const ClientRouter: ClientRouter = createRouter<ClientRouter>({
   ...MeetupRouter,
 });
