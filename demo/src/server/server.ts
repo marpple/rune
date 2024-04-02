@@ -1,7 +1,8 @@
 import { app } from '@rune-ts/server';
 import { ClientRouter } from '../app/ClientRouter';
-import { type TutorialLayoutData } from '../app/TutorialLayout';
+import { TutorialLayout, type TutorialLayoutData } from '../app/TutorialLayout';
 import runeConfig from '../../rune.config.js';
+import { MeetupPage } from '../app/Meetup';
 
 const server = app();
 
@@ -18,7 +19,7 @@ server.use((req, res, next) => {
 
 server.get(ClientRouter['/tutorials'].toString(), function (req, res) {
   res.locals.layoutData.title = '밋업';
-  res.send(ClientRouter['/tutorials']({}, res.locals.layoutData).toHtml());
+  res.send(new TutorialLayout(res.locals.layoutData, ClientRouter['/tutorials']({})).toHtml());
 });
 
 server.get('/', (req, res) => {

@@ -8,12 +8,12 @@ import type { RuneRouter } from '@rune-ts/server';
 export type Meetup = Record<string, string>;
 
 export interface MeetupRouter extends RuneRouter {
-  ['/tutorials']: (pageData: Meetup, layoutData: TutorialLayoutData) => TutorialLayout;
+  ['/tutorials']: (pageData: Meetup) => MeetupPage;
 }
 
 export const MeetupRouter: MeetupRouter = {
-  ['/tutorials'](pageData: Meetup, layoutData: TutorialLayoutData): TutorialLayout {
-    return new TutorialLayout(layoutData, new MeetupPage(pageData, { is_mobile: true }));
+  ['/tutorials'](pageData: Meetup): MeetupPage {
+    return new MeetupPage(pageData, { is_mobile: true });
   },
 };
 

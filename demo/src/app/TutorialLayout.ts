@@ -1,5 +1,5 @@
 import { Layout, Page, UnsafeHtml, html } from 'rune-ts';
-import { manifest } from '@rune-ts/server';
+import { getManifest } from '@rune-ts/server';
 
 export interface TutorialLayoutData {
   __host_name: string;
@@ -29,6 +29,8 @@ export class TutorialLayout extends Layout<TutorialLayoutData> {
   constructor(data: TutorialLayoutData, page: Page<any>) {
     super(data, page);
 
+    const manifest = getManifest();
+
     this.styleSheet = () =>
       manifest?.['main.css']
         ? html.preventEscape(`
@@ -44,9 +46,7 @@ export class TutorialLayout extends Layout<TutorialLayoutData> {
           ${htmlEscapeJsonString(
             JSON.stringify({
               data: page.data,
-              layoutData: data,
-              path: this.path,
-              manifest,
+              key: page.key,
             }),
           )}
         </script>`);
