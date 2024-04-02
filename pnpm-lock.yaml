@@ -75,8 +75,8 @@ importers:
         specifier: ^0.28.0
         version: 0.28.0
       '@rune-ts/server':
-        specifier: ^0.3.0
-        version: 0.3.0
+        specifier: ^0.6.0
+        version: 0.6.0
       rune-ts:
         specifier: ^0.6.0
         version: link:../rune
@@ -836,8 +836,8 @@ packages:
     dev: true
     optional: true
 
-  /@rune-ts/server@0.3.0:
-    resolution: {integrity: sha512-ObOM2yfUzrODpsdu3GEiBXJb7Z8xds2XRgUWdWFzz39LoiP7+4dLm3XbR7u0ZD9c5jP39BydTwTDZ2Fr9Z3MAA==}
+  /@rune-ts/server@0.6.0:
+    resolution: {integrity: sha512-esmlLc8Y960FER83JU+SS8eSd4guZcwxFiX0ZCUZc1lpYjTDS+jATnyvvo0bzQs9pFXWjGqDCrEZ2PmeXSji/w==}
     hasBin: true
     dependencies:
       '@swc/core': 1.4.8
