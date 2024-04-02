@@ -1,6 +1,7 @@
 import { _escape } from './lib/_escape';
 import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
+import { _htmlEscapeJsonString } from './lib/_htmlEscapeJsonString';
 
 export class VirtualView<T extends object> extends Base {
   key = '';
@@ -46,7 +47,7 @@ export class VirtualView<T extends object> extends Base {
     };
   }
 
-  private _addRuneAttrs(html: string): string {
+  private _addRuneAttrs(html: string, isSSR?: boolean): string {
     if (this.isLayout) return html;
     const { startTag, startTagName } = this._matchStartTag(html);
     const runeDataset = `data-rune="${this}" data-rune-parent="${this.parentView}"`;
@@ -55,7 +56,18 @@ export class VirtualView<T extends object> extends Base {
       : startTag.includes("class='")
         ? html.replace("class='", `${runeDataset} class='${this} `)
         : html.replace(`<${startTagName}`, `<${startTagName} ${runeDataset} class="${this}"`);
-    return html;
+
+    return isSSR
+      ? html.replace(
+          html,
+          `${html}<script class="__RUNE_DATA__ ${this}" type="application/json">${_htmlEscapeJsonString(
+            JSON.stringify({
+              data: this.data,
+              key: this.key,
+            }),
+          )}</script>`,
+        )
+      : html;
   }
 
   protected _currentInnerHtml(): string {
@@ -64,36 +76,45 @@ export class VirtualView<T extends object> extends Base {
     return html.replace(startTag, '').slice(0, -(startTagName.length + 3));
   }
 
-  private _resetCurrentHtml(currentHtml: string): this {
+  private _resetCurrentHtml(currentHtml: string, isSSR?: boolean): this {
     this.renderCount++;
-    this._currentHtml = this._addRuneAttrs(currentHtml.trim());
+    this._currentHtml = this._addRuneAttrs(currentHtml.trim(), isSSR);
     return this;
   }
 
-  protected _makeHtml(): this {
+  protected _makeHtml(isSSR?: boolean): this {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
     this.subViewsFromTemplate = [];
-    return this._resetCurrentHtml(html`${this.template(this.data)}`.make(this));
+    return this._resetCurrentHtml(html`${this.template(this.data)}`.make(this), isSSR);
   }
 
-  protected async _makeHtmlAsync(): Promise<this> {
+  protected async _makeHtmlAsync(isSSR?: boolean): Promise<this> {
     if (this.data === null) throw new TypeError("'this.data' is not assigned.");
     this.subViewsFromTemplate = [];
     return this._resetCurrentHtml(
       await html`${await this.templateAsync(this.data)}`.makeAsync(this),
+      isSSR,
     );
   }
 
   protected ready() {}
 
-  toHtml(): string {
+  toHtml(isSSR?: boolean): string {
     if (this.renderCount === 0) this.ready();
-    return this._makeHtml()._currentHtml!;
+    return this._makeHtml(isSSR)._currentHtml!;
   }
 
-  async toHtmlAsync(): Promise<string> {
+  async toHtmlAsync(isSSR?: boolean): Promise<string> {
     if (this.renderCount === 0) this.ready();
-    return (await this._makeHtmlAsync())._currentHtml!;
+    return (await this._makeHtmlAsync(isSSR))._currentHtml!;
+  }
+
+  toHtmlSRR(): UnsafeHtml {
+    return html.preventEscape(this.toHtml(true));
+  }
+
+  async toHtmlSRRAsync(): Promise<UnsafeHtml> {
+    return html.preventEscape(await this.toHtmlAsync(true));
   }
 }
 

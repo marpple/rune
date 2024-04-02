@@ -191,6 +191,17 @@ export class View<T extends object = object> extends VirtualView<T> {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   protected _reservedEnables: Enable<object>[] = [];
   static _ReservedEnables: (new (...args: any[]) => Enable<object>)[] = [];
+
+  static createAndHydrate(element: HTMLElement) {
+    const dataEl = $(element).next(`script.__RUNE_DATA__.${this.name}`);
+    if (dataEl === null) {
+      throw new Error('No __RUNE_DATA__ script found');
+    } else {
+      const data = JSON.parse(dataEl.getTextContent() ?? '{}');
+      dataEl.remove();
+      return new this(data).hydrateFromSSR(element);
+    }
+  }
 }
 
 type ViewConstructor = new (...args: any[]) => View<object>;
