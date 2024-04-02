@@ -7,8 +7,4 @@ export class Page<T extends object> extends View<T> {
   ) {
     super(data);
   }
-
-  override hydrateFromSSR(): this {
-    return super.hydrateFromSSR(document.querySelector(`body [data-rune="${this}"]`)!);
-  }
 }

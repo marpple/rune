@@ -19,7 +19,7 @@ export class Layout<T extends object> extends VirtualView<T> {
           <meta name="description" content="rune" />
         </head>
         <body>
-          ${this.page}
+          ${this.page.toHtmlSRR()}
         </body>
       </html>
     `;
