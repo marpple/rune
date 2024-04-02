@@ -75,7 +75,7 @@ importers:
         specifier: ^0.2.8
         version: 0.2.8
       rune-ts:
-        specifier: ^0.5.1
+        specifier: ^0.5.2
         version: link:../rune
     devDependencies:
       '@types/express':

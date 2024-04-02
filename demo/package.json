@@ -14,7 +14,7 @@
   "dependencies": {
     "@fxts/core": "^0.28.0",
     "@rune-ts/server": "^0.2.8",
-    "rune-ts": "^0.5.1"
+    "rune-ts": "^0.5.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
