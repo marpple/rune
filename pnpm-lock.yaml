@@ -72,10 +72,10 @@ importers:
         specifier: ^0.28.0
         version: 0.28.0
       '@rune-ts/server':
-        specifier: ^0.0.20
-        version: 0.0.20
+        specifier: ^0.2.8
+        version: 0.2.8
       rune-ts:
-        specifier: ^0.5.0
+        specifier: ^0.5.1
         version: link:../rune
     devDependencies:
       '@types/express':
@@ -867,8 +867,8 @@ packages:
     dev: true
     optional: true
 
-  /@rune-ts/server@0.0.20:
-    resolution: {integrity: sha512-863WxvFH1+VbL3Hurt9RFZXVSCZAZbmG9/Sxod3Yumc6VgoyUYPmZoMWcAJJNApyOUuHiEUreoHL0AtDhgoSyQ==}
+  /@rune-ts/server@0.2.8:
+    resolution: {integrity: sha512-l73vQlcLQKozCos79X6OdGDeFhnXiA3KG7qXNR4v2ShWyZdii4ou46scOpHjdEX5oukJyWuK4/peFjUb4E7lVQ==}
     hasBin: true
     dependencies:
       '@swc/core': 1.4.8
@@ -879,7 +879,7 @@ packages:
       mini-css-extract-plugin: 2.8.1(webpack@5.91.0)
       morgan: 1.10.0
       node-sass: 9.0.0
-      rune-ts: 0.0.8
+      rune-ts: 0.5.1
       sass: 1.72.0
       semver: 7.6.0
       watchpack: 2.4.1
@@ -4870,8 +4870,8 @@ packages:
       queue-microtask: 1.2.3
     dev: true
 
-  /rune-ts@0.0.8:
-    resolution: {integrity: sha512-CvzCLzIS/zeYB2qUTlsGveC3h9brgdQHmyOKgOAlTfzsXqIhS7Szs/S1rrG5yFxmo/ljonVhlDcnHmfKwSD5Ng==}
+  /rune-ts@0.5.1:
+    resolution: {integrity: sha512-iOvdPGdDkFXYjI+OH7hLZWpFoNQBf1EebyyEMbrEeGXK0QON7aPWkO89wWiiy59XK341HtP1GyCWhSCBGKsP0w==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@fxts/core': 0.24.0
