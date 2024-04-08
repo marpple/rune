@@ -197,9 +197,9 @@ export class View<T extends object = object> extends VirtualView<T> {
     if (dataEl === null) {
       throw new Error('No __RUNE_DATA__ script found');
     } else {
-      const data = JSON.parse(dataEl.getTextContent() ?? '{}');
+      const hydration_data = JSON.parse(dataEl.getTextContent() ?? '{}');
       dataEl.remove();
-      return new this(data).hydrateFromSSR(element);
+      return new this(hydration_data.data).hydrateFromSSR(element);
     }
   }
 }

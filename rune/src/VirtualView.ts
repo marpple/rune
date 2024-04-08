@@ -2,6 +2,7 @@ import { _escape } from './lib/_escape';
 import { Base } from './Base';
 import { join, pipe, toAsync } from '@fxts/core';
 import { _htmlEscapeJsonString } from './lib/_htmlEscapeJsonString';
+import { rune } from './rune';
 
 export class VirtualView<T extends object> extends Base {
   key = '';
@@ -63,6 +64,7 @@ export class VirtualView<T extends object> extends Base {
           `${html}<script class="__RUNE_DATA__ ${this}" type="application/json">${_htmlEscapeJsonString(
             JSON.stringify({
               data: this.data,
+              sharedData: rune.getSharedData(this),
               key: this.key,
             }),
           )}</script>`,

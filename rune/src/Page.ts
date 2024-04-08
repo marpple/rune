@@ -1,4 +1,5 @@
 import { View } from './View';
+import { $ } from './$Element';
 
 export class Page<T extends object> extends View<T> {
   constructor(
@@ -8,7 +9,14 @@ export class Page<T extends object> extends View<T> {
     super(data);
   }
 
-  override hydrateFromSSR(): this {
-    return super.hydrateFromSSR(document.querySelector(`body [data-rune="${this}"]`)!);
+  static override createAndHydrate(element: HTMLElement) {
+    const dataEl = $(element).next(`script.__RUNE_DATA__.${this.name}`);
+    if (dataEl === null) {
+      throw new Error('No __RUNE_DATA__ script found');
+    } else {
+      const hydration_data = JSON.parse(dataEl.getTextContent() ?? '{}');
+      dataEl.remove();
+      return new this(hydration_data.data, hydration_data.sharedData).hydrateFromSSR(element);
+    }
   }
 }
