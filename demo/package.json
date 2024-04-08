@@ -13,8 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "@fxts/core": "^0.28.0",
-    "@rune-ts/server": "^0.6.0",
-    "rune-ts": "^0.6.0"
+    "@rune-ts/server": "^0.8.0",
+    "rune-ts": "^0.7.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

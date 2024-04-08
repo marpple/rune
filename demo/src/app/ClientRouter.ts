@@ -11,8 +11,8 @@ import { MeetupRouter } from './Meetup';
 
 // import { MeetupRouter } from './Lecture/index';
 
-export type ClientRouter = MeetupRouter;
+export type ClientRouter = typeof MeetupRouter;
 
-export const ClientRouter: ClientRouter = createRouter<ClientRouter>({
+export const ClientRouter = createRouter<ClientRouter>({
   ...MeetupRouter,
 });

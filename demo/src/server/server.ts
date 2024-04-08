@@ -13,7 +13,12 @@ server.get(ClientRouter['/tutorials'].toString(), function (req, res) {
 
   res.locals.layoutData = layoutData;
 
-  res.send(new MetaView(ClientRouter['/tutorials']({}), res.locals.layoutData).toHtml());
+  res.send(
+    new MetaView(
+      ClientRouter['/tutorials']({}, { is_mobile: true }),
+      res.locals.layoutData,
+    ).toHtml(),
+  );
 });
 
 server.get('/', (req, res) => {
