@@ -1,0 +1,53 @@
+.category_outline_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: ptr(9) ptr(24);
+  gap: ptr(4);
+  border-radius: ptr(999);
+
+  .text {
+    position: absolute;
+    opacity: 1;
+  }
+
+  .bold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+  }
+
+  &.default {
+    background: $white;
+    color: $gray-80;
+
+    @include innerBorder($gray-20);
+
+    &:hover {
+      color: $blue;
+      @include innerBorder($blue);
+
+      & > .text {
+        opacity: 0;
+      }
+
+      & > .bold {
+        opacity: 1;
+      }
+    }
+  }
+
+  &.active {
+    background: $blue;
+    color: $white;
+
+    & > .bold {
+      opacity: 1;
+    }
+
+    & > .text {
+      opacity: 0;
+    }
+  }
+}

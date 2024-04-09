@@ -1,0 +1,173 @@
+html[is_mobile='false'] .dropdown {
+  display: inline-flex;
+  position: relative;
+
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: ptr(7) ptr(12);
+    border: 1px solid $black;
+    border-radius: ptr(8);
+    background: $white;
+    gap: ptr(4);
+
+    .icon {
+      flex-shrink: 0;
+      width: ptr(12);
+      height: ptr(12);
+      line-height: 0;
+
+      //transform: rotate(0);
+      //transition: transform 200ms linear;
+    }
+  }
+
+  .option_container {
+    display: none;
+    position: absolute;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: ptr(128);
+    padding: ptr(4) ptr(0);
+    border: 1px solid $black;
+    border-radius: ptr(8);
+    background: $bright-95;
+
+    /* Blur 60 */
+    backdrop-filter: blur(30px);
+
+    &.left {
+      left: 0;
+    }
+
+    &.right {
+      right: 0;
+    }
+
+    &.top {
+      top: 0;
+      transform: translateY(-100%) translateY(-#{ptr(12)});
+    }
+
+    &.bottom {
+      bottom: 0;
+      transform: translateY(100%) translateY(#{ptr(12)});
+    }
+  }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    align-self: stretch;
+    padding: ptr(8) ptr(16);
+    color: $gray-80;
+    cursor: pointer;
+    gap: ptr(10);
+
+    &:hover {
+      color: $black;
+    }
+
+    &.selected {
+      color: $black;
+    }
+  }
+
+  &.is_opened {
+    .button .icon {
+      transform: rotate(180deg);
+    }
+
+    .option_container {
+      display: flex;
+    }
+  }
+}
+
+html[is_mobile='true'] .dropdown {
+  display: inline-flex;
+  position: relative;
+
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: ptr(6) ptr(10);
+    border: 1px solid $black;
+    border-radius: ptr(8);
+    background: $white;
+    gap: ptr(4);
+
+    .icon {
+      flex-shrink: 0;
+      width: ptr(12);
+      height: ptr(12);
+      line-height: 0;
+
+      //transform: rotate(0);
+      //transition: transform 200ms linear;
+    }
+  }
+
+  .option_container {
+    display: none;
+    position: absolute;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: ptr(128);
+    padding: ptr(4) ptr(0);
+    border: 1px solid $black;
+    border-radius: ptr(8);
+    background: $bright-95;
+
+    /* Blur 60 */
+    backdrop-filter: blur(30px);
+
+    &.left {
+      left: 0;
+    }
+
+    &.right {
+      right: 0;
+    }
+
+    &.top {
+      top: 0;
+      transform: translateY(-100%) translateY(-#{ptr(12)});
+    }
+
+    &.bottom {
+      bottom: 0;
+      transform: translateY(100%) translateY(#{ptr(12)});
+    }
+  }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    align-self: stretch;
+    padding: ptr(8) ptr(16);
+    color: $gray-80;
+    cursor: pointer;
+    gap: ptr(10);
+
+    &:hover {
+      color: $black;
+    }
+
+    &.selected {
+      color: $black;
+    }
+  }
+
+  &.is_opened {
+    .button .icon {
+      transform: rotate(180deg);
+    }
+
+    .option_container {
+      display: flex;
+    }
+  }
+}

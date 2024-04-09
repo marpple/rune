@@ -1,0 +1,14 @@
+.button_outline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: ptr(8) ptr(16);
+  border: 1px solid $gray-50;
+  border-radius: 6px;
+  color: $gray-50;
+
+  &.is_selected {
+    border: 1px solid $black;
+    color: $black;
+  }
+}

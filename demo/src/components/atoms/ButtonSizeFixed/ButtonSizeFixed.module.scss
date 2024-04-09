@@ -1,0 +1,55 @@
+.fixed_size_button {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: ptr(140);
+  min-width: ptr(120);
+  height: ptr(40);
+  padding: ptr(2) ptr(16);
+  gap: ptr(4);
+  border-radius: ptr(8);
+
+  &.type_white {
+    background-color: $white;
+    color: $black;
+  }
+
+  &.type_lightblue {
+    background: $light-blue;
+    color: $blue;
+  }
+
+  &.type_blue {
+    background: $blue;
+    color: $white;
+  }
+}
+
+.fixed_size_button.mobile {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: ptr(140);
+  min-width: ptr(120);
+  height: ptr(40);
+  padding: ptr(2) ptr(16);
+  gap: ptr(4);
+  border-radius: ptr(8);
+
+  &.type_white {
+    background-color: $white;
+    color: $black;
+  }
+
+  &.type_lightblue {
+    background: $light-blue;
+    color: $blue;
+  }
+
+  &.type_blue {
+    background: $blue;
+    color: $white;
+  }
+}

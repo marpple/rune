@@ -1,0 +1,38 @@
+html[is_mobile='false'] .header_search_bar {
+  display: flex;
+  align-items: center;
+  padding: ptr(8) ptr(16);
+  border-radius: ptr(8);
+  background-color: $dim-5;
+
+  .input {
+    display: inline-block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+  }
+
+  .search_icon {
+    display: inline-block;
+    width: ptr(24);
+    height: ptr(24);
+
+    svg {
+      height: 100%;
+    }
+  }
+
+  &.transparent {
+    background-color: transparent;
+    color: $white;
+
+    .input {
+      color: $white;
+    }
+
+    .input::placeholder {
+      color: $white;
+    }
+  }
+}

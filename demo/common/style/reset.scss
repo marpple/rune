@@ -1,0 +1,65 @@
+/* 모든 요소에 대한 기본 스타일 초기화 */
+[data-rune] {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 버튼 요소 */
+  button {
+    border: none; /* 테두리 없음 */
+    background-color: transparent; /* 배경색 투명 */
+    color: inherit; /* 부모 요소의 텍스트 색상 상속 */
+    font-size: inherit; /* 부모 요소의 글꼴 크기 상속 */
+    line-height: inherit; /* 부모 요소의 줄 간격 상속 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+    appearance: none; /* 버튼의 기본 스타일 제거 */
+  }
+
+  /* 링크 요소 */
+  a {
+    color: inherit; /* 부모 요소의 텍스트 색상 상속 */
+    text-decoration: none; /* 밑줄 제거 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+  }
+
+  /* 텍스트 입력 필드 */
+  input[type='text'],
+  input[type='number'],
+  textarea {
+    padding: 0.5rem; /* 내부 여백 */
+    border: 1px solid #ccc; /* 테두리 스타일 */
+    color: inherit; /* 부모 요소의 텍스트 색상 상속 */
+    font-size: inherit; /* 부모 요소의 글꼴 크기 상속 */
+    line-height: inherit; /* 부모 요소의 줄 간격 상속 */
+    appearance: none; /* 기본 스타일 제거 */
+  }
+
+  /* 선택된 텍스트 입력 필드 */
+  input[type='text']:focus,
+  input[type='number']:focus,
+  textarea:focus {
+    border-color: #007bff; /* 포커스시 테두리 색상 변경 */
+    outline: none; /* 포커스 효과 제거 */
+  }
+
+  body,
+  button,
+  a,
+  input[type='text'],
+  input[type='number'],
+  textarea {
+    font-family: $font-family-kr;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #eee;
+    font-size: $font-size-default-px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: $font-letter-spacing-base;
+  }
+}

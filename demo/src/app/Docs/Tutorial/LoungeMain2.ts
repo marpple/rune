@@ -1,5 +1,4 @@
-import { View, Enable, html, on, enable, ListView, rune } from 'rune-ts';
-import { each, filter, map, pipe } from '@fxts/core';
+import { Enable, html, on, View } from 'rune-ts';
 
 interface DeletableViewInterface extends View<object> {
   targetClassName: string;

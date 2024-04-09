@@ -2,6 +2,7 @@
   "name": "rune-demo",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
     "postinstall": "pnpm link rune-ts",
     "dev": "pnpm rune dev",
@@ -13,8 +14,9 @@
   "license": "ISC",
   "dependencies": {
     "@fxts/core": "^0.28.0",
-    "@rune-ts/server": "^0.8.0",
-    "rune-ts": "^0.7.0"
+    "@rune-ts/server": "^0.8.1",
+    "rune-ts": "^0.7.1",
+    "swiper": "^11.1.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",

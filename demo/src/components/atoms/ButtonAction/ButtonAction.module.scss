@@ -1,0 +1,50 @@
+.action_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &.size_regular {
+    height: ptr(40);
+    padding: ptr(9) ptr(16);
+    gap: ptr(4);
+    border-radius: ptr(8);
+    backdrop-filter: blur(20px);
+  }
+
+  &.size_medium {
+    height: ptr(48);
+    padding: ptr(9) ptr(16);
+    gap: ptr(4);
+    border-radius: ptr(8);
+    backdrop-filter: blur(20px);
+  }
+
+  &.size_large {
+    height: ptr(56);
+    padding: ptr(16) ptr(24);
+    gap: ptr(8);
+    border-radius: ptr(12);
+  }
+
+  &.type_lightblue {
+    background: $light-blue;
+    color: $blue;
+  }
+
+  &.type_blue {
+    background: $blue;
+    color: $white;
+  }
+
+  &.type_disabled {
+    background-color: $gray-5;
+    color: $gray-50;
+  }
+
+  &.type_line {
+    @include innerBorder($gray-20);
+
+    background-color: $white;
+    color: $gray-80;
+  }
+}

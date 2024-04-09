@@ -1,0 +1,298 @@
+@mixin base_kr($size, $line, $font-weight) {
+  font-family: $font_family_kr !important;
+  font-size: ptr($size) !important;
+  font-style: normal !important;
+  font-weight: $font-weight !important;
+  letter-spacing: ptr($font_letter_spacing_base) !important;
+  line-height: $line !important;
+}
+
+@mixin base_bebas($size, $line, $font-weight) {
+  font-family: $font_family_en-bebas !important;
+  font-size: ptr($size) !important;
+  font-style: normal !important;
+  font-weight: $font-weight !important;
+  line-height: $line !important;
+}
+
+@mixin base_unica($size, $line, $font-weight) {
+  font-family: $font_family_en-unica !important;
+  font-size: ptr($size) !important;
+  font-style: normal !important;
+  font-weight: $font-weight !important;
+  letter-spacing: ptr($font_letter_spacing_base) !important;
+  line-height: $line !important;
+}
+
+/*
+ font - size + weight + lang
+ 2 depth 로 유지 (에디터에서 바로가기 동작 때문)
+ */
+
+.font_48 {
+  &_bold_kr {
+    @include base_kr(48, 1.25, $font_weight_bold);
+  }
+}
+
+.font_40 {
+  &_bold_kr {
+    @include base_kr(40, 1.4, $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(40, 1.4, $font_weight_normal);
+  }
+}
+
+.font_36 {
+  &_bold_kr {
+    @include base_kr(36, calc(50 / 36), $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(36, calc(50 / 36), $font_weight_normal);
+  }
+}
+
+.font_32 {
+  &_bold_kr {
+    @include base_kr(32, calc(45 / 32), $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(32, calc(45 / 32), $font_weight_normal);
+  }
+}
+
+.font_28 {
+  &_bold_kr {
+    @include base_kr(28, calc(39 / 28), $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(28, calc(39 / 28), $font_weight_normal);
+  }
+
+  &_regular_kr {
+    @include base_kr(28, calc(39 / 28), $font_weight_regular);
+  }
+}
+
+.font_24 {
+  &_bold_kr {
+    @include base_kr(24, calc(34 / 24), $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(24, calc(34 / 24), $font_weight_normal);
+  }
+
+  &_regular_kr {
+    @include base_kr(24, calc(34 / 24), $font_weight_regular);
+  }
+}
+
+.font_20 {
+  &_bold_kr {
+    @include base_kr(20, calc(28 / 20), $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(20, calc(28 / 20), $font_weight_normal);
+  }
+
+  &_regular_kr {
+    @include base_kr(20, calc(28 / 20), $font_weight_regular);
+  }
+}
+
+.font_16 {
+  &_bold_kr {
+    @include base_kr(16, 1.5, $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(16, 1.5, $font_weight_normal);
+  }
+
+  &_regular_kr {
+    @include base_kr(16, 1.5, $font_weight_regular);
+  }
+}
+
+.font_14 {
+  &_bold_kr {
+    @include base_kr(14, calc(22 / 14), $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(14, calc(22 / 14), $font_weight_normal);
+  }
+
+  &_regular_kr {
+    @include base_kr(14, calc(22 / 14), $font_weight_regular);
+  }
+}
+
+.font_12 {
+  &_bold_kr {
+    @include base_kr(12, calc(17 / 12), $font_weight_bold);
+  }
+
+  &_medium_kr {
+    @include base_kr(12, calc(17 / 12), $font_weight_normal);
+  }
+
+  &_regular_kr {
+    @include base_kr(12, calc(17 / 12), $font_weight_regular);
+  }
+}
+
+.font_10 {
+  &_medium_kr {
+    @include base_kr(10, calc(14 / 10), $font_weight_normal);
+  }
+
+  &_regular_kr {
+    @include base_kr(10, calc(14 / 10), $font_weight_regular);
+  }
+}
+
+/*
+ EN - bebas font
+ */
+
+.font_bebas_90 {
+  &_bold {
+    @include base_bebas(90, calc(90 / 96), $font-weight-bold);
+  }
+}
+
+.font_bebas_60 {
+  &_bold {
+    @include base_bebas(60, 0.9, $font-weight-bold);
+  }
+}
+
+.font_bebas_48 {
+  &_bold {
+    @include base_bebas(48, 0.9, $font-weight-bold);
+  }
+}
+
+.font_bebas_40 {
+  &_bold {
+    @include base_bebas(40, 0.9, $font-weight-bold);
+  }
+}
+
+.font_bebas_32 {
+  &_bold {
+    @include base_bebas(32, 1, $font-weight-bold);
+  }
+}
+
+.font_bebas_24 {
+  &_bold {
+    @include base_bebas(24, 1, $font-weight-bold);
+  }
+}
+
+.font_bebas_20 {
+  &_bold {
+    @include base_bebas(20, 1.4, $font-weight-bold);
+  }
+}
+
+.font_bebas_16 {
+  &_bold {
+    @include base_bebas(16, 1.5, $font-weight-bold);
+  }
+}
+
+.font_bebas_14 {
+  &_bold {
+    @include base_bebas(14, 1.5, $font-weight-bold);
+  }
+}
+
+/*
+ En - Unica font
+ */
+
+.font_24_unica {
+  &_bold {
+    @include base_unica(24, calc(34 / 24), $font-weight-bold);
+  }
+
+  &_medium {
+    @include base_unica(24, calc(34 / 24), $font-weight-normal);
+  }
+
+  &_regular {
+    @include base_unica(24, calc(34 / 24), $font-weight-regular);
+  }
+}
+
+.font_20_unica {
+  &_bold {
+    @include base_unica(20, calc(28 / 20), $font-weight-bold);
+  }
+
+  &_medium {
+    @include base_unica(20, calc(28 / 20), $font-weight-normal);
+  }
+
+  &_regular {
+    @include base_unica(20, calc(28 / 20), $font-weight-regular);
+  }
+}
+
+.font_16_unica {
+  &_bold {
+    @include base_unica(16, calc(22 / 16), $font-weight-bold);
+  }
+
+  &_medium {
+    @include base_unica(16, calc(22 / 16), $font-weight-normal);
+  }
+
+  &_regular {
+    @include base_unica(16, calc(22 / 16), $font-weight-regular);
+  }
+}
+
+.font_14_unica {
+  &_bold {
+    @include base_unica(14, calc(20 / 14), $font-weight-bold);
+  }
+
+  &_medium {
+    @include base_unica(14, calc(20 / 14), $font-weight-normal);
+  }
+
+  &_regular {
+    @include base_unica(14, calc(20 / 14), $font-weight-regular);
+  }
+}
+
+.font_12_unica {
+  &_bold {
+    @include base_unica(12, calc(17 / 12), $font-weight-bold);
+  }
+
+  &_medium {
+    @include base_unica(12, calc(17 / 12), $font-weight-normal);
+  }
+
+  &_regular {
+    @include base_unica(12, calc(17 / 12), $font-weight-regular);
+  }
+}
+
+.font_10_unica {
+  &_regular {
+    @include base_unica(10, 1.4, $font-weight-regular);
+  }
+}

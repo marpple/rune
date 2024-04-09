@@ -115,6 +115,11 @@ export abstract class Base {
     View: T,
     listener: (this: this, e: InstanceType<K>, targetView: InstanceType<T>) => void,
   ): this;
+  delegate<K extends keyof HTMLElementEventMap, T extends new (...args: any[]) => Base>(
+    eventType: K,
+    View: T,
+    listener: (this: this, e: HTMLElementEventMap[K], targetView: InstanceType<T>) => void,
+  ): this;
   delegate<K extends keyof HTMLElementEventMap>(
     eventType: K,
     selector: string,

@@ -1,0 +1,60 @@
+html[is_mobile='false'] {
+  .button_arrow {
+    @include flex(center, center);
+
+    flex-shrink: 0;
+    width: ptr(40);
+    height: ptr(40);
+    padding: ptr(8);
+    border-radius: 999px;
+    color: $white;
+    backdrop-filter: blur(5px);
+
+    &.type_bright {
+      background: $bright-20;
+    }
+
+    &.type_dim {
+      background: $dim-30;
+    }
+
+    .arrow {
+      width: ptr(20);
+      height: ptr(20);
+    }
+
+    &.left {
+      transform: rotateY(180deg);
+    }
+  }
+}
+
+html[is_mobile='true'] {
+  .button_arrow {
+    @include flex(center, center);
+
+    flex-shrink: 0;
+    width: ptr(40);
+    height: ptr(40);
+    padding: ptr(8);
+    border-radius: 999px;
+    backdrop-filter: blur(5px);
+
+    &.type_bright {
+      background: $bright-20;
+    }
+
+    &.type_dim {
+      background: $dim-30;
+    }
+
+    .arrow {
+      width: ptr(20);
+      height: ptr(20);
+    }
+
+    &.left {
+      transform: rotateY(180deg);
+    }
+  }
+}

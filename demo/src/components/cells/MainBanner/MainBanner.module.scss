@@ -1,0 +1,100 @@
+html[is_mobile='false'] {
+  .banner {
+    position: relative;
+    width: 100%;
+    height: ptr(740);
+    @include flex(center, center);
+
+    .image {
+      width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .swiper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    @include flex(flex-start, center);
+
+    .wrapper {
+      width: 100%;
+      height: 100%;
+      @include flex(flex-start, center);
+    }
+  }
+
+  .information {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    min-width: $pc-layout-body-min-width;
+    max-width: $pc-layout-body-max-width;
+    height: 100%;
+    padding: 0 ptr(32);
+    pointer-events: none;
+    gap: ptr(24);
+    @include flex(center, flex-start, column);
+
+    .contents {
+      display: flex;
+      flex-direction: column;
+      width: fit-content;
+      max-width: 400px;
+      color: $white;
+      pointer-events: auto;
+      gap: ptr(16);
+    }
+
+    .button {
+      pointer-events: auto;
+
+      .arrow {
+        width: ptr(16);
+        height: ptr(16);
+      }
+    }
+  }
+
+  .controller {
+    position: absolute;
+    z-index: 10;
+    bottom: ptr(60);
+    width: 100%;
+    min-width: $pc-layout-body-min-width;
+    max-width: $pc-layout-body-max-width;
+    height: fit-content;
+    padding: 0 ptr(32);
+    pointer-events: none;
+    @include flex(space-between, flex-end);
+
+    .pagination {
+      @include flex(center, center);
+
+      gap: ptr(12);
+      color: $white;
+
+      .pages {
+        @include flex(flex-start, center);
+
+        flex-shrink: 0;
+        width: ptr(48);
+        height: 1px;
+        background-color: $bright-20;
+
+        .page {
+          height: 100%;
+          background-color: $white;
+        }
+      }
+    }
+
+    .navigation {
+      pointer-events: auto;
+      @include flex(center, center);
+
+      gap: ptr(8);
+    }
+  }
+}

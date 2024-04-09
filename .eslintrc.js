@@ -36,6 +36,9 @@ module.exports = {
     '@typescript-eslint/prefer-nullish-coalescing': ['warn'],
     '@typescript-eslint/prefer-for-of': ['warn'],
     '@typescript-eslint/unbound-method': ['warn'],
+    '@typescript-eslint/restrict-plus-operands': ['off'],
+    '@typescript-eslint/no-base-to-string': ['off'],
+    '@typescript-eslint/no-redundant-type-constituents': ['off'],
     semi: 'error',
   },
 };

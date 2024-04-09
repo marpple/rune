@@ -21,6 +21,24 @@ server.get(ClientRouter['/tutorials'].toString(), function (req, res) {
   );
 });
 
+server.get(ClientRouter['/banner'].toString(), function (req, res) {
+  const layoutData: LayoutData = {
+    html: {
+      is_mobile: 'false',
+    },
+    head: {
+      title: '배너 예시',
+      description: '',
+    },
+  };
+
+  res.locals.layoutData = layoutData;
+
+  res.send(
+    new MetaView(ClientRouter['/banner']({}, { is_mobile: true }), res.locals.layoutData).toHtml(),
+  );
+});
+
 server.get('/', (req, res) => {
   res.send('Hello, this is RUNE + RUNE Server!');
 });

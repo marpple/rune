@@ -1,0 +1,5 @@
+@use 'sass:math';
+
+@function ptr($target-size) {
+  @return math.div($target-size, $font-size-default) * 1rem; // rem 단위로 변환
+}

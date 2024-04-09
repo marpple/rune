@@ -8,11 +8,13 @@
 
 import { createRouter } from '@rune-ts/server';
 import { MeetupRouter } from './Meetup';
+import { BannerRouter } from './Banner/router';
 
 // import { MeetupRouter } from './Lecture/index';
 
-export type ClientRouter = typeof MeetupRouter;
+export type ClientRouter = typeof MeetupRouter & typeof BannerRouter;
 
 export const ClientRouter = createRouter<ClientRouter>({
   ...MeetupRouter,
+  ...BannerRouter,
 });
