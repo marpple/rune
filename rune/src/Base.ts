@@ -113,19 +113,34 @@ export abstract class Base {
   delegate<K extends new (...args: any[]) => Event, T extends new (...args: any[]) => Base>(
     eventClass: K,
     View: T,
-    listener: (this: this, e: InstanceType<K>, targetView: InstanceType<T>) => void,
+    listener: (
+      this: this,
+      e: InstanceType<K> & { originalEvent: InstanceType<K> },
+      targetView: InstanceType<T>,
+    ) => void,
   ): this;
   delegate<K extends keyof HTMLElementEventMap, T extends new (...args: any[]) => Base>(
     eventType: K,
     View: T,
-    listener: (this: this, e: HTMLElementEventMap[K], targetView: InstanceType<T>) => void,
+    listener: (
+      this: this,
+      e: HTMLElementEventMap[K] & { originalEvent: HTMLElementEventMap[K] },
+      targetView: InstanceType<T>,
+    ) => void,
   ): this;
   delegate<K extends keyof HTMLElementEventMap>(
     eventType: K,
     selector: string,
-    listener: (this: this, e: HTMLElementEventMap[K]) => void,
+    listener: (
+      this: this,
+      e: HTMLElementEventMap[K] & { originalEvent: HTMLElementEventMap[K] },
+    ) => void,
   ): this;
-  delegate(eventType: string, selector: string, listener: (this: this, ev: Event) => any): this;
+  delegate(
+    eventType: string,
+    selector: string,
+    listener: (this: this, ev: Event & { originalEvent: Event }) => any,
+  ): this;
   delegate(eventType: any, selector: any, listener: any): this {
     eventHelper.delegate(this, this._element, eventType, selector, listener);
     return this;
