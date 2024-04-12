@@ -230,19 +230,19 @@ export class $Element {
   delegate<K extends keyof HTMLElementEventMap>(
     eventType: K,
     selector: string,
-    listener: (this: HTMLElement, e: HTMLElementEventMap[K]) => any,
+    listener: (this: HTMLElement, e: HTMLElementEventMap[K] & { originalEvent: Event }) => any,
   ): this;
   delegate<T extends Event>(
     eventType: string,
     selector: string,
-    listener: (this: HTMLElement, ev: T) => any,
+    listener: (this: HTMLElement, ev: T & { originalEvent: Event }) => any,
   ): this;
   delegate<K extends keyof HTMLElementEventMap>(
     eventType: K | string,
     selector: string,
     listener:
-      | ((this: HTMLElement, e: HTMLElementEventMap[K]) => void)
-      | ((this: HTMLElement, ev: Event) => any),
+      | ((this: HTMLElement, e: HTMLElementEventMap[K] & { originalEvent: Event }) => void)
+      | ((this: HTMLElement, ev: Event & { originalEvent: Event }) => any),
   ): this {
     this._element.addEventListener(eventType, (e: Event) => {
       pipe(
@@ -254,9 +254,12 @@ export class $Element {
         each(($currentTarget: $Element) => {
           listener.call(this._element, {
             ...(Object.fromEntries(_entries(e)) as HTMLElementEventMap[K]),
+            originalEvent: e,
             target: e.target,
             currentTarget: $currentTarget._element,
-          } as HTMLElementEventMap[K]);
+          } as unknown as HTMLElementEventMap[K] & {
+            originalEvent: Event;
+          });
         }),
       );
     });
