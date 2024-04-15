@@ -3,6 +3,7 @@ import { VirtualView } from './VirtualView';
 import { each, flatMap, pipe, toArray, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
+import { ViewMounted, ViewRendered } from './ViewEvent';
 
 export class View<T extends object = object> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
@@ -31,7 +32,7 @@ export class View<T extends object = object> extends VirtualView<T> {
   }
 
   protected hydrate(): this {
-    return this.hydrateSubViews()._addListenerForAppended()._onMount();
+    return this.hydrateSubViews()._addListenerForAppended()._onRender()._onMount();
   }
 
   private hydrateSubViews(): this {
@@ -58,6 +59,7 @@ export class View<T extends object = object> extends VirtualView<T> {
               this.element().dataset.runeParent = this.parentView.toString();
               observer.disconnect();
             });
+          this._onMount();
         }
       }
     });
@@ -65,13 +67,19 @@ export class View<T extends object = object> extends VirtualView<T> {
     return this;
   }
 
-  override _onMount() {
+  override _onRender() {
     this._reservedEnables = (this.constructor as HasReservedEnables)._ReservedEnables.map(
       (ReservedEnable) => new ReservedEnable(this),
     );
     rune.set(this.element(), this, View);
+    super._onRender();
+    this.dispatchEvent(ViewRendered, { detail: this });
+    return this;
+  }
+
+  override _onMount() {
     super._onMount();
-    this.dispatchEvent(new CustomEvent('view:mountend'));
+    this.dispatchEvent(ViewMounted, { detail: this });
     return this;
   }
 

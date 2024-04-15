@@ -8,13 +8,20 @@ export abstract class Base {
   private _runeElNumber = 0;
   private _isTempElId = false;
 
+  protected onRender() {}
+
+  protected _onRender(): this {
+    rune.set(this.element(), this);
+    eventHelper.addDecoratedListeners(this, this.element());
+    this.onRender();
+    eventHelper.addReservedListener(this, this.element());
+    return this;
+  }
+
   protected onMount() {}
 
   protected _onMount(): this {
-    rune.set(this.element(), this);
-    eventHelper.addDecoratedListeners(this, this.element());
     this.onMount();
-    eventHelper.addReservedListener(this, this.element());
     return this;
   }
 

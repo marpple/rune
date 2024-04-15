@@ -10,6 +10,10 @@ if (typeof global !== 'undefined') {
     };
 }
 
+export class CustomEventWithoutDetail extends CustomEvent<undefined> {}
+
+export class CustomEventOptionalDetail<T> extends CustomEvent<T> {}
+
 export interface CustomEventWithDetailInit<T> extends EventInit {
   detail: T;
 }

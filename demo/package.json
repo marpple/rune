@@ -13,9 +13,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fxts/core": "^0.28.0",
+    "@fxts/core": "^0.28.1",
     "@rune-ts/server": "^0.8.1",
-    "rune-ts": "^0.7.1",
+    "rune-ts": "^0.7.3",
     "swiper": "^11.1.0"
   },
   "devDependencies": {

@@ -72,13 +72,13 @@ importers:
   demo:
     dependencies:
       '@fxts/core':
-        specifier: ^0.28.0
-        version: 0.28.0
+        specifier: ^0.28.1
+        version: 0.28.1
       '@rune-ts/server':
         specifier: ^0.8.1
         version: 0.8.1
       rune-ts:
-        specifier: ^0.7.1
+        specifier: ^0.7.3
         version: link:../rune
       swiper:
         specifier: ^11.1.0
@@ -643,8 +643,8 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@fxts/core@0.28.0:
-    resolution: {integrity: sha512-V7YHWzbOMTzkPRdex3hYu+LSNAwxIMvLXIk/e4tqp1ES0R30tvFu8ikSBpXq9H/AY0DtKVUwED3+ou+Q+9jsFQ==}
+  /@fxts/core@0.28.1:
+    resolution: {integrity: sha512-4W0fo6s/vCt+5/08zpL/ujZlxavX7GP/tvyMX7saI+4iv4kuDou9BKpXXuNuK3GmGK1oNEfQCYRSQgps7HBK8g==}
     dependencies:
       tslib: 2.6.2
     dev: false

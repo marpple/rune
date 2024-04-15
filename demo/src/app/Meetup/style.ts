@@ -3,20 +3,23 @@ import { html, rune, View } from 'rune-ts';
 export class StyleView extends View<object> {
   override template() {
     return html`<style>
+      [data-rune] * {
+        box-sizing: content-box;
+      }
       #tutorial {
         padding: 120px;
         font-size: 18px;
       }
 
-      .SwitchView {
+      #tutorial button.SwitchView {
         width: 44px;
         border-radius: 15px;
         border: 0 none;
         padding: 5px;
         box-sizing: border-box;
-        background-color: #aaa;
         transition-property: background-color;
         transition-duration: 0.2s;
+        background-color: #aaa;
       }
 
       .SwitchView .toggle {
@@ -30,7 +33,7 @@ export class StyleView extends View<object> {
         transition-duration: 0.2s;
       }
 
-      .SwitchView.on {
+      #tutorial button.SwitchView.on {
         background-color: #1d75ff;
       }
 
@@ -172,7 +175,7 @@ export class StyleView extends View<object> {
 
       .TodoItemView .remove {
         position: absolute;
-        top: 12px;
+        top: 6px;
         right: 12px;
         background: none;
         border: 0 none;

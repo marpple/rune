@@ -48,7 +48,7 @@ class Rune {
     } while ((currentView = currentView.parentView!));
   }
 
-  getPage(currentView: VirtualView<object>): Page<object> {
+  getPage(currentView: VirtualView<object>): Page<object> | undefined {
     let page: View<object> | undefined;
     if (currentView) {
       page = this._getPageByParentView(currentView);
@@ -59,15 +59,11 @@ class Rune {
         page = this.getUnknownView(element);
       }
     }
-    if (page && page instanceof Page) {
-      return page as Page<object>;
-    } else {
-      throw Error('rune.Page not found.');
-    }
+    return page;
   }
 
   getSharedData(currentView: VirtualView<object>): Record<string, any> | undefined {
-    return this.getPage(currentView).sharedData;
+    return this.getPage(currentView)?.sharedData;
   }
 }
 

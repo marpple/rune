@@ -60,11 +60,11 @@ export class $Element {
     );
   }
 
-  prev(selector: string): $Element {
+  prev(selector: string): $Element | null {
     return $(_nextOrPrev('previousElementSibling', selector, this._element));
   }
 
-  next(selector: string): $Element {
+  next(selector: string): $Element | null {
     return $(_nextOrPrev('nextElementSibling', selector, this._element));
   }
 
