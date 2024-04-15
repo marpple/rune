@@ -1,8 +1,8 @@
-# Event handling
+# Handling Events
 
 ## Event Registration
 
-`onMount()` is executed immediately after rendering within `document.body`, making it an appropriate time to register events. `this.element()` returns the `HTMLElement` associated with the `View`, enabling event registration using Web API's `addEventListener()`.
+`onRender()` is executed right after the `element` is created, making it the ideal time to register events. `this.element()` returns the `HTMLElement` associated with the `View`, and events can be registered using the Web API’s `addEventListener()`.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -10,7 +10,7 @@ export class ColorCheckboxView extends View<Color> {
     return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
   }
 
-  override onMount() {
+  override onRender() {
     this.element().addEventListener('click', () => this.toggle());
   }
 
@@ -21,12 +21,12 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-The above code is not bad, but if there are many instances of `ColorCheckboxView`, there will also be a lot of registered event listeners. To prevent this, the `View` provides an extended method for `addEventListener`.
+While the code above is not bad, if `ColorCheckboxView` instances increase, the registered event listeners will also multiply. To prevent this, `View` provides an extended method for `addEventListener`.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
   ...
-  override onMount() {
+  override onRender() {
     this.addEventListener('click', this.toggle);
   }
 
@@ -37,11 +37,11 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-`view.addEventListener()` registers the provided function and binds `view` to `this` when the event is triggered. In the above code, `ColorCheckboxView.prototype.toggle` is a single function, so it remains efficient even when multiple `ColorCheckboxView` instances are created.
+`view.addEventListener()` registers a function and binds it to `this` as `view` when the event triggers. In the code above, `ColorCheckboxView.prototype.toggle` is a single function, making it efficient even when multiple ColorCheckboxViews are created.
 
 ## Event Registration Decorator
 
-Using the `@on` decorator allows for a more concise code. `@on('click')` replaces the code written within `onMount`.
+The `@on` decorator allows for more concise code writing. `@on('click')` replaces the code written inside `onRender`.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -71,12 +71,12 @@ export class ColorCheckboxView extends View<Color> {
 
 ## Event Delegation
 
-As shown above, you can trigger events using `dispatchEvent()`. `checkbox:` is a kind of convention to avoid duplication and doesn't have any functionality. Additionally, you can listen to events using the instance method `delegate()` of the `View` as follows.
+As shown above, `dispatchEvent()` can be used to trigger events. `checkbox:` is a type of convention to avoid duplication and has no functionality. Events can also be listened to using the instance method `delegate()` of `View` as shown below.
 
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {
   ...
-  override onMount() {
+  override onRender() {
     this.delegate('checkbox:change', '.ColorCheckboxView', (e) => {
       console.log(e.target);
       // <li class="ColorCheckboxView checked">...</li>
@@ -92,11 +92,11 @@ export class ColorCheckboxListView extends View<Color[]> {
 }
 ```
 
-When passing only one argument to the `@on` decorator, it utilizes `addEventListener`, and when passing a CSS selector as the second argument to `@on`, it utilizes `delegate`. You can also write `delegate` as a decorator for convenience.
+If only one argument is provided to the `@on` decorator, it uses `addEventListener`, and if a CSS selector is provided as a second argument to `@on`, it uses `delegate`. `Delegate` can also be written concisely as a decorator like below.
 
 ```typescript
 class MyView extends View<{ val: number }> {
-  override onMount() {
+  override onRender() {
     this.delegate('click', '.target', () => this.remove());
   }
 
@@ -113,7 +113,7 @@ class MyView extends View<{ val: number }> {
 }
 ```
 
-## ColorCheckBoxListView
+## Wrapping Up ColorCheckboxListView
 
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {
@@ -125,7 +125,7 @@ export class ColorCheckboxListView extends View<Color[]> {
     `;
   }
 
-  override onMount() {
+  override onRender() {
     this.delegate('checkbox:change', '.ColorCheckboxView', this.onChange);
   }
 

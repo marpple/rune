@@ -2,7 +2,7 @@
 
 ## 이벤트 등록
 
-`onMount()`는 `document.body` 내에 렌더링된 직후 실행되며 이벤트를 등록하기 적합한 시점입니다. `this.element()`는 `View`와 매핑된 `HTMLElement`를 리턴하며 Web API의 `addEventListener()`를 이용하여 이벤트를 등록할 수 있습니다.
+`onRender()`는 `element`가 생성된 직후 실행되며 이벤트를 등록하기 적합한 시점입니다. `this.element()`는 `View`와 매핑된 `HTMLElement`를 리턴하며 Web API의 `addEventListener()`를 이용하여 이벤트를 등록할 수 있습니다.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -10,7 +10,7 @@ export class ColorCheckboxView extends View<Color> {
     return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
   }
 
-  override onMount() {
+  override onRender() {
     this.element().addEventListener('click', () => this.toggle());
   }
 
@@ -26,7 +26,7 @@ export class ColorCheckboxView extends View<Color> {
 ```typescript
 export class ColorCheckboxView extends View<Color> {
   ...
-  override onMount() {
+  override onRender() {
     this.addEventListener('click', this.toggle);
   }
 
@@ -41,7 +41,7 @@ export class ColorCheckboxView extends View<Color> {
 
 ## 이벤트 등록 데코레이터
 
-`@on` 데코레이터를 사용하면 보다 간결하게 코드를 작성할 수 있습니다. `@on('click')`은 `onMount` 내 작성했던 코드를 대체합니다.
+`@on` 데코레이터를 사용하면 보다 간결하게 코드를 작성할 수 있습니다. `@on('click')`은 `onRender` 내 작성했던 코드를 대체합니다.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -76,7 +76,7 @@ export class ColorCheckboxView extends View<Color> {
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {
   ...
-  override onMount() {
+  override onRender() {
     this.delegate('checkbox:change', '.ColorCheckboxView', (e) => {
       console.log(e.target);
       // <li class="ColorCheckboxView checked">...</li>
@@ -96,7 +96,7 @@ export class ColorCheckboxListView extends View<Color[]> {
 
 ```typescript
 class MyView extends View<{ val: number }> {
-  override onMount() {
+  override onRender() {
     this.delegate('click', '.target', () => this.remove());
   }
 
@@ -125,7 +125,7 @@ export class ColorCheckboxListView extends View<Color[]> {
     `;
   }
 
-  override onMount() {
+  override onRender() {
     this.delegate('checkbox:change', '.ColorCheckboxView', this.onChange);
   }
 

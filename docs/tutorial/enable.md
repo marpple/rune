@@ -1,10 +1,10 @@
 # Enable Pattern
 
-Rune provides the Enable pattern, which allows multiple functionalities to be added to a single `View`. Enable serves as a concept and a class that modularizes behavior or functionality and facilitates extending `View`. Think of Enable as a `View` without a template, demonstrating a pattern for extending functionality based on a `View`.
+Rune provides an Enable pattern that assigns multiple functionalities to a single `View`. Using `Enable` allows for the modularization of actions or functionalities, making it easier to extend `View`. You can think of `Enable` as a `View` without a template, designed to receive a `View` and enhance its capabilities.
 
-## Sharing View and Data with Enable
+## Enable Sharing Data with View
 
-Enable is designed to share both `View` and data. In TypeScript, you can pass the same type to `Enable<T>`'s type argument as the `view.data` of `View<T>`. When utilizing Enable with the previously created `CheckboxView`, you can implement it using the following pattern. `Checkable<T extends CheckableData>` constrains the type of `View`'s data passed when creating `Checkable`.
+`Enable` is designed to share data with `View`. In TypeScript, the type argument for `Enable<T>` should match the type argument of `view.data` in `View<T>`. Below is how you can implement the `CheckboxView` using the `Enable` pattern. `Checkable<T extends CheckableData>` constrains the type of `data` for the `View` passed during creation.
 
 ```typescript
 import { View, html, Enable } from 'rune-ts';
@@ -43,7 +43,7 @@ console.log(checkableColorView.data.checked);
 // true
 ```
 
-The `Enable.prototype.onMount` function is executed when the `element` of the `View` passed as an argument is added to the browser (appended). Additionally, like `View`, `Enable` also has an `addEventListener` method.
+`Enable` also has `addEventListener`, `delegate`, and the `@on` decorator, similar to `View`.
 
 ```typescript
 _toggle() {
@@ -55,15 +55,15 @@ _toggle() {
 }
 ```
 
-In `Enable`, since `this.view.data === this.data` and `this.view.element() === this.element()`, the toggle section can be modified as shown in the code above. This facilitates the process of transferring the code written for `View` to `Enable` to create reusable code.
+In `Enable`, `this.view.data === this.data` and `this.view.element() === this.element()`, allowing for simplification of the toggle functionality. This facilitates the reuse of code originally written for `View` within `Enable`.
 
 ## Extending Views without Data Sharing
 
-Using `Deletable`, you can easily create a `BallView` that is deleted when clicked. `class Deletable extends Enable` is equivalent to `class Deletable extends Enable<object>`.
+Using `Deletable`, you can easily create a `BallView` that gets removed on click. `class Deletable extends Enable` is equivalent to `class Deletable extends Enable<object>`.
 
 ```typescript
 class Deletable extends Enable {
-  override onMount() {
+  override onRender() {
     this.delegate('mousedown', '.remove-target', this.remove);
   }
 
@@ -77,7 +77,7 @@ type Ball = {
 };
 
 class BallView extends View<Ball> {
-  deletable = new Deletable(this);
+  deletable = new Deletable(this).init();
 
   override template() {
     return html`
@@ -109,9 +109,11 @@ class BallView extends View<Ball> {
   });
 ```
 
+`Enable.prototype.onRender` executes when the `element` of the received `View` is created.
+
 ## EnableViewInterface
 
-In the above code, we've agreed to use the class name "remove-target" for elements that trigger deletion in `Deletable`. By utilizing interfaces, we can further abstract and safely extend the protocol of communication between objects with greater scalability.
+In the code above, we agreed on the class name `remove-target` for the element triggering deletion. Using an `interface` allows for a more scalable and secure abstraction of communications between objects.
 
 ```typescript
 interface DeletableViewInterface extends View<object> {
@@ -122,8 +124,8 @@ export class Deletable extends Enable {
   constructor(public override view: DeletableViewInterface) {
     super(view);
   }
-
-  override onMount() {
+  
+  override onRender() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
   }
 
@@ -144,7 +146,9 @@ export class BallView extends View<Ball> {
          border: 1px solid black; 
          padding: 10px; 
          width: 20px; 
-         height: 20px; 
+        
+
+ height: 20px; 
          border-radius: 20px;"
       >
         <div
@@ -161,9 +165,9 @@ export class BallView extends View<Ball> {
 }
 ```
 
-Now, if `BallView` does not implement `targetClassName`, developers will receive an error message like "S2345: Argument of type this is not assignable to parameter of type DeletableViewInterface. Property targetClassName is missing in type BallView but required in type DeletableViewInterface." This guides developers to implement it.
+Now, if `BallView` does not implement `targetClassName`, it will throw an error such as `TS2345: Argument of type this is not assignable to parameter of type DeletableViewInterface. Property targetClassName is missing in type BallView but required in type DeletableViewInterface`, guiding developers to implement it mandatorily.
 
-Below is an example of inter-object communication, where `Deletable` asks `View` if it can be removed and deletes accordingly, with interfaces and implementations added:
+Here's an example of object communication, where `Deletable` asks `View` if it can remove, and an interface with implementation was added.
 
 ```typescript
 interface DeletableViewInterface extends View<object> {
@@ -175,8 +179,8 @@ export class Deletable extends Enable {
   constructor(public override view: DeletableViewInterface) {
     super(view);
   }
-
-  override onMount() {
+  
+  override onRender() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
   }
 
@@ -193,12 +197,12 @@ export type Ball = {
 };
 
 export class BallView extends View<Ball> {
-  deletable = new Deletable(this);
+  deletable = new Deletable(this).init();
 
   readonly targetClassName = 'target';
 
   canRemove() {
-    return confirm('삭제하시겠습니까?');
+    return confirm('Would you like to delete this?');
   }
 
   override template() {
@@ -209,11 +213,11 @@ export class BallView extends View<Ball> {
 
 ## Multiple Enables
 
-With `Enable`, you can bestow two or more functionalities onto a single `View`.
+Using `Enable`, you can assign multiple functionalities to a single `View`.
 
 ```typescript
 class Movable extends Enable {
-  override onMount() {
+  override onRender() {
     this.element().animate(
       [
         { transform: 'translateX(0px)' },
@@ -239,7 +243,7 @@ export class BallView extends View<Ball> {
   readonly targetClassName = 'target';
 
   canRemove() {
-    return confirm('삭제하시겠습니까?');
+    return confirm('Would you like to delete this?');
   }
 
   override template() {
@@ -248,7 +252,7 @@ export class BallView extends View<Ball> {
 }
 ```
 
-Now, `BallView` moves horizontally after being rendered on the screen and gets deleted when clicked. Let's add a `count` to the `Ball` and slightly modify the `canRemove` implementation.
+Now, after being drawn on the screen, the `BallView` moves horizontally back and forth, and can be removed upon clicking. Let's slightly modify the implementation of `canRemove` by adding a `count` to `Ball`.
 
 ```typescript
 export type Ball = {
@@ -283,4 +287,4 @@ balls
   });
 ```
 
-Now, a simple game is completed where you have to click multiple times on the balls moving horizontally to pop them.
+A simple game has now been created where a horizontally moving ball needs to be clicked multiple times to burst.

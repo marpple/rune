@@ -43,7 +43,7 @@ console.log(checkableColorView.data.checked);
 // true
 ```
 
-`Enable.prototype.onMount`는 인자로 받은 `View`의 `element`가 브라우저에 추가(append) 되었을 때 실행됩니다. 또한 `Enable`도 `View`처럼 `addEventListener`를 가지고 있습니다.
+`Enable`도 `View`처럼 `addEventListener`, `delegate`와 `@on` 데코레이터를 가지고 있습니다.
 
 ```typescript
 _toggle() {
@@ -57,13 +57,14 @@ _toggle() {
 
 `Enable`에서 `this.view.data === this.data` 이고 `this.view.element() === this.element()` 이기 때문에 toggle 영역을 위 코드처럼 변경할 수 있습니다. 이는 `View`를 작성할 때 만들었던 코드를 `Enable`로 옮겨 재사용가능한 코드로 만들고자 할 때 용이하게 합니다.
 
+
 ## 데이터 공유가 없는 View 확장
 
 `Deletable`을 사용하여 클릭했을 때 삭제되는 `BallView`를 쉽게 만들 수 있습니다. `class Deletable extends Enable` 는 `class Deletable extends Enable<object>`와 같습니다.
 
 ```typescript
 class Deletable extends Enable {
-  override onMount() {
+  override onRender() {
     this.delegate('mousedown', '.remove-target', this.remove);
   }
 
@@ -109,6 +110,8 @@ class BallView extends View<Ball> {
   });
 ```
 
+`Enable.prototype.onRender`는 인자로 받은 `View`의 `element`가 생성 되었을 때 실행됩니다. 
+
 ## EnableViewInterface
 
 위 코드에서는 `Deletable`의 삭제를 트리거하는 엘리먼트의 클래스명을 `remove-target`라는 문자열로 약속을 했습니다. `interface`를 활용하면 객체간 통신의 규약을 더 확장성이 있으면서도 안전하게 추상화할 수 있습니다.
@@ -123,7 +126,7 @@ export class Deletable extends Enable {
     super(view);
   }
   
-  override onMount() {
+  override onRender() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
   }
 
@@ -176,7 +179,7 @@ export class Deletable extends Enable {
     super(view);
   }
   
-  override onMount() {
+  override onRender() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
   }
 
@@ -213,7 +216,7 @@ export class BallView extends View<Ball> {
 
 ```typescript
 class Movable extends Enable {
-  override onMount() {
+  override onRender() {
     this.element().animate(
       [
         { transform: 'translateX(0px)' },

@@ -1,6 +1,6 @@
-# Enable class
+# Enable Class
 
-Rune provides the Enable pattern, which allows multiple functionalities to be added to a single View. Enabling allows for modularizing behavior or features and is a concept and class that facilitates extending Views. Think of Enable as similar to a View without a template, making it easy to understand, and it demonstrates a pattern of extending functionality by taking a View.
+Rune provides an Enable pattern that assigns multiple functionalities to a single `View`. Utilizing `Enable` allows for the modularization of actions or functionalities and facilitates the extension of `View`, making it a useful concept and class. Think of `Enable` as a `View` without a template, which receives a `View` and extends its functionalities.
 
 ## Definition
 
@@ -50,24 +50,32 @@ class CheckableColorView extends View<Color> {
 
 `element(): HTMLElement;`
 
-Returns the HTMLElement associated with the `view` received as an argument during creation.
+This is the `view.element()` of the `view` received as an argument during creation.
 
 ## view
 
 `public view: ExtendExtraInterface<View<T>, E>;`
 
-The `view` received as an argument during creation.
+This is the `view` received as an argument during creation.
 
 ## data
 
 `public data: T;`
 
-The `view.data` associated with the `view` received as an argument during creation.
+This is the `view.data` of the `view` received as an argument during creation.
+
+## onRender()
+
+The `onRender()` method executes when the `element` of the view received as an argument during creation is created. If the `view`'s `element` is already created, `onRender()` executes immediately.
 
 ## onMount()
 
-When creating an `enable`, if the `element` of the `view` passed as an argument is appended to the `document`, the `onMount()` function is executed. If the `element` is already appended, `onMount()` is executed immediately.
+The `onMount()` method executes when the `element` of the view received as an argument during creation is added to the `document.body`. If it is already added, `onMount()` executes immediately.
 
-## Event handling
+## onUnmount()
 
-Enable class inherits Event handling methods from the Base class, just like the View class. (Refer to [API - Event handling](/api/event.html))
+The `onUnmount()` method executes when the `element` of the view received as an argument during creation is removed from the `document.body`.
+
+## Event Handling
+
+Like the View class, the Enable class also inherits event handling methods from the Base class. ([API - Event Handling](/api/event.html))

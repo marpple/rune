@@ -40,7 +40,7 @@ export class ColorCheckboxListView extends View<Color[]> {
     `;
   }
 
-  override onMount() {
+  override onRender() {
     this.delegate('checkbox:change', '.ColorCheckboxView', this.onChange);
   }
 

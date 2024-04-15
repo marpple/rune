@@ -1,10 +1,6 @@
----
-outline: deep
----
+# Event Handling
 
-# Event handling
-
-The View class and the Enable class inherit event handling methods implemented in the Base class.
+The View and Enable classes inherit event handling methods implemented in the Base class.
 
 ## addEventListener()
 
@@ -26,7 +22,7 @@ addEventListener(
 ): this;
 ```
 
-The View class and the Enable class provide extended methods for `addEventListener`. When you use `view.addEventListener()`, the provided function is registered and executed with `this` bound to the `view` when the event occurs. All other behaviors are consistent with the Web API's `addEventListener`. ([Tutorial - Handling Events](/tutorial/event.html))
+The View and Enable classes provide an extended `addEventListener` method. `view.addEventListener()` registers a function and executes it bound to `this` as `view` when an event occurs. All other behaviors are identical to the Web API’s `addEventListener`. ([Tutorial - Handling Events](/tutorial/event.html))
 
 ## removeEventListener()
 
@@ -64,7 +60,7 @@ delegate<K extends keyof HTMLElementEventMap>(
 delegate(eventType: string, selector: string, listener: (this: this, ev: Event) => any): this;
 ```
 
-([Tutorial - Event Delegation](/tutorial/event.html#event-delegate))
+([Tutorial - Event Delegation](/tutorial/event.html#event-delegation))
 
 ## dispatchEvent()
 
@@ -78,11 +74,11 @@ dispatchEvent<T extends new (...args: any[]) => Event, U extends CustomEventInit
 
 ## @on decorator
 
-Using the `@on` decorator allows for more concise code writing.
+The `@on` decorator allows for more concise code.
 
 ```typescript
 export class CheckboxView extends View<{ checked: boolean }> {
-  override onMount() {
+  override onRender() {
     this.addEventListener('click', () => this._toggle());
   }
 
@@ -101,11 +97,11 @@ export class CheckboxView extends View<{ checked: boolean }> {
 }
 ```
 
-When passing only one argument to the `@on` decorator, it utilizes `addEventListener`, while passing a second argument, a CSS selector, to `@on` indicates the use of `delegate`.
+If only one argument is passed to the `@on` decorator, it uses `addEventListener`. If a second argument, a CSS selector, is provided to `@on`, it uses `delegate`.
 
 ```typescript
 class MyView extends View<object> {
-  override onMount() {
+  override onRender() {
     this.delegate('click', 'button', () => this.remove());
   }
 

@@ -82,7 +82,7 @@ dispatchEvent<T extends new (...args: any[]) => Event, U extends CustomEventInit
 
 ```typescript
 export class CheckboxView extends View<{ checked: boolean }> {
-  override onMount() {
+  override onRender() {
     this.addEventListener('click', () => this._toggle());
   }
 
@@ -105,7 +105,7 @@ export class CheckboxView extends View<{ checked: boolean }> {
 
 ```typescript
 class MyView extends View<object> {
-  override onMount() {
+  override onRender() {
     this.delegate('click', 'button', () => this.remove());
   }
 

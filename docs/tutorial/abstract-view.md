@@ -1,10 +1,10 @@
-# Abstracting View
+# View Abstraction
 
-## Separating Check Functionality
+## Separating the Checking Feature
 
-The `ColorCheckboxListView` and `ColorCheckboxView` above have a property indicating whether they can be checked. By preparing a `View` abstracting the check functionality, you can more easily create more views with check functionality.
+The `ColorCheckboxListView` and `ColorCheckboxView` possess a checkable attribute. By preparing an abstracted `View` for the checking functionality, it becomes easier to create more `View` types with this capability.
 
-First, let's review the code for `ColorView`, `ColorCheckboxListView`, and `ColorCheckboxView`:
+Here's a look back at the code for `ColorView`, `ColorCheckboxListView`, and `ColorCheckboxView`:
 
 ```typescript
 export type Color = {
@@ -40,7 +40,7 @@ export class ColorCheckboxListView extends View<Color[]> {
     `;
   }
 
-  override onMount() {
+  override onRender() {
     this.delegate('checkbox:change', '.ColorCheckboxView', this.onChange);
   }
 
@@ -56,7 +56,7 @@ export class ColorCheckboxListView extends View<Color[]> {
 
 ## Abstracted Classes and Generics
 
-`ColorCheckboxListView` and `ColorCheckboxView` can be abstracted using the following approach. Compare it with the previous code to see what has changed:
+You can abstract `ColorCheckboxListView` and `ColorCheckboxView` as follows. Notice the changes compared to the previous code:
 
 ```typescript
 export type CheckboxData = {
@@ -83,7 +83,7 @@ export class CheckboxView<T extends CheckboxData> extends View<T> {
   private _toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
-    this.element().dispatchEvent(new CustomEvent('checkbox:change', { bubbles: true }));
+    this.element().dispatchEvent(new Custom Event('checkbox:change', { bubbles: true }));
   }
 }
 
@@ -105,7 +105,7 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
 
   @on('checkbox:change', '> *')
   onChange() {
-    this.element().dispatchEvent(new CustomEvent('checkboxlist:change', { bubbles: true }));
+    this.element().dispatchEvent(new Custom Event('checkboxlist:change', { bubbles: true }));
   }
 
   checkedData() {
@@ -114,11 +114,11 @@ export class CheckboxListView<T extends CheckboxData> extends View<T[]> {
 }
 ```
 
-Generics were used to allow type inference for the `data` in code extending `CheckboxListView` and `CheckboxView`. `CheckboxView<T extends CheckboxData>` constrains the type of `data` for new `View` extending `CheckboxView`. Additionally, properties like `tagName`, `SubView`, and `CheckboxView` were added for extension purposes.
+Generics are utilized to allow code that extends `CheckboxListView` and `CheckboxView` to infer the type of `data`. `CheckboxView<T extends CheckboxData>` constrains the type of `data` for any new `View` extending `CheckboxView`. Additionally, properties like `tagName`, `SubView`, and `CheckboxView` can be extended.
 
-## Extending through Inheritance
+## Extending via Inheritance
 
-By inheriting `CheckboxView` and `CheckboxListView`, `ColorCheckboxListView` and `ColorCheckboxView` can be reimplemented as follows:
+By inheriting `CheckboxView` and `CheckboxListView`, you can reimplement `ColorCheckboxListView` and `ColorCheckboxView` as follows:
 
 ```typescript
 export class ColorCheckboxView extends CheckboxView<Color> {
@@ -130,7 +130,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-They can be used in the same way:
+They can be used just like before:
 
 ```typescript
 const colorCheckboxListView = new ColorCheckboxListView([
@@ -148,9 +148,11 @@ colorCheckboxListView.addEventListener('checkboxlist:change', function () {
 });
 ```
 
-## Utilizing First-class Objects
+## Utilizing First-Class Objects
 
-Let's include `ColorView` in the code:
+Here's a revisited version including `Color
+
+View`:
 
 ```typescript
 export type Color = {
@@ -173,7 +175,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-If you don't use `ColorCheckboxView`, you can write the code like this:
+If you choose not to use `ColorCheckboxView`, you could alternatively write:
 
 ```typescript
 export class ColorView extends View<Color> {
@@ -189,7 +191,7 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-Similarly, if you don't use `ColorView`, you can implement it like this:
+Similarly, if you choose not to use `ColorView`, you could implement it as follows:
 
 ```typescript
 export class ColorCheckboxListView extends CheckboxListView<Color> {
@@ -203,9 +205,9 @@ export class ColorCheckboxListView extends CheckboxListView<Color> {
 }
 ```
 
-## Abstracting with Templates
+## Simplifying Abstraction with Templates
 
-The approach used to implement `CheckboxView` requires careful type definitions, making abstraction somewhat challenging. By leveraging Rune's template functions, you can abstract more easily as shown below.
+The method of implementing `CheckboxView` as previously described requires careful type definition, making abstraction a bit challenging. By using Rune's template functions, you can abstract more easily:
 
 ```typescript
 export class CheckboxView<T extends CheckboxData> extends View<T> {

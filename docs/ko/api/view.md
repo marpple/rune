@@ -195,7 +195,7 @@ class ProductView extends View<Product> {
     `;
   }
 
-  override onMount() {
+  override onRender() {
     console.log(this.subView(PhotoView)!.data.src);
   }
 }
@@ -273,9 +273,17 @@ new MyView('hi').toString();
 // MyView
 ```
 
+## onRender()
+
+View의 `element`가 생성된 직후에 실행됩니다.
+
 ## onMount()
 
-View가 `document`에 `append` 된 이후에 실행됩니다.
+View가 `document.body`에 추가된 직후에 실행됩니다.
+
+## onUnmount()
+
+View가 `document.body`에서 삭제된 직후에 실행됩니다.
 
 ## Event handling
 

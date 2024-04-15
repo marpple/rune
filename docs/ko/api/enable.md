@@ -64,9 +64,17 @@ class CheckableColorView extends View<Color> {
 
 생성시 인자로 받은 `view`의 `view.data`입니다.
 
+## onRender()
+
+Enable을 생성할 때 인자로 받았던 `view`의 `element`가 생성 되었을 때 `onRender()`가 실행됩니다. 이미 `view`의 `element`가 생성된 상태라면 바로 `onRender()`가 실행됩니다.
+
 ## onMount()
 
-Enable을 생성할 때 인자로 받았던 `view`의 `element`가 `document`에 `append` 되었을 때 `onMount()`가 실행됩니다. 이미 `append` 되어있던 상태라면 바로 `onMount()`가 실행됩니다.
+Enable을 생성할 때 인자로 받았던 `view`의 `element`가 `document.body` 에 추가되었을 때 `onRender()`가 실행됩니다. 이미 추가 되어있던 상태라면 바로 `onMount()`가 실행됩니다.
+
+## onUnmount()
+
+Enable을 생성할 때 인자로 받았던 `view`의 `element`가 `document.body` 에서 삭제되었을 때 `onUnmount()`가 실행됩니다.
 
 ## Event handling
 
