@@ -1,6 +1,6 @@
 import { type View } from './View';
 import { Base } from './Base';
-import { ViewMounted, ViewRendered } from './ViewEvent';
+import { ViewMounted, ViewRendered, ViewUnmounted } from './ViewEvent';
 
 export abstract class Enable<T extends object = object> extends Base {
   constructor(public view: View<T>) {
@@ -13,6 +13,7 @@ export abstract class Enable<T extends object = object> extends Base {
     } else {
       this.view.addEventListener(ViewRendered, () => this._onRender());
       this.view.addEventListener(ViewMounted, () => this._onMount());
+      this.view.addEventListener(ViewUnmounted, () => this._onUnmount());
     }
   }
 
@@ -24,7 +25,7 @@ export abstract class Enable<T extends object = object> extends Base {
     throw TypeError("'data' property is readonly.");
   }
 
-  override _onRender() {
+  protected override _onRender() {
     this._setElement(this.view.element()).element();
     return super._onRender();
   }

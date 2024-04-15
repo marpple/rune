@@ -9,11 +9,19 @@ import { _camelToColonSeparated } from './lib/_camelToColonSeparated';
 export class EventHelper {
   private _listenerMap = new WeakMap();
 
-  getListener(Constructor: any, fn: any) {
-    const map =
-      this._listenerMap.get(Constructor) ||
-      this._listenerMap.set(Constructor, new Map()).get(Constructor);
-    return map.get(fn);
+  _getMap(constructor: any) {
+    return (
+      this._listenerMap.get(constructor) ||
+      this._listenerMap.set(constructor, new Map()).get(constructor)
+    );
+  }
+
+  getListener({ constructor }: any, fn: any) {
+    return this._getMap(constructor).get(fn);
+  }
+
+  setListener({ constructor }: any, fn: any, boundListener: any) {
+    return this._getMap(constructor).set(fn, boundListener);
   }
 
   private _makeListener(
@@ -22,7 +30,7 @@ export class EventHelper {
     View?: (new (...args: any[]) => any) | string,
   ) {
     const fn = typeof listener === 'string' ? instance[listener] : listener;
-    const boundListener = this.getListener(instance.constructor, fn);
+    const boundListener = this.getListener(instance, fn);
     if (boundListener) {
       return boundListener;
     } else {
@@ -36,7 +44,7 @@ export class EventHelper {
             : rune.getUnknownView(e.currentTarget)!,
         );
       };
-      this._listenerMap.set(fn, boundListener);
+      this.setListener(instance, fn, boundListener);
       return boundListener;
     }
   }

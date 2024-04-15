@@ -10,7 +10,7 @@ export class Deletable extends Enable {
     super(view);
   }
 
-  override onMount() {
+  override onRender() {
     this.delegate('mousedown', `.${this.view.targetClassName}`, this.remove);
   }
 
@@ -22,7 +22,7 @@ export class Deletable extends Enable {
 }
 
 export class Movable extends Enable {
-  override onMount() {
+  override onRender() {
     this.start();
   }
 

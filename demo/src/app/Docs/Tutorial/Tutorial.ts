@@ -1,5 +1,4 @@
 import { Page, html } from 'rune-ts';
-import { TutorialLayout, type TutorialLayoutData } from '../../TutorialLayout';
 import { ColorView } from './ColorPicker/ColorView';
 import { ColorCheckboxListView, ColorCheckboxView } from './ColorPicker/ColorPicker';
 import { main } from './LoungeMain2';
@@ -74,12 +73,6 @@ export class TutorialPage extends Page<Tutorial> {
   }
 }
 
-export interface TutorialRouter {
-  ['/tutorials']: (layoutData: TutorialLayoutData, pageData: Tutorial) => TutorialLayout;
-}
-
-export const TutorialRouter: TutorialRouter = {
-  ['/tutorials'](layoutData: TutorialLayoutData, pageData: Tutorial): TutorialLayout {
-    return new TutorialLayout(layoutData, new TutorialPage(pageData));
-  },
+export const TutorialRouter = {
+  ['/tutorials2']: TutorialPage,
 };

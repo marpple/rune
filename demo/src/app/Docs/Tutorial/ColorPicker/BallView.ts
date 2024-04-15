@@ -1,6 +1,6 @@
 import { View, Enable, on, html } from 'rune-ts';
 
-export class Movable extends Enable<unknown> {
+export class Movable extends Enable {
   override onMount() {
     this.start();
   }

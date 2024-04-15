@@ -15,7 +15,7 @@ export class MeetupPage extends Page<Meetup> {
     `;
   }
 
-  override onMount() {
+  override onRender() {
     main();
     main2();
   }

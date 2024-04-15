@@ -3,7 +3,7 @@ import { VirtualView } from './VirtualView';
 import { each, flatMap, pipe, toArray, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
-import { ViewMounted, ViewRendered } from './ViewEvent';
+import { ViewMounted, ViewRendered, ViewUnmounted } from './ViewEvent';
 
 export class View<T extends object = object> extends VirtualView<T> {
   override subViewsFromTemplate: View<T>[] = [];
@@ -32,7 +32,11 @@ export class View<T extends object = object> extends VirtualView<T> {
   }
 
   protected hydrate(): this {
-    return this.hydrateSubViews()._addListenerForAppended()._onRender()._onMount();
+    this.hydrateSubViews()._onRender();
+    if (document.body.contains(this.element())) {
+      this._onMount();
+    }
+    return this;
   }
 
   private hydrateSubViews(): this {
@@ -47,39 +51,16 @@ export class View<T extends object = object> extends VirtualView<T> {
     return this;
   }
 
-  private _addListenerForAppended(): this {
-    const observer = new MutationObserver((mutationsList, observer) => {
-      for (const mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-          $(this.element())
-            .parentNode()
-            ?.closest('[data-rune]')
-            ?.chain((parentViewElement) => {
-              this.parentView = rune.getView(parentViewElement, View)!;
-              this.element().dataset.runeParent = this.parentView.toString();
-              observer.disconnect();
-            });
-          this._onMount();
-        }
-      }
-    });
-    observer.observe(this.element(), { childList: true });
-    return this;
-  }
+  protected override _onRender() {
+    this.addEventListener(ViewMounted, this._onMount);
+    this.addEventListener(ViewUnmounted, this._onUnmount);
 
-  override _onRender() {
     this._reservedEnables = (this.constructor as HasReservedEnables)._ReservedEnables.map(
       (ReservedEnable) => new ReservedEnable(this),
     );
     rune.set(this.element(), this, View);
     super._onRender();
     this.dispatchEvent(ViewRendered, { detail: this });
-    return this;
-  }
-
-  override _onMount() {
-    super._onMount();
-    this.dispatchEvent(ViewMounted, { detail: this });
     return this;
   }
 

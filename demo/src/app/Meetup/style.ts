@@ -215,8 +215,7 @@ export class StyleView extends View<object> {
         padding: 16px 16px 15px 58px;
         height: 30px;
         line-height: 30px;
-        border: 0 none;
-        border-top: 1px solid #eee;
+        border: 0 none !important;
         font-size: 18px;
         width: 70%;
         outline: none;

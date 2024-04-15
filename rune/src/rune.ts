@@ -5,6 +5,8 @@
 import { View } from './View';
 import { Page } from './Page';
 import type { VirtualView } from './VirtualView';
+import { $ } from './$Element';
+import { ViewMounted, ViewUnmounted } from './ViewEvent';
 
 type Constructor = new (...args: any) => any;
 
@@ -69,6 +71,45 @@ class Rune {
 
 export const rune = new Rune();
 
+function dispatchEvents(Event: any, subViewElement: HTMLElement) {
+  [subViewElement, ...subViewElement.querySelectorAll('[data-rune]')]
+    .map((element) => rune.getUnknownView(element)!)
+    .forEach((subView) => subView.dispatchEvent(Event, { detail: subView }));
+}
+
 if (typeof window !== 'undefined') {
   window.__rune__ = rune;
+
+  const observer = new MutationObserver((records, observer) => {
+    for (const record of records) {
+      for (const addedNode of record.addedNodes) {
+        if (addedNode.nodeType === Node.ELEMENT_NODE) {
+          const subViewElement = addedNode as HTMLElement;
+          if (subViewElement.matches('[data-rune]')) {
+            $(subViewElement)
+              .parentNode()
+              ?.closest('[data-rune]')
+              ?.chain((parentViewElement) => {
+                const subView = rune.getUnknownView(subViewElement)!;
+                subView.parentView = rune.getUnknownView(parentViewElement)!;
+                subView.element().dataset.runeParent = subView.parentView.toString();
+              });
+            dispatchEvents(ViewMounted, subViewElement);
+          }
+        }
+      }
+      for (const removedNode of record.removedNodes) {
+        if (removedNode.nodeType === Node.ELEMENT_NODE) {
+          const subViewElement = removedNode as HTMLElement;
+          if (subViewElement.matches('[data-rune]')) {
+            const subView = rune.getUnknownView(subViewElement)!;
+            subView.parentView = null;
+            subView.element().dataset.runeParent = '';
+            dispatchEvents(ViewUnmounted, subViewElement);
+          }
+        }
+      }
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 }

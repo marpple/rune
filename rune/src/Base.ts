@@ -25,6 +25,13 @@ export abstract class Base {
     return this;
   }
 
+  protected onUnmount() {}
+
+  protected _onUnmount() {
+    this.onUnmount();
+    return this;
+  }
+
   element(): HTMLElement {
     if (this._element === null) {
       throw new TypeError("element is not created. call 'view.render' or 'view.hydrateFromSSR'.");

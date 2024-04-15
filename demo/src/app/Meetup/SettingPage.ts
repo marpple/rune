@@ -70,5 +70,6 @@ export function main() {
     { title: 'Airdrop', on: true },
   ];
 
-  document.querySelector('#tutorial')!.append(new SettingPage(settings).render());
+  const element = new SettingPage(settings).render();
+  document.querySelector('#tutorial')!.append(element);
 }

@@ -13,12 +13,30 @@ server.get(ClientRouter['/tutorials'].toString(), function (req, res) {
 
   res.locals.layoutData = layoutData;
 
-  res.send(
-    new MetaView(
-      ClientRouter['/tutorials']({}, { is_mobile: true }),
-      res.locals.layoutData,
-    ).toHtml(),
-  );
+  const html = new MetaView(
+    ClientRouter['/tutorials']({}, { is_mobile: true }),
+    res.locals.layoutData,
+  ).toHtml();
+
+  res.send(html);
+});
+
+server.get(ClientRouter['/tutorials2'].toString(), function (req, res) {
+  const layoutData: LayoutData = {
+    head: {
+      title: '밋업',
+      description: '',
+    },
+  };
+
+  res.locals.layoutData = layoutData;
+
+  const html = new MetaView(
+    ClientRouter['/tutorials2']({}, { is_mobile: true }),
+    res.locals.layoutData,
+  ).toHtml();
+
+  res.send(html);
 });
 
 server.get(ClientRouter['/banner'].toString(), function (req, res) {

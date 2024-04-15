@@ -72,7 +72,7 @@ class TodoPage extends View<Todo[]> {
     `;
   }
 
-  override onMount() {
+  override onRender() {
     this.addEventListener(InputTextReturned, (e: InputTextReturned) => this._append(e.detail));
     this.addEventListener(Toggled, () => this.redraw());
     this.addEventListener(SegmentSelected, () => this.redraw());
