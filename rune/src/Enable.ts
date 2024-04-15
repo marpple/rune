@@ -12,9 +12,9 @@ export abstract class Enable<T extends object = object> extends Base {
       }
     } else {
       this.view.addEventListener(ViewRendered, () => this._onRender());
-      this.view.addEventListener(ViewMounted, () => this._onMount());
-      this.view.addEventListener(ViewUnmounted, () => this._onUnmount());
     }
+    this.view.addEventListener(ViewMounted, () => this._onMount());
+    this.view.addEventListener(ViewUnmounted, () => this._onUnmount());
   }
 
   get data() {
