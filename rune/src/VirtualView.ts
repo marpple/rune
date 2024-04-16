@@ -111,11 +111,11 @@ export class VirtualView<T extends object> extends Base {
     return (await this._makeHtmlAsync(isSSR))._currentHtml!;
   }
 
-  toHtmlSRR(): UnsafeHtml {
+  toHtmlSSR(): UnsafeHtml {
     return html.preventEscape(this.toHtml(true));
   }
 
-  async toHtmlSRRAsync(): Promise<UnsafeHtml> {
+  async toHtmlSSRAsync(): Promise<UnsafeHtml> {
     return html.preventEscape(await this.toHtmlAsync(true));
   }
 }
