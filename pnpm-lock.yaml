@@ -75,13 +75,13 @@ importers:
         specifier: ^0.28.1
         version: 0.28.1
       '@rune-ts/server':
-        specifier: ^0.9.16
-        version: 0.9.16
+        specifier: ^0.9.17
+        version: 0.9.17
       animejs:
         specifier: ^3.2.2
         version: 3.2.2
       rune-ts:
-        specifier: workspace:^
+        specifier: ^0.8.2
         version: link:../rune
       swiper:
         specifier: ^11.1.0
@@ -826,8 +826,8 @@ packages:
     dev: true
     optional: true
 
-  /@rune-ts/server@0.9.16:
-    resolution: {integrity: sha512-jX0Yv+Z/kTxwAurLFHtULFUv8Xa6DnAyIjXUOBDR9IATriX36AbvqZMVzXqN3QNkC+5Oyl4Z16OmdF6XkrynwA==}
+  /@rune-ts/server@0.9.17:
+    resolution: {integrity: sha512-vMtWzcuzJbshjAgfI3lPSd3IlJvPksccoszxVQnpQNp9OyN695xEgXAr9ogpRcZgJOfW4gbJJsQh6NGb3aQCiQ==}
     hasBin: true
     dependencies:
       '@swc/core': 1.4.8
