@@ -188,7 +188,7 @@ export class View<T extends object = object> extends VirtualView<T> {
     } else {
       const hydration_data = JSON.parse(dataEl.getTextContent() ?? '{}');
       dataEl.remove();
-      return new this(hydration_data.data).hydrateFromSSR(element);
+      return new this(hydration_data.data, ...hydration_data.args).hydrateFromSSR(element);
     }
   }
 }

@@ -7,6 +7,7 @@ import { rune } from './rune';
 export class VirtualView<T extends object> extends Base {
   key = '';
   private readonly _data: T;
+  readonly _args: any;
 
   parentView: VirtualView<object> | null = null;
   subViewsFromTemplate: VirtualView<object>[] = [];
@@ -23,9 +24,10 @@ export class VirtualView<T extends object> extends Base {
     throw TypeError("'data' property is readonly.");
   }
 
-  constructor(data: T) {
+  constructor(data: T, ...args: any) {
     super();
     this._data = data;
+    this._args = args;
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
@@ -64,6 +66,7 @@ export class VirtualView<T extends object> extends Base {
           `${html}<script class="__RUNE_DATA__ ${this}" type="application/json">${_htmlEscapeJsonString(
             JSON.stringify({
               data: this.data,
+              args: this._args,
               sharedData: rune.getSharedData(this),
               key: this.key,
             }),
