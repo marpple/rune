@@ -5,8 +5,9 @@ export class Page<T extends object> extends View<T> {
   constructor(
     data: T,
     public sharedData?: Record<string, any>,
+    ...args: any[]
   ) {
-    super(data);
+    super(data, ...args);
   }
 
   static override createAndHydrate(element: HTMLElement) {
@@ -16,7 +17,11 @@ export class Page<T extends object> extends View<T> {
     } else {
       const hydration_data = JSON.parse(dataEl.getTextContent() ?? '{}');
       dataEl.remove();
-      return new this(hydration_data.data, hydration_data.sharedData).hydrateFromSSR(element);
+      return new this(
+        hydration_data.data,
+        hydration_data.sharedData,
+        ...hydration_data.args,
+      ).hydrateFromSSR(element);
     }
   }
 }

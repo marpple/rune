@@ -7,7 +7,7 @@ import { rune } from './rune';
 export class VirtualView<T extends object> extends Base {
   key = '';
   private readonly _data: T;
-  readonly _args: any;
+  readonly _args: any[];
 
   parentView: VirtualView<object> | null = null;
   subViewsFromTemplate: VirtualView<object>[] = [];
@@ -24,7 +24,7 @@ export class VirtualView<T extends object> extends Base {
     throw TypeError("'data' property is readonly.");
   }
 
-  constructor(data: T, ...args: any) {
+  constructor(data: T, ...args: any[]) {
     super();
     this._data = data;
     this._args = args;
