@@ -8,7 +8,7 @@ Rune provides a pattern for handling type-safe custom events.
 You can prepare events for export so that they can be used where events are registered by creating and exporting them as shown below:
 
 ```typescript
-export class DialogOpened extends CustomEvent<undefined> {}
+export class DialogOpened extends CustomEventWithoutDetail {}
 ```
 
 When propagating events, `this.dispatchEvent` must be executed with two arguments extending `CustomEvent` and `CustomEventInit`.
@@ -30,7 +30,7 @@ export class DialogView extends View {
 The pattern for custom events with an optional detail value is not commonly used and should be used with caution. It can be used as shown below:
 
 ```typescript
-export class DataLoaded extends CustomEvent<{ body: string; loadedAt: Date }> {}
+export class DataLoaded extends CustomEventOptionalDetail<{ body: string; loadedAt: Date }> {}
 
 export class DataLoaderView extends View {
   download() {

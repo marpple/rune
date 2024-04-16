@@ -1,6 +1,8 @@
 export { rune } from './rune';
 export { $Element, $ } from './$Element';
 export {
+  CustomEventWithoutDetail,
+  CustomEventOptionalDetail,
   CustomEventWithDetail,
   type CustomEventWithDetailInit,
   type CustomEventDetailType,

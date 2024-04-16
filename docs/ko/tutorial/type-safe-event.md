@@ -8,7 +8,7 @@ Rune은 타입 안전한 커스텀 이벤트 핸들링 패턴을 제공합니다
 아래처럼 이벤트를 생성하고 export 하여 이벤트를 등록하는 곳에서 사용할 수 있도록 준비할 수 있습니다.
 
 ```typescript
-export class DialogOpened extends CustomEvent<undefined> {}
+export class DialogOpened extends CustomEventWithoutDetail {}
 ```
 
 이벤트를 전파할 때는 `this.dispatchEvent`를 실행하면서 `CustomEvent`를 확장한 class와 `CustomEventInit`로 두개의 인자로 전달해야합니다.  
@@ -30,7 +30,7 @@ export class DialogView extends View {
 detail 값이 옵셔널한 커스텀 이벤트 패턴은 사용하기 적합한 케이스가 흔하지는 않으며 유의하여 사용해야합니다. 아래와 같이 사용할 수 있습니다.
 
 ```typescript
-export class DataLoaded extends CustomEvent<{ body: string; loadedAt: Date }> {}
+export class DataLoaded extends CustomEventOptionalDetail<{ body: string; loadedAt: Date }> {}
 
 export class DataLoaderView extends View {
   download() {
@@ -49,8 +49,6 @@ export class DataLoaderView extends View {
 ```
 
 ## detail 값이 필수인 커스텀 이벤트
-
-`CustomEventWithDetail` 
 
 detail 값이 필수인 커스텀 이벤트를 만들고자 할 때는 `CustomEventWithDetail` 클래스를 import 하여 확장합니다.
 
