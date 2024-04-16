@@ -1,30 +1,25 @@
 import { View, html } from 'rune-ts';
 import Swiper from 'swiper';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
-import { SwiperEvents } from 'swiper/types/swiper-events';
-import type { AutoplayOptions } from 'swiper/types/modules/autoplay';
-import type { NavigationOptions } from 'swiper/types/modules/navigation';
-import type { PaginationOptions } from 'swiper/types/modules/pagination';
 import { isUndefined } from '@fxts/core';
+import type { SwiperOptions } from 'swiper/types/swiper-options';
 
-export class SwiperEvent extends CustomEvent<{ swiper: Swiper; eventType: keyof SwiperEvents }> {}
+export class SwiperChangeEvent extends CustomEvent<{
+  swiper: Swiper;
+  current_index: number;
+  previous_index: number;
+}> {}
 
 export interface SwiperStyleType {
   swiper: string;
   wrapper: string;
 }
 
-export interface SwiperOptionType {
-  observe?: boolean;
-  loop?: boolean;
-  autoplay?: AutoplayOptions | boolean;
-  navigation?: NavigationOptions;
-  pagination?: PaginationOptions;
-}
-
 export class SwiperView<T extends object, S extends typeof View<T>> extends View<T[]> {
+  swiper?: Swiper;
+
   constructor(
-    public options: SwiperOptionType,
+    public options: SwiperOptions,
     public styles: SwiperStyleType,
     public SlideView: S,
     data: T[],
@@ -44,8 +39,6 @@ export class SwiperView<T extends object, S extends typeof View<T>> extends View
   }
 
   protected override onMount() {
-    const { observe, loop, autoplay } = this.options;
-
     const swiper = new Swiper(this.element(), {
       modules: [Pagination, Navigation, Autoplay],
       speed: 1000,
@@ -57,30 +50,41 @@ export class SwiperView<T extends object, S extends typeof View<T>> extends View
       slideBlankClass: this.SlideView + 'Blank',
       slideNextClass: this.SlideView + 'Next',
       slidePrevClass: this.SlideView + 'Prev',
-      resizeObserver: observe,
-      observer: observe,
-      loop,
-      autoplay: !isUndefined(autoplay)
-        ? autoplay
+      resizeObserver: true,
+      observer: true,
+      autoplay: !isUndefined(this.options.autoplay)
+        ? this.options.autoplay
         : {
             delay: 5000,
             pauseOnMouseEnter: true,
             waitForTransition: true,
           },
+      ...this.options,
     });
 
-    swiper.on('slideChange', () => {
-      this.dispatchEvent(SwiperEvent, {
+    let previous_index = swiper.realIndex;
+
+    swiper.on('realIndexChange', (swiper) => {
+      if (previous_index === swiper.realIndex) return;
+      this.dispatchEvent(SwiperChangeEvent, {
         bubbles: true,
-        detail: { swiper, eventType: 'slideChange' },
+        detail: { swiper, current_index: swiper.realIndex, previous_index },
       });
+      previous_index = swiper.realIndex;
     });
 
-    swiper.on('beforeTransitionStart', () => {
-      this.dispatchEvent(SwiperEvent, {
-        bubbles: true,
-        detail: { swiper, eventType: 'beforeTransitionStart' },
-      });
-    });
+    this.swiper = swiper;
+  }
+
+  next() {
+    if (this.swiper) {
+      this.swiper.slideNext();
+    }
+  }
+
+  prev() {
+    if (this.swiper) {
+      this.swiper.slidePrev();
+    }
   }
 }
