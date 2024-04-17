@@ -1,6 +1,6 @@
 {
   "name": "rune-ts",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Rune Core Library",
   "engines": {
     "node": ">=14.0.0"
