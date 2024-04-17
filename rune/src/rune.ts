@@ -100,7 +100,7 @@ class Rune {
         }
       }
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(target, { childList: true, subtree: true });
   }
 }
 
