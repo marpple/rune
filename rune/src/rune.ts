@@ -67,6 +67,41 @@ class Rune {
   getSharedData(currentView: VirtualView<object>): Record<string, any> | undefined {
     return this.getPage(currentView)?.sharedData;
   }
+
+  addMutationObserver(target: HTMLElement) {
+    const observer = new MutationObserver((records) => {
+      for (const record of records) {
+        for (const addedNode of record.addedNodes) {
+          if (addedNode.nodeType === Node.ELEMENT_NODE) {
+            const subViewElement = addedNode as HTMLElement;
+            if (subViewElement.matches('[data-rune]')) {
+              $(subViewElement)
+                .parentNode()
+                ?.closest('[data-rune]')
+                ?.chain((parentViewElement) => {
+                  const subView = rune.getUnknownView(subViewElement)!;
+                  subView.parentView = rune.getUnknownView(parentViewElement)!;
+                  subView.element().dataset.runeParent = subView.parentView.toString();
+                });
+              dispatchEvents(ViewMounted, subViewElement);
+            }
+          }
+        }
+        for (const removedNode of record.removedNodes) {
+          if (removedNode.nodeType === Node.ELEMENT_NODE) {
+            const subViewElement = removedNode as HTMLElement;
+            if (subViewElement.matches('[data-rune]')) {
+              const subView = rune.getUnknownView(subViewElement)!;
+              subView.parentView = null;
+              subView.element().dataset.runeParent = '';
+              dispatchEvents(ViewUnmounted, subViewElement);
+            }
+          }
+        }
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
 }
 
 export const rune = new Rune();
@@ -79,37 +114,5 @@ function dispatchEvents(Event: any, subViewElement: HTMLElement) {
 
 if (typeof window !== 'undefined') {
   window.__rune__ = rune;
-
-  const observer = new MutationObserver((records, observer) => {
-    for (const record of records) {
-      for (const addedNode of record.addedNodes) {
-        if (addedNode.nodeType === Node.ELEMENT_NODE) {
-          const subViewElement = addedNode as HTMLElement;
-          if (subViewElement.matches('[data-rune]')) {
-            $(subViewElement)
-              .parentNode()
-              ?.closest('[data-rune]')
-              ?.chain((parentViewElement) => {
-                const subView = rune.getUnknownView(subViewElement)!;
-                subView.parentView = rune.getUnknownView(parentViewElement)!;
-                subView.element().dataset.runeParent = subView.parentView.toString();
-              });
-            dispatchEvents(ViewMounted, subViewElement);
-          }
-        }
-      }
-      for (const removedNode of record.removedNodes) {
-        if (removedNode.nodeType === Node.ELEMENT_NODE) {
-          const subViewElement = removedNode as HTMLElement;
-          if (subViewElement.matches('[data-rune]')) {
-            const subView = rune.getUnknownView(subViewElement)!;
-            subView.parentView = null;
-            subView.element().dataset.runeParent = '';
-            dispatchEvents(ViewUnmounted, subViewElement);
-          }
-        }
-      }
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
+  rune.addMutationObserver(document.body);
 }
