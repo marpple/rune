@@ -15,6 +15,7 @@ export class VirtualView<T extends object> extends Base {
   readonly isLayout: boolean = false;
   renderCount = 0;
   protected _currentHtml: string | null = null;
+  className = '';
 
   get data(): T {
     return this._data;
@@ -54,11 +55,13 @@ export class VirtualView<T extends object> extends Base {
     if (this.isLayout) return html;
     const { startTag, startTagName } = this._matchStartTag(html);
     const runeDataset = `data-rune="${this}" data-rune-parent="${this.parentView}"`;
+    const className = this.className ? `${this} ${this.className}` : `${this}`;
+
     html = startTag.includes('class="')
-      ? html.replace('class="', `${runeDataset} class="${this} `)
+      ? html.replace('class="', `${runeDataset} class="${className} `)
       : startTag.includes("class='")
-        ? html.replace("class='", `${runeDataset} class='${this} `)
-        : html.replace(`<${startTagName}`, `<${startTagName} ${runeDataset} class="${this}"`);
+        ? html.replace("class='", `${runeDataset} class='${className} `)
+        : html.replace(`<${startTagName}`, `<${startTagName} ${runeDataset} class="${className}"`);
 
     return isSSR
       ? html.replace(
