@@ -22,7 +22,6 @@ class SettingItemView extends View<Setting> {
 }
 
 class SettingListView extends ListView<Setting, SettingItemView> {
-  className = 'list-view-classname-test';
   ItemView = SettingItemView;
 }
 
@@ -30,7 +29,6 @@ class SettingPage extends View<Setting[]> {
   listView = new SettingListView(this.data.map((setting) => ({ ...setting })));
   checkAllView = new SwitchView({ on: false });
   checkableViewController = new CheckableViewController(this);
-  className = 'setting-page-style-class111';
 
   getItemViewChecked(itemView: SettingItemView) {
     return itemView.data.on;
@@ -42,7 +40,7 @@ class SettingPage extends View<Setting[]> {
 
   override template() {
     return html`
-      <div class="setting-page-style-class222">
+      <div>
         <div class="header">
           <h2>Setting</h2>
           ${this.checkAllView}
