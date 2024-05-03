@@ -1,3 +1,5 @@
+import { _camelToColonSeparated } from './lib/_camelToColonSeparated';
+
 if (typeof global !== 'undefined') {
   global.CustomEvent =
     global.CustomEvent ||
@@ -10,7 +12,11 @@ if (typeof global !== 'undefined') {
     };
 }
 
-export class CustomEventWithoutDetail extends CustomEvent<undefined> {}
+export class CustomEventWithoutDetail extends CustomEvent<undefined> {
+  static override toString() {
+    return _camelToColonSeparated(this.name);
+  }
+}
 
 export class CustomEventOptionalDetail<T> extends CustomEvent<T> {}
 
@@ -31,4 +37,8 @@ export class CustomEventWithDetail<T> extends CustomEvent<T> {
   }
 
   private readonly isCustomEventWithDetail = true;
+
+  static override toString() {
+    return _camelToColonSeparated(this.name);
+  }
 }
