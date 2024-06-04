@@ -6,6 +6,7 @@ import { rune } from './rune';
 
 export class VirtualView<T extends object> extends Base {
   key = '';
+  protected _base_name = 'VirtualView';
   private readonly _data: T;
   readonly _args: any[];
 
@@ -66,7 +67,7 @@ export class VirtualView<T extends object> extends Base {
     return isSSR
       ? html.replace(
           html,
-          `${html}<script class="__RUNE_DATA__ ${this}" type="application/json">${_htmlEscapeJsonString(
+          `${html}<script class="__RUNE_DATA__ ${this}" type="application/json" data-rune-base-name="${this._base_name}">${_htmlEscapeJsonString(
             JSON.stringify({
               data: this.data,
               args: this._args,

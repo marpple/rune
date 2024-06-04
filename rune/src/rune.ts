@@ -51,14 +51,14 @@ class Rune {
   }
 
   getPage(currentView: VirtualView<object>): Page<object> | undefined {
-    let page: View<object> | undefined;
+    let page: Page<object> | undefined;
     if (currentView) {
       page = this._getPageByParentView(currentView);
     }
     if (!page && typeof window !== 'undefined') {
       const element = document.querySelector(`body [data-rune]`);
       if (element) {
-        page = this.getUnknownView(element);
+        page = this.getUnknownView(element) as Page<object> | undefined;
       }
     }
     return page;

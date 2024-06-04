@@ -2,6 +2,8 @@ import { View } from './View';
 import { $ } from './$Element';
 
 export class Page<T extends object> extends View<T> {
+  protected override _base_name = 'Page';
+
   constructor(
     data: T,
     public sharedData?: Record<string, any>,
@@ -11,7 +13,7 @@ export class Page<T extends object> extends View<T> {
   }
 
   static override createAndHydrate(element: HTMLElement) {
-    const dataEl = $(element).next(`script.__RUNE_DATA__.${this.name}`);
+    const dataEl = $(element).next(`script.__RUNE_DATA__.${this.name}[data-rune-base-name="Page"]`);
     if (dataEl === null) {
       throw new Error('No __RUNE_DATA__ script found');
     } else {

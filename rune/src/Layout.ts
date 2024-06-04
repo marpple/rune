@@ -2,6 +2,7 @@ import { html, VirtualView } from './VirtualView';
 import { Page } from './Page';
 
 export class Layout<T extends object> extends VirtualView<T> {
+  protected override _base_name = 'Layout';
   override readonly isLayout: boolean = true;
 
   constructor(

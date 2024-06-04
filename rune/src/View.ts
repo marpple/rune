@@ -6,6 +6,7 @@ import { type Enable } from './Enable';
 import { ViewMounted, ViewRendered, ViewUnmounted } from './ViewEvent';
 
 export class View<T extends object = object> extends VirtualView<T> {
+  protected override _base_name = 'View';
   override subViewsFromTemplate: View<T>[] = [];
   ignoreRefreshOnlySubViewFromParent = false;
 
@@ -182,7 +183,7 @@ export class View<T extends object = object> extends VirtualView<T> {
   static _ReservedEnables: (new (...args: any[]) => Enable<object>)[] = [];
 
   static createAndHydrate(element: HTMLElement) {
-    const dataEl = $(element).next(`script.__RUNE_DATA__.${this.name}`);
+    const dataEl = $(element).next(`script.__RUNE_DATA__.${this.name}[data-rune-base-name="View"]`);
     if (dataEl === null) {
       throw new Error('No __RUNE_DATA__ script found');
     } else {
