@@ -80,10 +80,7 @@ interface Toggle {
 export class Toggled extends CustomEventWithDetail<Toggle> {}
 
 export abstract class ToggleView extends View<Toggle> {
-  protected override onRender() {
-    this.addEventListener('click', () => this._toggle());
-  }
-
+  @on('click')
   private _toggle() {
     this.setOn(!this.data.on);
     this.dispatchEvent(Toggled, { bubbles: true, detail: this.data });
