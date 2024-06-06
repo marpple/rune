@@ -4,11 +4,11 @@
 
 Rune is a fast and robust library for building high-quality frontend applications, serving as a modern web technology-based SDK.
 
+- Object-oriented programming-based architecture
 - Type-safe Generic Views & Enable
 - Single-component Server-Side Rendering
 - Sleek UI component development kit
 - High portability and performance
-- Object-oriented programming-based architecture
 
 # Getting Started
 
