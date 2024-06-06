@@ -77,9 +77,9 @@ interface Toggle {
   on: boolean;
 }
 
-export class Toggled extends CustomEventWithDetail<Toggle> {}
+class Toggled extends CustomEventWithDetail<Toggle> {}
 
-export abstract class ToggleView extends View<Toggle> {
+abstract class ToggleView extends View<Toggle> {
   @on('click')
   private _toggle() {
     this.setOn(!this.data.on);
@@ -92,7 +92,7 @@ export abstract class ToggleView extends View<Toggle> {
   }
 }
 
-export class SwitchView extends ToggleView {
+class SwitchView extends ToggleView {
   override template() {
     return html`
       <button class="${this.data.on ? 'on' : ''}">
