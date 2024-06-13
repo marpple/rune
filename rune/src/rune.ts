@@ -79,9 +79,11 @@ class Rune {
                 .parentNode()
                 ?.closest('[data-rune]')
                 ?.chain((parentViewElement) => {
-                  const subView = rune.getUnknownView(subViewElement)!;
-                  subView.parentView = rune.getUnknownView(parentViewElement)!;
-                  subView.element().dataset.runeParent = subView.parentView.toString();
+                  const subView = rune.getUnknownView(subViewElement);
+                  if (subView) {
+                    subView.parentView = rune.getUnknownView(parentViewElement)!;
+                    subView.element().dataset.runeParent = subView.parentView.toString();
+                  }
                 });
               dispatchEvents(ViewMounted, subViewElement);
             }
@@ -91,9 +93,11 @@ class Rune {
           if (removedNode.nodeType === Node.ELEMENT_NODE) {
             const subViewElement = removedNode as HTMLElement;
             if (subViewElement.matches('[data-rune]')) {
-              const subView = rune.getUnknownView(subViewElement)!;
-              subView.parentView = null;
-              subView.element().dataset.runeParent = '';
+              const subView = rune.getUnknownView(subViewElement);
+              if (subView) {
+                subView.parentView = null;
+                subView.element().dataset.runeParent = '';
+              }
               dispatchEvents(ViewUnmounted, subViewElement);
             }
           }
