@@ -7,36 +7,62 @@ In today's development landscape, TypeScript and JavaScript have evolved to inte
 Rune embraces the characteristics of these two languages by understanding and applying them effectively. It adheres to authentic programming paradigms without overly extending the languages or deviating from their core principles. Designed to handle the JavaScript core technology, Web API, Rune enables developers to create sophisticated components and applications. Over time, this approach enhances code reusability, facilitates maintenance, and enables the development of high-quality software with excellent productivity.
 
 ```typescript
-class SettingController extends View<Setting[]> {
-  private checkAllSwitchView = new SwitchView({ on: this.isAllChecked() });
-  private settingListview = new SettingListView(this.data);
+interface Setting {
+  title: string;
+  on: boolean;
+}
+
+class SettingItemView extends View<Setting> {
+  switchView = new SwitchView(this.data);
+
+  override template() {
+    return html`
+      <div>
+        <span class="title">${this.data.title}</span>
+        ${this.switchView}
+      </div>
+    `;
+  }
+}
+
+class SettingListView extends ListView<Setting, SettingItemView> {
+  ItemView = SettingItemView;
+}
+
+class SettingPage extends View<Setting[]> {
+  private _listView = new SettingListView(this.data);
+  private _checkAllView = new SwitchView({ on: this._isCheckAll() });
 
   override template() {
     return html`
       <div>
         <div class="header">
-          <span class="title">Check All</span>
-          ${this.checkAllSwitchView}
+          <h2>Setting</h2>
+          ${this._checkAllView}
         </div>
-        ${this.settingListview}
+        <div class="body">
+          ${this._listView}
+        </div>
       </div>
     `;
   }
 
-  @on('switch:change', '> .header')
-  checkAll() {
-    const { on } = this.checkAllSwitchView.data;
-    this.settingListview.itemViews
-      .filter((view) => on !== view.data.on)
-      .forEach((view) => view.switchView.setOn(on));
+  protected override onRender() {
+    this._checkAllView.addEventListener(Toggled, (e) => this._checkAll(e.detail.on));
+    this._listView.addEventListener(Toggled, () => this._syncCheckAll());
   }
 
-  @on('switch:change', `> .${SettingListView}`)
-  private _changed() {
-    this.checkAllSwitchView.setOn(this.isAllChecked());
+  private _checkAll(on: boolean) {
+    this._listView.itemViews
+      .filter((itemView) => itemView.data.on !== on)
+      .forEach((itemView) => itemView.switchView.setOn(on));
   }
 
-  isAllChecked() {
+  private _syncCheckAll() {
+    this._checkAllView.setOn(this._isCheckAll());
+  }
+
+  private _isCheckAll() {
     return this.data.every(({ on }) => on);
   }
 }
@@ -47,52 +73,32 @@ class SettingController extends View<Setting[]> {
 Rune itself is not inherently reactive. Instead, as components are composed, they gain reactive characteristics, and DOM manipulation code becomes increasingly abstracted. At this point, each component adopts its own optimized rendering logic. With automatic re-rendering at the library level and no associated side effects, controlling the complexity required for elegant UI development becomes manageable and advantageous for advancement.
 
 ```typescript
-interface Setting {
-  title: string;
+interface Toggle {
   on: boolean;
 }
 
-class SettingView extends View<Setting> {
-  switchView = new SwitchView(this.data);
+class Toggled extends CustomEventWithDetail<Toggle> {}
 
-  override template(setting: Setting) {
-    return html`
-      <li>
-        <span class="title">${setting.title}</span>
-        ${this.switchView}
-      </li>
-    `;
-  }
-}
-
-class SettingListView extends ListView<Setting, SettingView> {
-  override ItemView = SettingView;
-}
-
-class SwitchView extends View<{ on: boolean }> {
-  override template() {
-    return html`
-      <button class="${this.data.on ? 'on' : ''}">
-        <div class="toggle"></div>
-      </button>
-    `;
-  }
-
+abstract class ToggleView extends View<Toggle> {
   @on('click')
   private _toggle() {
     this.setOn(!this.data.on);
-    this.dispatchEvent(new CustomEvent('switch:change', { bubbles: true }));
+    this.dispatchEvent(Toggled, { bubbles: true, detail: this.data });
   }
 
-  setOn(on: boolean): this {
-    this.data.on = on;
-    return this.redraw();
+  setOn(bool: boolean) {
+    this.data.on = bool;
+    this.element().classList.toggle('on', bool);
   }
+}
 
-  override redraw() {
-    const { classList } = this.element();
-    this.data.on ? classList.add('on') : classList.remove('on');
-    return this;
+class SwitchView extends ToggleView {
+  override template() {
+    return html`
+      <button class="${this.data.on ? 'on' : ''}">
+        <span class="toggle"></span>
+      </button>
+    `;
   }
 }
 ```

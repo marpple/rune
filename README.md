@@ -4,11 +4,11 @@
 
 Rune is a fast and robust library for building high-quality frontend applications, serving as a modern web technology-based SDK.
 
+- Object-oriented programming-based architecture
 - Type-safe Generic Views & Enable
 - Single-component Server-Side Rendering
 - Sleek UI component development kit
 - High portability and performance
-- Object-oriented programming-based architecture
 
 # Getting Started
 
@@ -31,36 +31,55 @@ interface Setting {
   on: boolean;
 }
 
-class SettingController extends View<Setting[]> {
-  private checkAllSwitchView = new SwitchView({ on: this.isAllChecked() });
-  private settingListview = new SettingListView(this.data);
+class SettingItemView extends View<Setting> {
+  switchView = new SwitchView(this.data);
+
+  override template() {
+    return html`
+      <div>
+        <span class="title">${this.data.title}</span>
+        ${this.switchView}
+      </div>
+    `;
+  }
+}
+
+class SettingListView extends ListView<Setting, SettingItemView> {
+  ItemView = SettingItemView;
+}
+
+class SettingPage extends View<Setting[]> {
+  private _listView = new SettingListView(this.data);
+  private _checkAllView = new SwitchView({ on: this._isCheckAll() });
 
   override template() {
     return html`
       <div>
         <div class="header">
-          <span class="title">Check All</span>
-          ${this.checkAllSwitchView}
+          <h2>Setting</h2>
+          ${this._checkAllView}
         </div>
-        ${this.settingListview}
+        <div class="body">${this._listView}</div>
       </div>
     `;
   }
 
-  @on('switch:change', '> .header')
-  checkAll() {
-    const { on } = this.checkAllSwitchView.data;
-    this.settingListview.itemViews
-      .filter((view) => on !== view.data.on)
-      .forEach((view) => view.switchView.setOn(on));
+  protected override onRender() {
+    this._checkAllView.addEventListener(Toggled, (e) => this._checkAll(e.detail.on));
+    this._listView.addEventListener(Toggled, () => this._syncCheckAll());
   }
 
-  @on('switch:change', `> .${SettingListView}`)
-  private _changed() {
-    this.checkAllSwitchView.setOn(this.isAllChecked());
+  private _checkAll(on: boolean) {
+    this._listView.itemViews
+      .filter((itemView) => itemView.data.on !== on)
+      .forEach((itemView) => itemView.switchView.setOn(on));
   }
 
-  isAllChecked() {
+  private _syncCheckAll() {
+    this._checkAllView.setOn(this._isCheckAll());
+  }
+
+  private _isCheckAll() {
     return this.data.every(({ on }) => on);
   }
 }
