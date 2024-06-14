@@ -112,8 +112,10 @@ export const rune = new Rune();
 
 function dispatchEvents(Event: any, subViewElement: HTMLElement) {
   [subViewElement, ...subViewElement.querySelectorAll('[data-rune]')]
-    .map((element) => rune.getUnknownView(element)!)
-    .forEach((subView) => subView.dispatchEvent(Event, { detail: subView }));
+    .map((element) => rune.getUnknownView(element))
+    .forEach((subView) => {
+      if (subView) subView.dispatchEvent(Event, { detail: subView });
+    });
 }
 
 if (typeof window !== 'undefined') {
