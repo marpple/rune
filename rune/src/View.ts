@@ -1,6 +1,6 @@
 import { rune } from './rune';
 import { VirtualView } from './VirtualView';
-import { each, flatMap, pipe, toArray, zip } from '@fxts/core';
+import { each, pipe, zip } from '@fxts/core';
 import { $ } from './$Element';
 import { type Enable } from './Enable';
 import { ViewMounted, ViewRendered, ViewUnmounted } from './ViewEvent';
@@ -104,27 +104,25 @@ export class View<T extends object = object> extends VirtualView<T> {
   }
 
   private _subViewSelector(subViewName?: string) {
-    return `[data-rune-parent="${this}"]:not(#${this._getElId()} [data-rune-parent="${this}"] [data-rune-parent="${this}"])${
-      subViewName && subViewName !== 'View' ? `.${subViewName}` : ''
-    }`;
+    return `[data-rune-parent="${this}"]${subViewName && subViewName !== 'View' ? `.${subViewName}` : ''}`;
+  }
+
+  private _firstDepthSubViews(parentEl: HTMLElement, subViewName?: string) {
+    return $(parentEl)
+      .findAll(this._subViewSelector(subViewName))
+      .map(($el) => $el.element())
+      .filter((el) => this.element() === el.parentElement?.closest(`[data-rune="${this}"]`));
   }
 
   private _subViewElements(subViewName?: string): HTMLElement[] {
-    const elements = [
-      ...this.element().querySelectorAll(this._subViewSelector(subViewName)),
-    ] as HTMLElement[];
-    this._removeTempElId();
-    return elements;
+    return this._firstDepthSubViews(this.element(), subViewName);
   }
 
   private _subViewElementsIn(selector: string, subViewName: string): HTMLElement[] {
-    const elements = pipe(
-      $(this.element()).findAll(selector),
-      flatMap(($el) => $el.element().querySelectorAll(this._subViewSelector(subViewName))),
-      toArray,
-    ) as HTMLElement[];
-    this._removeTempElId();
-    return elements;
+    return $(this.element())
+      .findAll(selector)
+      .map(($el) => $el.element())
+      .flatMap((el) => this._firstDepthSubViews(el, subViewName));
   }
 
   private _subViews<T extends ViewConstructor>(elements: HTMLElement[], SubView: T) {
@@ -141,20 +139,18 @@ export class View<T extends object = object> extends VirtualView<T> {
     return this._subViews(this._subViewElementsIn(selector, SubView.name), SubView);
   }
 
+  private _firstDepthSubView(parentEl: HTMLElement | undefined, subViewName?: string) {
+    return parentEl
+      ? $(parentEl).find(this._subViewSelector(subViewName))?.element() ?? null
+      : null;
+  }
+
   private _subViewElement(subViewName?: string): HTMLElement | null {
-    const element = this.element().querySelector(this._subViewSelector(subViewName));
-    this._removeTempElId();
-    return element as HTMLElement | null;
+    return this._firstDepthSubView(this.element(), subViewName);
   }
 
   private _subViewElementIn(selector: string, subViewName: string): HTMLElement | null {
-    const element =
-      $(this.element())
-        .find(selector)
-        ?.element()
-        .querySelector(this._subViewSelector(subViewName)) ?? null;
-    this._removeTempElId();
-    return element as HTMLElement | null;
+    return this._firstDepthSubView($(this.element()).find(selector)?.element(), subViewName);
   }
 
   private _subView<T extends ViewConstructor>(element: HTMLElement | null, SubView: T) {
