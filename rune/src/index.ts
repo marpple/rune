@@ -15,4 +15,4 @@ export { ListEnable } from './ListEnable';
 export { Layout } from './Layout';
 export { Page } from './Page';
 export { UnsafeHtml, VirtualView, type Html, html } from './VirtualView';
-export { on, enable } from './decorators';
+export { on } from './decorators';
