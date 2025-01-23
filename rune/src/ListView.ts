@@ -1,18 +1,18 @@
 import { View } from './View';
-import { each, every, map, pipe, reject, reverse, toArray, zip } from '@fxts/core';
+import { map, pipe, reject, reverse, toArray } from '@fxts/core';
 import { html } from './VirtualView';
 
-export abstract class ListView<T extends object, IV extends View<T>> extends View<T[]> {
+export abstract class ListView<IV extends View<object>> extends View<IV['data'][]> {
   tagName = 'div';
-  abstract ItemView: new (data: T) => IV;
+  abstract ItemView: new (data: IV['data']) => IV;
   readonly _itemViews: IV[] = [];
   private _initialized = false;
 
-  createItemView(item: T): IV {
+  createItemView(item: IV['data']): IV {
     return new this.ItemView(item);
   }
 
-  createItemViews(items: T[]): IV[] {
+  createItemViews(items: IV['data'][]): IV[] {
     return items.map((item) => this.createItemView(item));
   }
 
@@ -22,7 +22,7 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
 
   get itemViews() {
     if (!this._initialized) {
-      this._itemViews.push(...this.createItemViews(this.data));
+      this.createItemViews(this.data).forEach((view) => this._itemViews.push(view));
       this._initialized = true;
     }
     return this._itemViews;
@@ -41,33 +41,15 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
   }
 
   override redraw(): this {
-    if (
-      this.data.length &&
-      this.data.length === this.itemViews.length &&
-      every(
-        ([a, b]) => a === b,
-        zip(
-          this.data,
-          this.itemViews.map((itemView) => itemView.data),
-        ),
-      )
-    ) {
-      this.itemViews.forEach((itemView) => itemView.redraw());
-    } else {
-      const itemViewMap = new Map(this.itemViews.map((itemView) => [itemView.data, itemView]));
-      const newItemViews = this.data.map(
-        (item) => itemViewMap.get(item) ?? this.createItemView(item),
-      );
-      this.itemViews.length = 0;
-      this.element().innerHTML = '';
-      this.itemViews.push(...newItemViews);
-      each((itemView) => itemView.render(), itemViewMap.values());
-      this.element().append(...newItemViews.map((itemView) => itemView.render()));
-    }
+    const newItems = [...this.data];
+    this.data.length = 0;
+    this.itemViews.forEach(({ data }) => this.data.push(data));
+    this.set(newItems);
+    this.itemViews.forEach((view) => view.redraw());
     return this;
   }
 
-  add(items: T[], at?: number): this {
+  add(items: IV['data'][], at?: number): this {
     if (at === undefined || at >= this.length) {
       this.appendAll(items);
     } else if (at <= 0) {
@@ -83,7 +65,11 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
     return this;
   }
 
-  private _append(push: 'push' | 'unshift', append: 'append' | 'prepend', items: T[]): this {
+  private _append(
+    push: 'push' | 'unshift',
+    append: 'append' | 'prepend',
+    items: IV['data'][],
+  ): this {
     const itemViews = this.createItemViews(items);
     this.data[push](...items);
     this._itemViews[push](...itemViews);
@@ -93,19 +79,19 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
     return this;
   }
 
-  append(item: T): this {
+  append(item: IV['data']): this {
     return this.appendAll([item]);
   }
 
-  appendAll(items: T[]): this {
+  appendAll(items: IV['data'][]): this {
     return this._append('push', 'append', items);
   }
 
-  prepend(item: T): this {
+  prepend(item: IV['data']): this {
     return this.prependAll([item]);
   }
 
-  prependAll(items: T[]): this {
+  prependAll(items: IV['data'][]): this {
     return this._append('unshift', 'prepend', items);
   }
 
@@ -119,11 +105,11 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
     ).reverse();
   }
 
-  remove(item: T): IV | undefined {
+  remove(item: IV['data']): IV | undefined {
     return this._removeAll([item], this.data)[0];
   }
 
-  removeAll(items: T[]): IV[] {
+  removeAll(items: IV['data'][]): IV[] {
     return this._removeAll(items, this.data);
   }
 
@@ -163,10 +149,54 @@ export abstract class ListView<T extends object, IV extends View<T>> extends Vie
     return this;
   }
 
-  set(items: T[]): this {
-    this.reset();
-    this.data.push(...items);
-    return this.redraw();
+  set(items: IV['data'][]): this {
+    let i = 0,
+      j = 0;
+
+    const oldItemsMap = new Map(this.data.map((item) => [item, true]));
+
+    while (i < this.data.length && j < items.length) {
+      const oldItem = this.data[i];
+      const newItem = items[j];
+
+      if (oldItem === newItem) {
+        i++;
+        j++;
+        continue;
+      }
+
+      if (oldItemsMap.has(newItem)) {
+        this.itemViews[i].element().remove();
+        this.itemViews.splice(i, 1);
+        this.data.splice(i, 1);
+      } else {
+        const oldItemView = this.itemViews[i];
+        const newItemView = new this.ItemView(newItem);
+        oldItemView.element().before(newItemView.render());
+        this.itemViews.splice(i, 0, newItemView);
+        this.data.splice(i, 0, newItem);
+        i++;
+        j++;
+      }
+    }
+
+    while (i < this.data.length) {
+      const oldItemView = this.itemViews[i];
+      oldItemView.element().remove();
+      this.itemViews.splice(i, 1);
+      this.data.splice(i, 1);
+    }
+
+    while (j < items.length) {
+      const newItem = items[j];
+      const newItemView = new this.ItemView(newItem);
+      this.itemViews.push(newItemView);
+      this.element().append(newItemView.render());
+      this.data.push(newItem);
+      j++;
+    }
+
+    return this;
   }
 
   move(at: number, to: number): this {
