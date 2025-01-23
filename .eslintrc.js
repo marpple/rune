@@ -39,6 +39,7 @@ module.exports = {
     '@typescript-eslint/restrict-plus-operands': ['off'],
     '@typescript-eslint/no-base-to-string': ['off'],
     '@typescript-eslint/no-redundant-type-constituents': ['off'],
+    '@typescript-eslint/consistent-type-definitions': ['off'],
     semi: 'error',
   },
 };

@@ -44,42 +44,42 @@ class SettingItemView extends View<Setting> {
   }
 }
 
-class SettingListView extends ListView<Setting, SettingItemView> {
+class SettingListView extends ListView<SettingItemView> {
   ItemView = SettingItemView;
 }
 
 class SettingPage extends View<Setting[]> {
-  private _listView = new SettingListView(this.data);
-  private _checkAllView = new SwitchView({ on: this._isCheckAll() });
+  private listView = new SettingListView(this.data);
+  private toggleAllView = new SwitchView({ on: this.isAllOn() });
 
   override template() {
     return html`
       <div>
         <div class="header">
           <h2>Setting</h2>
-          ${this._checkAllView}
+          ${this.toggleAllView}
         </div>
-        <div class="body">${this._listView}</div>
+        <div class="body">${this.listView}</div>
       </div>
     `;
   }
 
   protected override onRender() {
-    this._checkAllView.addEventListener(Toggled, (e) => this._checkAll(e.detail.on));
-    this._listView.addEventListener(Toggled, () => this._syncCheckAll());
+    this.toggleAllView.addEventListener(Toggled, (e) => this.toggleAll(e.detail.on));
+    this.listView.addEventListener(Toggled, () => this.syncToggleAllView());
   }
 
-  private _checkAll(on: boolean) {
-    this._listView.itemViews
+  private toggleAll(on: boolean) {
+    this.listView.itemViews
       .filter((itemView) => itemView.data.on !== on)
       .forEach((itemView) => itemView.switchView.setOn(on));
   }
 
-  private _syncCheckAll() {
-    this._checkAllView.setOn(this._isCheckAll());
+  private syncToggleAllView() {
+    this.toggleAllView.setOn(this.isAllOn());
   }
 
-  private _isCheckAll() {
+  private isAllOn() {
     return this.data.every(({ on }) => on);
   }
 }

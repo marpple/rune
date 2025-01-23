@@ -1,13 +1,8 @@
 import { createRouter } from '@rune-ts/server';
-import { TutorialRouter } from './Docs/Tutorial/Tutorial';
-import { MeetupRouter } from './Meetup';
-import { BannerRouter } from './Banner/router';
-// import { MeetupRouter } from './Lecture';
+import { TodoPage } from './todo';
+import { SettingPage } from './setting';
 
-export type ClientRouter = typeof MeetupRouter & typeof BannerRouter & typeof TutorialRouter;
-
-export const ClientRouter = createRouter<ClientRouter>({
-  ...MeetupRouter,
-  ...BannerRouter,
-  ...TutorialRouter,
+export const ClientRouter = createRouter({
+  '/todo': TodoPage,
+  '/setting': SettingPage,
 });

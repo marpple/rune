@@ -14,7 +14,6 @@
     "isolatedModules": true,
     "typeRoots": ["node_modules/@types"],
     "noImplicitOverride": true,
-    "preserveSymlinks": true,
     "noImplicitAny": false,
     "verbatimModuleSyntax": true,
     "experimentalDecorators": true
