@@ -168,6 +168,70 @@ override redraw() {
 }
 ```
 
+## subView()
+
+```
+protected subView<T extends ViewConstructor>(
+  SubView: T,
+  selector?: string
+): InstanceType<T> | null;
+```
+
+Returns the first subView created within the `template()` method that matches the constructor passed as an argument. The optional second argument, selector,
+
+allows for further querying conditions using a CSS Selector.
+
+```typescript
+class ProductView extends View<Product> {
+  override template(product: Product) {
+    return html`
+      <div>
+        ${new PhotoView({ src: product.thumbnail, alt: product.name })}
+        <div class="name">${product.name}</div>
+        <div class="price">$${product.price}</div>
+      </div>
+    `;
+  }
+
+  override onRender() {
+    console.log(this.subView(PhotoView)!.data.src);
+  }
+}
+```
+
+## subViews()
+
+```
+protected subViews<T extends ViewConstructor>(
+  SubView: T,
+  selector?: string
+): InstanceType<T>[];
+```
+
+Returns an array of subViews.
+
+## subViewIn()
+
+```
+protected subViewIn<T extends ViewConstructor>(
+  selector: string,
+  SubView: T
+): InstanceType<T> | null;
+```
+
+Returns a single subView drawn inside a parent element found using the selector.
+
+## subViewsIn()
+
+```
+protected subViewsIn<T extends ViewConstructor>(
+  selector: string,
+  SubView: T,
+): InstanceType<T>[];
+```
+
+Returns an array of subViews drawn inside a parent element found using the selector.
+
 ## redrawOnlySubViews()
 
 `protected redrawOnlySubViews(): this;`

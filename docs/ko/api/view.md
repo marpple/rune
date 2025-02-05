@@ -172,6 +172,68 @@ override redraw() {
 }
 ```
 
+## subView()
+
+```
+protected subView<T extends ViewConstructor>(
+  SubView: T,
+  selector?: string
+): InstanceType<T> | null;
+```
+
+View의 `template()` 메서드 안에서 생성된 subView들, 즉 첫 번째 뎁스의 subView들 중에 컨스트럭터가 인자로 전달한 컨스트럭터와 동일한 첫 번째 subView를 리턴합니다. 두 번째 인자인 selector? 는 CSS Selector로, SubView를 조회하는 조건을 추가할 수 있습니다.
+
+```typescript
+class ProductView extends View<Product> {
+  override template(product: Product) {
+    return html`
+      <div>
+        ${new PhotoView({ src: product.thumbnail, alt: product.name })}
+        <div class="name">${product.name}</div>
+        <div class="price">$${product.price}</div>
+      </div>
+    `;
+  }
+
+  override onRender() {
+    console.log(this.subView(PhotoView)!.data.src);
+  }
+}
+```
+
+## subViews()
+
+```
+protected subViews<T extends ViewConstructor>(
+  SubView: T,
+  selector?: string
+): InstanceType<T>[];
+```
+
+subViews 배열을 리턴합니다.
+
+## subViewIn()
+
+```
+protected subViewIn<T extends ViewConstructor>(
+  selector: string,
+  SubView: T
+): InstanceType<T> | null;
+```
+
+selector로 찾아지는 부모 엘리먼트 내부에 그려진 subView를 하나를 리턴합니다.
+
+## subViewsIn()
+
+```
+protected subViewsIn<T extends ViewConstructor>(
+  selector: string,
+  SubView: T,
+): InstanceType<T>[];
+```
+
+selector로 찾아지는 부모 엘리먼트 내부에 그려진 subViews 배열을 리턴합니다.
+
 ## redrawOnlySubViews()
 
 `protected redrawOnlySubViews(): this;`
