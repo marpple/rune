@@ -14,22 +14,12 @@ export class View<T extends object = object> extends VirtualView<T> {
     return this._render(this.toHtml());
   }
 
-  async renderAsync(): Promise<HTMLElement> {
-    return this._render(await this.toHtmlAsync());
-  }
-
   private _render(html: string): HTMLElement {
     return this._setElement($.fromHtml(html).element()).hydrate().element();
   }
 
   hydrateFromSSR(element: HTMLElement): this {
     return this._setElement(element)._makeHtml().hydrate();
-  }
-
-  async hydrateFromSSRAsync(element: HTMLElement): Promise<this> {
-    return this._setElement(element)
-      ._makeHtmlAsync()
-      .then(() => this.hydrate());
   }
 
   protected hydrate(): this {
@@ -93,12 +83,6 @@ export class View<T extends object = object> extends VirtualView<T> {
 
   redraw(): this {
     return this._makeHtml().safely(() =>
-      this._redrawAttributes()._setInnerHtmlFromCurrentInnerHtml().hydrateSubViews(),
-    );
-  }
-
-  async redrawAsync(): Promise<this> {
-    return (await this._makeHtmlAsync()).safely(() =>
       this._redrawAttributes()._setInnerHtmlFromCurrentInnerHtml().hydrateSubViews(),
     );
   }

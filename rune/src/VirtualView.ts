@@ -1,6 +1,6 @@
 import { _escape } from './lib/_escape';
 import { Base } from './Base';
-import { join, pipe, toAsync } from '@fxts/core';
+import { join, pipe } from '@fxts/core';
 import { _htmlEscapeJsonString } from './lib/_htmlEscapeJsonString';
 import { rune } from './rune';
 
@@ -35,10 +35,6 @@ export class VirtualView<T extends object> extends Base {
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
   protected template(data: T): Html {
     return html``;
-  }
-
-  async templateAsync(data: T): Promise<Html> {
-    return Promise.resolve(this.template(data));
   }
 
   protected _matchStartTag(html: string): {
@@ -97,15 +93,6 @@ export class VirtualView<T extends object> extends Base {
     return this._resetCurrentHtml(html`${this.template(this.data)}`.make(this), isSSR);
   }
 
-  protected async _makeHtmlAsync(isSSR?: boolean): Promise<this> {
-    if (this.data === null) throw new TypeError("'this.data' is not assigned.");
-    this.subViewsFromTemplate = [];
-    return this._resetCurrentHtml(
-      await html`${await this.templateAsync(this.data)}`.makeAsync(this),
-      isSSR,
-    );
-  }
-
   protected ready() {}
 
   toHtml(isSSR?: boolean): string {
@@ -113,17 +100,8 @@ export class VirtualView<T extends object> extends Base {
     return this._makeHtml(isSSR)._currentHtml!;
   }
 
-  async toHtmlAsync(isSSR?: boolean): Promise<string> {
-    if (this.renderCount === 0) this.ready();
-    return (await this._makeHtmlAsync(isSSR))._currentHtml!;
-  }
-
   toHtmlSSR(): UnsafeHtml {
     return html.preventEscape(this.toHtml(true));
-  }
-
-  async toHtmlSSRAsync(): Promise<UnsafeHtml> {
-    return html.preventEscape(await this.toHtmlAsync(true));
   }
 }
 
@@ -149,18 +127,6 @@ export class Html {
         (view) => view.toHtml(),
         (html, view) => html.make(view),
       ),
-      join(''),
-    );
-  }
-
-  async makeAsync(virtualView: VirtualView<object>): Promise<string> {
-    return pipe(
-      this._make(
-        virtualView,
-        (view) => view.toHtmlAsync(),
-        (html, view) => html.makeAsync(view),
-      ),
-      toAsync,
       join(''),
     );
   }

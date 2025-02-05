@@ -81,7 +81,7 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2
       rune-ts:
-        specifier: ^0.8.12
+        specifier: ^0.8.13
         version: link:../rune
       swiper:
         specifier: ^11.1.0
