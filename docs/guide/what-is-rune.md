@@ -1,10 +1,10 @@
 # What is Rune?
 
-Rune is a library and SDK designed to develop high-quality frontend applications. It is tailored for creating elegant UIs, reusable components, supporting smooth rendering, and facilitating the creation of high-quality libraries.
+Rune is both a library and an SDK for developing high-quality frontend applications. It’s designed to facilitate elegant UI development, the creation of reusable components, smooth rendering, and the production of robust, high-quality libraries.
 
-In today's development landscape, TypeScript and JavaScript have evolved to integrate the paradigms of object-oriented and functional languages, leveraging their respective strengths. TypeScript, in particular, has become a versatile multi-paradigm language with a stable and flexible type system. Additionally, advancements in Web APIs (VanillaJS), browser standardization, and module system standardization have enriched frontend development, making it more robust and secure.
+Today, TypeScript and JavaScript have evolved considerably, effectively adopting object-oriented and functional programming paradigms in ways well suited to each language’s unique characteristics. Thanks in part to TypeScript, they’ve become outstanding multi-paradigm languages with stable and flexible type systems. Furthermore, advances in the Web API (Vanilla JS), browser standardization, and module system standardization have made frontend app development more feature-rich and secure than ever.
 
-Rune embraces the characteristics of these two languages by understanding and applying them effectively. It adheres to authentic programming paradigms without overly extending the languages or deviating from their core principles. Designed to handle the JavaScript core technology, Web API, Rune enables developers to create sophisticated components and applications. Over time, this approach enhances code reusability, facilitates maintenance, and enables the development of high-quality software with excellent productivity.
+Rune fully embraces and applies the strengths of these two languages. Rather than excessively extending the language or straying from established paradigms, Rune follows a traditional programming approach and is designed to seamlessly handle Web APIs—a core JavaScript technology. As a result, developers using Rune can build advanced components and applications, steadily increase code reusability over time, simplify maintenance, and develop high-quality software with strong productivity.
 
 ```typescript
 interface Setting {
@@ -25,52 +25,48 @@ class SettingItemView extends View<Setting> {
   }
 }
 
-class SettingListView extends ListView<Setting, SettingItemView> {
+class SettingListView extends ListView<SettingItemView> {
   ItemView = SettingItemView;
 }
 
 class SettingPage extends View<Setting[]> {
-  private _listView = new SettingListView(this.data);
-  private _checkAllView = new SwitchView({ on: this._isCheckAll() });
+  private listView = new SettingListView(this.data);
+  private checkAllView = new SwitchView({ on: this.isAllOn() });
 
   override template() {
     return html`
       <div>
         <div class="header">
           <h2>Setting</h2>
-          ${this._checkAllView}
+          ${this.checkAllView}
         </div>
-        <div class="body">
-          ${this._listView}
-        </div>
+        <div class="body">${this.listView}</div>
       </div>
     `;
   }
 
   protected override onRender() {
-    this._checkAllView.addEventListener(Toggled, (e) => this._checkAll(e.detail.on));
-    this._listView.addEventListener(Toggled, () => this._syncCheckAll());
+    this.checkAllView.addEventListener(Toggled, (e) => this.checkAll(e.detail.on));
+    this.listView.addEventListener(Toggled, () => this.syncCheckAllView());
   }
 
-  private _checkAll(on: boolean) {
-    this._listView.itemViews
-      .filter((itemView) => itemView.data.on !== on)
-      .forEach((itemView) => itemView.switchView.setOn(on));
+  private checkAll(on: boolean) {
+    this.listView.itemViews
+      .filter(itemView => itemView.data.on !== on)
+      .forEach(itemView => itemView.switchView.setOn(on));
   }
 
-  private _syncCheckAll() {
-    this._checkAllView.setOn(this._isCheckAll());
+  private syncCheckAllView() {
+    this.checkAllView.setOn(this.isAllOn());
   }
 
-  private _isCheckAll() {
+  private isAllOn() {
     return this.data.every(({ on }) => on);
   }
 }
 ```
 
-<img src="https://raw.githubusercontent.com/marpple/rune/main/docs/img/setting_controller.gif" width="100%">
-
-Rune itself is not inherently reactive. Instead, as components are composed, they gain reactive characteristics, and DOM manipulation code becomes increasingly abstracted. At this point, each component adopts its own optimized rendering logic. With automatic re-rendering at the library level and no associated side effects, controlling the complexity required for elegant UI development becomes manageable and advantageous for advancement.
+Rune itself is not reactive. Instead, it becomes reactive through successive composition of components, progressively abstracting away DOM manipulation code. At this stage, each component has its own optimized rendering logic. Because there is no automatic re-rendering at the library level—and thus no side effects from it—it’s easier to control the complexity required for building smooth UIs and better suited for more sophisticated development.
 
 ```typescript
 interface Toggle {
@@ -81,7 +77,7 @@ class Toggled extends CustomEventWithDetail<Toggle> {}
 
 abstract class ToggleView extends View<Toggle> {
   @on('click')
-  private _toggle() {
+  private toggle() {
     this.setOn(!this.data.on);
     this.dispatchEvent(Toggled, { bubbles: true, detail: this.data });
   }
@@ -103,4 +99,4 @@ class SwitchView extends ToggleView {
 }
 ```
 
-Rune adheres to a solid foundation, embracing both the latest standard web technologies and traditional programming paradigms. Rune components operate solely with pure JavaScript and boast high portability, supporting [server-side rendering even when a component operates alone](/tutorial/solo-component-ssr.html). This versatility positions Rune as an exciting new tool for crafting high-quality components based on Vanilla JS. We look forward to Rune contributing to the frontend development ecosystem alongside many developers.
+Rune is built on strong foundations, such as the latest web standards and traditional programming paradigms. Rune components operate purely in JavaScript and are highly portable—for instance, [a standalone component can support server-side rendering](/tutorial/solo-component-ssr.html). This makes Rune a promising new tool for creating high-quality, Vanilla JS–based components. We look forward to seeing Rune contribute to the frontend development ecosystem together with many developers.

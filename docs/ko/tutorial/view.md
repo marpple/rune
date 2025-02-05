@@ -13,7 +13,9 @@ export type Color = {
 
 export class ColorView extends View<Color> {
   override template({ code }: Color) {
-    return html` <div style="background-color: ${code}"></div> `;
+    return html`
+      <div style="background-color: ${code}"></div> 
+    `;
   }
 }
 
@@ -76,7 +78,9 @@ export type Color = {
 
 export class ColorCheckboxView extends View<Color> {
   override template(color: Color) {
-    return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
+    return html`
+      <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li>
+    `;
   }
 }
 

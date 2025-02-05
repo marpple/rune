@@ -2,7 +2,7 @@
 
 ## Creating a simple component
 
-In Rune, components are created by inheriting from the `View` class.
+In Rune, you create components by extending the `View` class.
 
 ```typescript
 import { View, html } from 'rune-ts';
@@ -13,7 +13,9 @@ export type Color = {
 
 export class ColorView extends View<Color> {
   override template({ code }: Color) {
-    return html` <div style="background-color: ${code}"></div> `;
+    return html`
+      <div style="background-color: ${code}"></div> 
+    `;
   }
 }
 
@@ -27,9 +29,9 @@ colorView.toHtml();
 <div class="ColorView" style="background-color: red"></div>
 ```
 
-## Data Modification
+## Changing data
 
-After modifying the data in `colorView`, you can obtain the HTML string again.
+After changing the `colorView` data, you can obtain the HTML string again.
 
 ```typescript
 colorView.data.code = 'blue';
@@ -40,7 +42,7 @@ colorView.toHtml();
 <div class="ColorView" style="background-color: blue"></div>
 ```
 
-The same code can be expressed using method chaining.
+You can express the same code using method chaining.
 
 ```typescript
 colorView.chain((view) => (view.data.code = 'blue')).toHtml();
@@ -48,7 +50,7 @@ colorView.chain((view) => (view.data.code = 'blue')).toHtml();
 
 ## Creating an HTMLElement
 
-Executing `colorView.render();` generates an HTMLElement and returns it. It's recommended to use the `render` method only on the browser side.
+When you run `colorView.render();`, it creates and returns an HTMLElement. It’s recommended to use the `render` method only in the browser.
 
 ```typescript
 document.body.appendChild(new ColorView({ code: 'pink' }).render());
@@ -64,7 +66,7 @@ document.body.appendChild(new ColorView({ code: 'pink' }).render());
 </html>
 ```
 
-## Creating Nested Components
+## Creating nested components
 
 You can implement nested components using template literals.
 
@@ -76,7 +78,9 @@ export type Color = {
 
 export class ColorCheckboxView extends View<Color> {
   override template(color: Color) {
-    return html` <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li> `;
+    return html`
+      <li class="${color.checked ? 'checked' : ''}">${new ColorView(color)}</li>
+    `;
   }
 }
 
@@ -89,7 +93,7 @@ new ColorCheckboxView({ code: 'yellow', checked: true }).toHtml();
 </li>
 ```
 
-You can create a `ColorCheckboxView` that contains `ColorView` like this. Below is an example of creating a `ColorCheckboxListView` that contains multiple `ColorCheckboxView` by passing an array.
+In this way, you can create a `ColorCheckboxView` that contains a `ColorView`. Below is an example of creating a `ColorCheckboxListView` that holds multiple `ColorCheckboxView`s by passing an array.
 
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {

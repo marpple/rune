@@ -1,17 +1,16 @@
-# Type-safe Custom Event Handling Pattern
+# Type-Safe Custom Event Handling Pattern
 
-Rune provides a pattern for handling type-safe custom events.
+Rune provides a type-safe custom event handling pattern.
 
+## Custom events with no `detail` value
 
-## Custom Events without a detail value
-
-You can prepare events for export so that they can be used where events are registered by creating and exporting them as shown below:
+You can set up an event for use as follows by creating and exporting it:
 
 ```typescript
 export class DialogOpened extends CustomEventWithoutDetail {}
 ```
 
-When propagating events, `this.dispatchEvent` must be executed with two arguments extending `CustomEvent` and `CustomEventInit`.
+When propagating the event, you must call `this.dispatchEvent` and pass two arguments: the class that extends `CustomEvent` and `CustomEventInit`.
 
 ```typescript
 export class DialogView extends View {
@@ -25,9 +24,9 @@ export class DialogView extends View {
 }
 ```
 
-## Custom Events with an optional detail value
+## Custom events with an optional `detail` value
 
-The pattern for custom events with an optional detail value is not commonly used and should be used with caution. It can be used as shown below:
+There aren’t many typical use cases where a custom event with an optional `detail` is perfectly suitable, so use this pattern carefully. Here is an example:
 
 ```typescript
 export class DataLoaded extends CustomEventOptionalDetail<{ body: string; loadedAt: Date }> {}
@@ -39,25 +38,18 @@ export class DataLoaderView extends View {
       this.dispatchEvent(DataLoaded, { bubbles: true });
       // ok  
     } else {
-      this.dispatchEvent(DataLoaded, { 
-        detail: { 
-          body: '...', 
-          loadedAt: new Date() 
-        } 
-      });
+      this.dispatchEvent(DataLoaded, { detail: { body: '...', loadedAt: new Date() } });
       // ok
-      this.dispatchEvent(DataLoaded, { 
-        detail: { body: '...' } 
-      });
+      this.dispatchEvent(DataLoaded, { detail: { body: '...' } });
       // TS2741: Property loadedAt is missing in type { body: string; } but required in type { body: string; loadedAt: Date; }  
     }
   }
 }
 ```
 
-## Custom Events with a required detail value
+## Custom events with a required `detail` value
 
-When you want to create a custom event with a required detail value, you can import the `CustomEventWithDetail` class and extend it as shown below:
+To create custom events that require a `detail` value, import and extend `CustomEventWithDetail`.
 
 ```typescript
 import { CustomEventWithDetail } from 'rune-ts';
@@ -65,17 +57,17 @@ import { CustomEventWithDetail } from 'rune-ts';
 export class SegmentSelected extends CustomEventWithDetail<Segment> {}
 ```
 
-By making the detail property mandatory, you enforce passing it when dispatching events as shown below:
+By making the `detail` property mandatory, the dispatch call is also constrained to include it:
 
 ```typescript
 export class SegmentControlView extends View<Segment[]> {
   // ...
-  
+
   @on('click', 'button:not(.selected)')
-  private _select(e: MouseEvent) {
+  private select(e: MouseEvent) {
     //...
-    this.dispatchEvent(SegmentSelected, { 
-      detail: this.selectedSegment(), 
+    this.dispatchEvent(SegmentSelected, {
+      detail: this.selectedSegment(),
       bubbles: true
     });
     // ok
@@ -89,9 +81,9 @@ export class SegmentControlView extends View<Segment[]> {
 }
 ```
 
-## Custom Event Listening
+## Listening to custom events
 
-You can register events by passing the event class instead of a string in the event type argument position. Doing so allows for inference of `(e: SegmentSelected) => void`, and `e.detail` is also inferred based on the type passed when dispatched.
+You can register the event by passing the event class instead of a string as shown below. In doing so, `(e: SegmentSelected) => void` is inferred, and `e.detail` is inferred as the type passed when dispatching the event.
 
 ```typescript
 this.addEventListener(SegmentSelected, (e: SegmentSelected) => {
@@ -99,12 +91,12 @@ this.addEventListener(SegmentSelected, (e: SegmentSelected) => {
 });
 ```
 
-Using `delegate` is also powerful. By providing the event class in the first argument and the SubView class to which the event will be sent in the second argument, you can filter events occurring within subviews and provide inference such as `(e: RemoveRequested, todoItemView: TodoItemView)`, which also passes the `TodoItemView` object that triggered the event.
+This approach is also powerful when used with `delegate`. In the first argument (the event type position), pass the event class; in the second argument (the CSS selector position), specify the SubView class from which the event will be dispatched. This filters events that occur in the child view and provides inference such as `(e: RemoveRequested, todoItemView: TodoItemView)`, while also passing the `TodoItemView` object that triggered the event:
 
 ```typescript
 this.delegate(
-  RemoveRequested, 
-  TodoItemView, 
+  RemoveRequested,
+  TodoItemView,
   (e: RemoveRequested, todoItemView: TodoItemView) => {
     this.remove(todoItemView.data);
   },

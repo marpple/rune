@@ -2,7 +2,7 @@
 
 ## Event Registration
 
-`onRender()` is executed right after the `element` is created, making it the ideal time to register events. `this.element()` returns the `HTMLElement` associated with the `View`, and events can be registered using the Web API’s `addEventListener()`.
+`onRender()` is executed immediately after the `element` is created, making it a good time to register events. `this.element()` returns the `HTMLElement` mapped to the `View`, and you can register events using the Web API’s `addEventListener()`.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -21,7 +21,7 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-While the code above is not bad, if `ColorCheckboxView` instances increase, the registered event listeners will also multiply. To prevent this, `View` provides an extended method for `addEventListener`.
+The above code is fine, but if there are many `ColorCheckboxView` instances, there will also be many registered event listeners. To prevent this, `View` provides an extended method for `addEventListener`.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
@@ -37,29 +37,29 @@ export class ColorCheckboxView extends View<Color> {
 }
 ```
 
-`view.addEventListener()` registers a function and binds it to `this` as `view` when the event triggers. In the code above, `ColorCheckboxView.prototype.toggle` is a single function, making it efficient even when multiple ColorCheckboxViews are created.
+`view.addEventListener()` registers the given function so that when the event is triggered, it is bound to `this` as the `view`. In the code above, `ColorCheckboxView.prototype.toggle` is a single function, so even if multiple instances of `ColorCheckboxView` are created, it remains efficient.
 
 ## Event Registration Decorator
 
-The `@on` decorator allows for more concise code writing. `@on('click')` replaces the code written inside `onRender`.
+Using the `@on` decorator allows for more concise code. `@on('click')` replaces what was written inside `onRender`.
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
   @on('click')
-  private _toggle() {
+  private toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
   }
 }
 ```
 
-## Custom Event Dispatch
+## Dispatching Custom Events
 
 ```typescript
 export class ColorCheckboxView extends View<Color> {
   ...
   @on('click')
-  private _toggle() {
+  private toggle() {
     this.data.checked = !this.data.checked;
     this.element().classList.toggle('checked');
     this.element().dispatchEvent(
@@ -71,7 +71,7 @@ export class ColorCheckboxView extends View<Color> {
 
 ## Event Delegation
 
-As shown above, `dispatchEvent()` can be used to trigger events. `checkbox:` is a type of convention to avoid duplication and has no functionality. Events can also be listened to using the instance method `delegate()` of `View` as shown below.
+As shown above, you can trigger an event using `dispatchEvent()`. Here, `checkbox:` is a kind of convention to avoid duplication and does not have any special functionality. In addition, you can listen for the event via the `delegate()` method of `View` instances, as shown below.
 
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {
@@ -92,7 +92,7 @@ export class ColorCheckboxListView extends View<Color[]> {
 }
 ```
 
-If only one argument is provided to the `@on` decorator, it uses `addEventListener`, and if a CSS selector is provided as a second argument to `@on`, it uses `delegate`. `Delegate` can also be written concisely as a decorator like below.
+If you pass only one argument to the `@on` decorator, it uses `addEventListener`; if you pass a CSS selector as the second argument to `@on`, it uses `delegate`. You can also write `delegate` succinctly with the decorator, as shown below.
 
 ```typescript
 class MyView extends View<{ val: number }> {
@@ -113,7 +113,7 @@ class MyView extends View<{ val: number }> {
 }
 ```
 
-## Wrapping Up ColorCheckboxListView
+## Completing ColorCheckBoxListView
 
 ```typescript
 export class ColorCheckboxListView extends View<Color[]> {

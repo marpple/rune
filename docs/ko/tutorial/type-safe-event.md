@@ -65,7 +65,7 @@ export class SegmentControlView extends View<Segment[]> {
   // ...
 
   @on('click', 'button:not(.selected)')
-  private _select(e: MouseEvent) {
+  private select(e: MouseEvent) {
     //...
     this.dispatchEvent(SegmentSelected, {
       detail: this.selectedSegment(),

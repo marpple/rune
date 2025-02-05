@@ -1,6 +1,6 @@
-# View Class
+# View class
 
-The View class supports tools necessary for HTML templating, HTMLElement creation, and event handling, and is used when creating UI components.
+View is a class used to create UI components, providing tools for handling HTML templates, creating HTMLElements, and managing event handling.
 
 ## Definition
 
@@ -26,7 +26,7 @@ class SwitchView extends View<SwitchData> {
 
 `new (data: T) => View<T>;`
 
-The passed `data` is registered as `this.data` and passed to the `template()` method like `this.template(data: T);`.
+The `data` passed as an argument is registered in `this.data` and is also passed to the `template()` method as `this.template(data: T);`.
 
 ```typescript
 new SwitchView({ on: false });
@@ -36,7 +36,7 @@ new SwitchView({ on: false });
 
 `protected template(): Html;`
 
-Inside the `template` method, use `html` to create an HTML template. ([More on Template API](/api/template.html))
+Inside the `template` method, create an HTML template using `html`. ([See more about the template API](/api/template.html))
 
 ```typescript
 import { View, html } from 'rune-ts';
@@ -90,7 +90,7 @@ dessertView.toHtml();
 
 `public render(): HTMLElement;`
 
-Internally, it creates an HTML string using `this.template(this.data)` and returns the created HTMLElement stored in `this._element`.
+Internally, it creates an HTML string from `this.template(this.data)`, generates an HTMLElement, assigns it to `this._element`, and returns it.
 
 ```typescript
 const element: HTMLElement = dessertView.render();
@@ -101,7 +101,7 @@ const element: HTMLElement = dessertView.render();
 
 `public element(): HTMLElement;`
 
-Returns the already created HTMLElement.
+Returns the created HTMLElement.
 
 ```typescript
 const element: HTMLElement = dessertView.element();
@@ -112,19 +112,19 @@ const element: HTMLElement = dessertView.element();
 
 `public isRendered(): boolean;`
 
-`isRendered()` checks if an HTMLElement has been created inside the View. It's useful for differentiating code that should only run in a rendered state.
+`isRendered()` checks whether an HTMLElement has ever been created inside the View. It’s useful when you want to separate out code that should only run when rendering has occurred.
 
 ## renderCount
 
 `public renderCount: number;`
 
-Counts how many times the `template()` function has been executed internally. This property can be utilized to implement lazy rendering by defining the `template()` function to only partially render.
+This tracks how many times the `template()` function has been executed internally. You can use this property to implement lazy rendering by defining the `template()` function in a way that only partially renders based on the render count.
 
 ## hydrateFromSSR()
 
 `public hydrateFromSSR(element: HTMLElement): this;`
 
-Rehydrates a View using the same data that was used to render an HTML-drawn HTMLElement. ([Tutorial - Solo Component SSR](/tutorial/solo-component-ssr.html))
+You can hydrate an existing HTMLElement that was rendered with the same data on the server by passing the previously rendered HTML element and data. ([Tutorial - Solo Component SSR](/tutorial/solo-component-ssr.html))
 
 ```typescript
 // Server Side
@@ -144,7 +144,7 @@ new ProductView({
 
 `public redraw(): this;`
 
-Redraws the View object according to its current data state. The default behavior is to update the outermost element's html attributes, and change the interior with `innerHTML`. Developers can optimize the `redraw` function by overriding it.
+Redraws itself using the current data state of the View object. By default, it updates the HTML attributes of the outermost element and changes the inside by setting `innerHTML`. If you want further optimization, it’s good to override and optimize the `redraw` function in each component.
 
 ```typescript
 class PhotoView extends View<{ src: string; alt: string }> {
@@ -160,7 +160,7 @@ class PhotoView extends View<{ src: string; alt: string }> {
 }
 ```
 
-The above code can be written more concisely using Rune's DOM manipulation helper class `$Element`.
+Using `$Element`, Rune’s DOM manipulation helper class, you can write the above code more succinctly:
 
 ```typescript
 override redraw() {
@@ -168,75 +168,11 @@ override redraw() {
 }
 ```
 
-## subView()
-
-```
-protected subView<T extends ViewConstructor>(
-  SubView: T,
-  selector?: string
-): InstanceType<T> | null;
-```
-
-Returns the first subView created within the `template()` method that matches the constructor passed as an argument. The optional second argument, selector,
-
-allows for further querying conditions using a CSS Selector.
-
-```typescript
-class ProductView extends View<Product> {
-  override template(product: Product) {
-    return html`
-      <div>
-        ${new PhotoView({ src: product.thumbnail, alt: product.name })}
-        <div class="name">${product.name}</div>
-        <div class="price">$${product.price}</div>
-      </div>
-    `;
-  }
-
-  override onRender() {
-    console.log(this.subView(PhotoView)!.data.src);
-  }
-}
-```
-
-## subViews()
-
-```
-protected subViews<T extends ViewConstructor>(
-  SubView: T,
-  selector?: string
-): InstanceType<T>[];
-```
-
-Returns an array of subViews.
-
-## subViewIn()
-
-```
-protected subViewIn<T extends ViewConstructor>(
-  selector: string,
-  SubView: T
-): InstanceType<T> | null;
-```
-
-Returns a single subView drawn inside a parent element found using the selector.
-
-## subViewsIn()
-
-```
-protected subViewsIn<T extends ViewConstructor>(
-  selector: string,
-  SubView: T,
-): InstanceType<T>[];
-```
-
-Returns an array of subViews drawn inside a parent element found using the selector.
-
 ## redrawOnlySubViews()
 
 `protected redrawOnlySubViews(): this;`
 
-Iterates through subViews and executes their `redraw()`.
+Iterates through subViews and executes `redraw()` on each.
 
 ## chain()
 
@@ -260,7 +196,7 @@ safely(f: (this: this, view: this) => void): this {
 }
 ```
 
-The implementation of `safely` is as described above. Use it to chain code that should only operate in a rendered state.
+The implementation of `safely` is as shown above. Use this when you want to chain code that should only operate if the element is already rendered.
 
 ## toString()
 
@@ -273,16 +209,16 @@ new MyView('hi').toString();
 
 ## onRender()
 
-Executes immediately after the View's `element` is created.
+Executes right after the View’s `element` is created.
 
 ## onMount()
 
-Executes right after the View is added to `document.body`.
+Executes right after the View is appended to `document.body`.
 
 ## onUnmount()
 
 Executes right after the View is removed from `document.body`.
 
-## Event Handling
+## Event handling
 
-The View class inherits event handling methods from the Base class. ([API - Event Handling](/api/event.html))
+The View class inherits event handling methods from the Base class. ([Refer to API - Event handling](/api/event.html))

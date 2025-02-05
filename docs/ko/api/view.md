@@ -148,7 +148,7 @@ new ProductView({
 
 `public redraw(): this;`
 
-View 객체의 현재 data 상태로 자신을 다시 그립니다. 기본 동작은 가장 바깥 엘리먼트의 html attributes를 갱신하고 내부는 `innerHTML`로 변경합니다. 각 컴포넌트를 만드는 개발자가 `redraw` 함수를 최적화하여 오버라이드 해두면 좋습니다.
+View 객체의 현재 data 상태로 자신을 다시 그립니다. 기본 동작은 가장 바깥 엘리먼트의 html attributes를 갱신하고 내부는 `innerHTML`로 변경합니다. 더욱 최적화하고자 할 때는 각 컴포넌트를 만드는 개발자가 `redraw` 함수를 최적화하여 오버라이드 해두면 좋습니다.
 
 ```typescript
 class PhotoView extends View<{ src: string; alt: string }> {
@@ -171,68 +171,6 @@ override redraw() {
   $(this.element()).find('img')!.setAttributes(this.data);
 }
 ```
-
-## subView()
-
-```
-protected subView<T extends ViewConstructor>(
-  SubView: T,
-  selector?: string
-): InstanceType<T> | null;
-```
-
-View의 `template()` 메서드 안에서 생성된 subView들, 즉 첫 번째 뎁스의 subView들 중에 컨스트럭터가 인자로 전달한 컨스트럭터와 동일한 첫 번째 subView를 리턴합니다. 두 번째 인자인 selector? 는 CSS Selector로, SubView를 조회하는 조건을 추가할 수 있습니다.
-
-```typescript
-class ProductView extends View<Product> {
-  override template(product: Product) {
-    return html`
-      <div>
-        ${new PhotoView({ src: product.thumbnail, alt: product.name })}
-        <div class="name">${product.name}</div>
-        <div class="price">$${product.price}</div>
-      </div>
-    `;
-  }
-
-  override onRender() {
-    console.log(this.subView(PhotoView)!.data.src);
-  }
-}
-```
-
-## subViews()
-
-```
-protected subViews<T extends ViewConstructor>(
-  SubView: T,
-  selector?: string
-): InstanceType<T>[];
-```
-
-subViews 배열을 리턴합니다.
-
-## subViewIn()
-
-```
-protected subViewIn<T extends ViewConstructor>(
-  selector: string,
-  SubView: T
-): InstanceType<T> | null;
-```
-
-selector로 찾아지는 부모 엘리먼트 내부에 그려진 subView를 하나를 리턴합니다.
-
-## subViewsIn()
-
-```
-protected subViewsIn<T extends ViewConstructor>(
-  selector: string,
-  SubView: T,
-): InstanceType<T>[];
-```
-
-selector로 찾아지는 부모 엘리먼트 내부에 그려진 subViews 배열을 리턴합니다.
 
 ## redrawOnlySubViews()
 

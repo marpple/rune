@@ -7,12 +7,7 @@ outline: deep
 Array 데이터를 다루는 기본 뷰 클래스입니다. View class를 상속 받았기 때문에 View의 기능도 그대로 모두 사용할 수 있습니다.
 
 ```typescript
-export class ListView<
-  T extends object,
-  IV extends View<T> = View<T>,
-> extends View<T[]> {
-  ...
-}
+class ListView<IV extends View<object>> extends View<IV['data'][]> {}
 ```
 
 ## Definition
@@ -27,20 +22,22 @@ interface Dessert {
 
 class DessertView extends View<Dessert> {
   override template({ name, rating }: Dessert) {
-    return html` <li>${name} (${rating})</li> `;
+    return html`
+      <li>${name} (${rating})</li> 
+    `;
   }
 }
 
-class DessertListView extends ListView<Dessert, DessertView> {
+class DessertListView extends ListView<DessertView> {
   override ItemView = DessertView;
 }
 ```
 
-ListView 안에서 사용할 ItemView 클래스를 정의하고 ItemView에서 사용하는 데이터의 타입을 `ListView<Dessert, DessertView>`와 같이 ListView 클래스의 타입 인자로 전달하면 됩니다.
+ListView 안에서 사용할 ItemView 클래스를 정의하고 `ListView<DessertView>`와 같이 ListView 클래스의 타입 인자로 전달하면 됩니다.
 
 ## Create
 
-`new (data: T) => ListView<T, IV>;`
+`new (data: T) => ListView<IV>;`
 
 ```typescript
 const dessertListView = new DessertListView([
@@ -69,7 +66,7 @@ dessertListView.toHtml();
 `tagName: string;`
 
 ```typescript
-class DessertListView extends ListView<Dessert, DessertView> {
+class DessertListView extends ListView<DessertView> {
   override tagName = 'ol';
   override ItemView = DessertView;
 }
@@ -204,7 +201,7 @@ dessertListView.add([
 
 `set(items: T[]): this;`
 
-모두 삭제하고 새로 받은 `items`로 `this.data`와 화면을 갱신합니다.
+새로 받은 `items`로 기존의 `this.data`와 비교하여 최소한의 변경으로 `this.data`와 화면을 갱신합니다. 기존 데이터에 없던 새로운 `item`이 있으면 `ItemView`를 추가하고, 기존 `item`이 새로운 `items`에 없으면 `ItemView`를 제거합니다. 다만, 이 메서드에서는 `ItemView` 자체를 갱신하지는 않습니다. `this.data`를 기준으로 모든 `ItemView` 내부도 갱신하고자 한다면, `redraw()` 메서드를 실행하면 됩니다. 
 
 ## move()
 
