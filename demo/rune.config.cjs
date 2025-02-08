@@ -1,12 +1,13 @@
-import { join, resolve } from 'node:path';
+const { join, resolve } = require('node:path');
 /**
  * @type {import('@rune-ts/server').RuneConfigType}
  */
-export default {
+module.exports = {
   port: 5001,
   hostname: 'localhost',
   mode: 'render',
   sassOptions: {
+    api: 'legacy',
     includePaths: [join(resolve(), 'common/style')],
     additionalData: `@import "base";`,
   },
