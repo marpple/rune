@@ -16,7 +16,7 @@
     "@fxts/core": "^0.28.1",
     "@rune-ts/server": "^0.9.17",
     "animejs": "^3.2.2",
-    "rune-ts": "^0.8.13",
+    "rune-ts": "^0.9.0",
     "swiper": "^11.1.0"
   },
   "devDependencies": {

@@ -49,6 +49,6 @@
     "watchpack": "^2.4.0"
   },
   "dependencies": {
-    "@fxts/core": "^0.24.0"
+    "@fxts/core": "^1.4.0"
   }
 }
