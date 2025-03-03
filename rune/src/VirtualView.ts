@@ -62,8 +62,8 @@ export class VirtualView<T extends object> extends Base {
 
     return isSSR
       ? html.replace(
-          html,
-          `${html}<script class="__RUNE_DATA__ ${this}" type="application/json" data-rune-base-name="${this._base_name}">${_htmlEscapeJsonString(
+          /(<\/\w+>)$/,
+          `$1<script class="__RUNE_DATA__ ${this}" type="application/json" data-rune-base-name="${this._base_name}">${_htmlEscapeJsonString(
             JSON.stringify({
               data: this.data,
               args: this._args,
