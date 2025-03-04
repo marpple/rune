@@ -69,6 +69,7 @@ export class VirtualView<T extends object> extends Base {
               args: this._args,
               sharedData: rune.getSharedData(this),
               key: this.key,
+              name: this.constructor.name,
             })
           )}</script>`
         : html;
