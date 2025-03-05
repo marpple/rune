@@ -4,7 +4,6 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "postinstall": "pnpm link rune-ts",
     "dev": "pnpm rune dev",
     "build": "pnpm rune build",
     "start": "pnpm rune start"
@@ -16,7 +15,7 @@
     "@fxts/core": "^0.28.1",
     "@rune-ts/server": "^1.0.24",
     "animejs": "^3.2.2",
-    "rune-ts": "^0.9.1",
+    "rune-ts": "workspace:^",
     "swiper": "^11.1.0"
   },
   "devDependencies": {
