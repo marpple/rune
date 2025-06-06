@@ -115,7 +115,7 @@ export class EventHelper {
     instancePrototype: any,
     eventType: string | (new (...args: any[]) => Event),
     listener: any,
-    selector?: string | ((runeInstance: any) => string),
+    selector?: any,
   ) {
     instancePrototype._decoratedListeners = [
       ...(instancePrototype._decoratedListeners ?? []),
