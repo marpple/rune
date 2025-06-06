@@ -4,7 +4,7 @@ import { html } from './VirtualView';
 
 export abstract class ListView<IV extends View<object>> extends View<IV['data'][]> {
   tagName = 'div';
-  abstract ItemView: new (data: IV['data']) => IV;
+  abstract ItemView: new (data: IV['data'], ...args: any[]) => IV; // eslint-disable-line @typescript-eslint/no-explicit-any
   readonly _itemViews: IV[] = [];
   private _initialized = false;
 

@@ -123,13 +123,7 @@ export class EventHelper {
         ? (instance: any, element: any) =>
             eventHelper.addEventListener(instance, element, eventType, listener)
         : (instance: any, element: any) =>
-            eventHelper.delegate(
-              instance,
-              element,
-              eventType,
-              typeof selector === 'string' ? selector : instance,
-              listener,
-            ),
+            eventHelper.delegate(instance, element, eventType, selector, listener),
     ];
   }
 }

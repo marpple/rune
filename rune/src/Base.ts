@@ -133,6 +133,11 @@ export abstract class Base {
       targetView: InstanceType<T>,
     ) => void,
   ): this;
+  delegate<K extends new (...args: any[]) => Event>(
+    eventClass: K,
+    selector: string,
+    listener: (this: this, e: InstanceType<K> & { originalEvent: InstanceType<K> }) => void,
+  ): this;
   delegate<K extends keyof HTMLElementEventMap, T extends new (...args: any[]) => Base>(
     eventType: K,
     View: T,
@@ -150,10 +155,19 @@ export abstract class Base {
       e: HTMLElementEventMap[K] & { originalEvent: HTMLElementEventMap[K] },
     ) => void,
   ): this;
+  delegate<T extends new (...args: any[]) => Base>(
+    eventType: string,
+    View: T,
+    listener: (
+      this: this,
+      e: Event & { originalEvent: Event },
+      targetView: InstanceType<T>,
+    ) => void,
+  ): this;
   delegate(
     eventType: string,
     selector: string,
-    listener: (this: this, ev: Event & { originalEvent: Event }) => any,
+    listener: (this: this, e: Event & { originalEvent: Event }) => any,
   ): this;
   delegate(eventType: any, selector: any, listener: any): this {
     eventHelper.delegate(this, this._element, eventType, selector, listener);
