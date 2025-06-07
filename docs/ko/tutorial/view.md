@@ -50,7 +50,7 @@ colorView.chain((view) => (view.data.code = 'blue')).toHtml();
 
 ## HTMLElement 생성하기
 
-`colorView.render();` 를 실행하면 HTMLElement 생성하여 리턴합니다. `render` 메서드는 브라우저단에서만 사용하는 것을 권장합니다.
+`colorView.render();` 를 실행하면 HTMLElement를 생성하여 리턴합니다. `render` 메서드는 브라우저단에서만 사용하는 것을 권장합니다.
 
 ```typescript
 document.body.appendChild(new ColorView({ code: 'pink' }).render());
