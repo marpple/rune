@@ -19,7 +19,7 @@ const div: $Element = $('div')!;
 `static all(selector: string): $Element[];`
 
 ```typescript
-const divs: $Element[] = $('div');
+const divs: $Element[] = $.all('div');
 ```
 
 ## static $.fromHtml()
