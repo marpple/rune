@@ -1,5 +1,5 @@
 {
-  "name": "rune",
+  "name": "rune-ts",
   "version": "0.0.1",
   "description": "Rune Core Library REPOSITORY",
   "engines": {
@@ -43,8 +43,5 @@
   },
   "volta": {
     "node": "20.11.1"
-  },
-  "dependencies": {
-    "rune-ts": "link:../../../Library/pnpm/global/5/node_modules/rune-ts"
   }
 }

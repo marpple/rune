@@ -30,7 +30,7 @@ function on(
 function on<K extends keyof HTMLElementEventMap>(
   eventType: K,
   selector: string,
-): <T extends (event: HTMLElementEventMap[K]) => void>(
+): <T extends (event: HTMLElementEventMap[K] & { originalEvent: HTMLElementEventMap[K] }) => void>(
   target: View,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<T>,
@@ -39,7 +39,7 @@ function on<K extends keyof HTMLElementEventMap>(
 function on<E extends new (...args: any[]) => Event>(
   EventClass: E,
   selector: string,
-): <T extends (event: InstanceType<E>) => void>(
+): <T extends (event: Event & { originalEvent: Event }) => void>(
   view: View,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<T>,
@@ -48,7 +48,12 @@ function on<E extends new (...args: any[]) => Event>(
 function on<E extends new (...args: any[]) => Event, V extends new (...args: any[]) => Base>(
   EventClass: E,
   ViewClass: V,
-): <T extends (event: InstanceType<E>, targetView: InstanceType<V>) => void>(
+): <
+  T extends (
+    event: InstanceType<E> & { originalEvent: InstanceType<E> },
+    targetView: InstanceType<V>,
+  ) => void,
+>(
   view: View,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<T>,
@@ -57,7 +62,7 @@ function on<E extends new (...args: any[]) => Event, V extends new (...args: any
 function on(
   eventType: string,
   selector: string,
-): <T extends (event: Event) => void>(
+): <T extends (event: Event & { originalEvent: Event }) => void>(
   target: View,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<T>,
@@ -66,7 +71,7 @@ function on(
 function on<V extends new (...args: any[]) => Base>(
   eventType: string,
   ViewClass: V,
-): <T extends (event: Event, targetView: InstanceType<V>) => void>(
+): <T extends (event: Event & { originalEvent: Event }, targetView: InstanceType<V>) => void>(
   target: View,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<T>,
@@ -81,4 +86,4 @@ function on(
   };
 }
 
-export { on };
+export { on, on as On };
