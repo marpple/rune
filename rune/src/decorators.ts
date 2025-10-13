@@ -39,7 +39,7 @@ function on<K extends keyof HTMLElementEventMap>(
 function on<E extends new (...args: any[]) => Event>(
   EventClass: E,
   selector: string,
-): <T extends (event: Event & { originalEvent: Event }) => void>(
+): <T extends (event: InstanceType<E> & { originalEvent: InstanceType<E> }) => void>(
   view: View,
   propertyKey: string,
   descriptor: TypedPropertyDescriptor<T>,
