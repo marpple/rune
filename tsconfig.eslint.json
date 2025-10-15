@@ -9,6 +9,5 @@
     // whatever paths you intend to lint
     "packages",
     "examples",
-    "docs"
   ]
 }
