@@ -14,5 +14,5 @@ module.exports = {
   },
   clientEntry: './src/app/client.ts',
   serverEntry: './src/server/server.ts',
-  watchToReloadPaths: ['../rune'],
+  watchToReloadPaths: ['../../packages/rune'],
 };
