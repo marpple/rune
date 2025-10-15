@@ -1,6 +1,6 @@
 {
-  "name": "docs",
-  "priviate": true,
+  "name": "@rune-ts/docs",
+  "private": true,
   "version": "0.0.0",
   "scripts": {
     "docs:dev": "vitepress dev",
