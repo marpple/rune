@@ -1,6 +1,7 @@
 {
-  "name": "@rune-ts/demo",
-  "version": "1.0.0",
+  "name": "example-todo-setting",
+  "private": true,
+  "version": "0.9.4",
   "description": "",
   "type": "module",
   "scripts": {

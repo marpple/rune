@@ -1,4 +1,3 @@
 packages:
-  - 'docs'
-  - 'demo'
-  - 'rune'
+  - 'packages/*'
+  - 'examples/*'

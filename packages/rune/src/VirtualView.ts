@@ -70,7 +70,7 @@ export class VirtualView<T extends object> extends Base {
             sharedData: rune.getSharedData(this),
             key: this.key,
             name: this.constructor.name,
-          })
+          }),
         )}</script>`
       : html;
   }
