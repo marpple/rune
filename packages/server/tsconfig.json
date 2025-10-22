@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "node",
+    "lib": ["es2022", "dom", "dom.iterable"],
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noImplicitOverride": true,
+    "preserveSymlinks": true,
+    "noImplicitAny": false,
+    "verbatimModuleSyntax": true,
+    "experimentalDecorators": true,
+    "rootDir": "./src",
+    "sourceRoot": "./src",
+    "sourceMap": true,
+    "allowJs": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "./dist",
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "taskfile.js",
+    "taskfile-watch.js",
+    "taskfile-copy.js",
+    "taskfile-swc.js",
+    "compiled"
+  ]
+}

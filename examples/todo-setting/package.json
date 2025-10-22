@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@fxts/core": "^0.28.1",
-    "@rune-ts/server": "^1.0.24",
+    "@rune-ts/server": "workspace:^",
     "animejs": "^3.2.2",
     "rune-ts": "workspace:^",
     "swiper": "^11.1.0"

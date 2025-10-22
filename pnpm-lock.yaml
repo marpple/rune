@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  rune-ts: workspace:^
+
 importers:
 
   .:
@@ -72,8 +75,8 @@ importers:
         specifier: ^0.28.1
         version: 0.28.1
       '@rune-ts/server':
-        specifier: ^1.0.24
-        version: 1.0.24(mini-css-extract-plugin@2.8.1(webpack@5.91.0))(rune-ts@packages+rune)
+        specifier: workspace:^
+        version: link:../../packages/server
       animejs:
         specifier: ^3.2.2
         version: 3.2.2
@@ -127,6 +130,145 @@ importers:
       watchpack:
         specifier: ^2.4.0
         version: 2.4.1
+
+  packages/server:
+    dependencies:
+      '@fxts/core':
+        specifier: ^1.19.0
+        version: 1.19.0
+      '@swc/core':
+        specifier: ^1.4.2
+        version: 1.4.8
+      '@vanilla-extract/webpack-plugin':
+        specifier: ^2.3.16
+        version: 2.3.17(webpack@5.91.0(@swc/core@1.4.8))
+      arg:
+        specifier: ^5.0.2
+        version: 5.0.2
+      clean-webpack-plugin:
+        specifier: 4.0.0
+        version: 4.0.0(webpack@5.91.0(@swc/core@1.4.8))
+      css-loader:
+        specifier: ^7.1.2
+        version: 7.1.2(webpack@5.91.0(@swc/core@1.4.8))
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
+      file-loader:
+        specifier: 6.2.0
+        version: 6.2.0(webpack@5.91.0(@swc/core@1.4.8))
+      http-proxy-middleware:
+        specifier: ^3.0.0
+        version: 3.0.0
+      icss-utils:
+        specifier: ^5.1.0
+        version: 5.1.0(postcss@8.4.38)
+      mini-css-extract-plugin:
+        specifier: ^2.9.2
+        version: 2.9.4(webpack@5.91.0(@swc/core@1.4.8))
+      morgan:
+        specifier: 1.10.0
+        version: 1.10.0
+      picomatch:
+        specifier: ^4.0.2
+        version: 4.0.2
+      postcss:
+        specifier: ^8.4.38
+        version: 8.4.38
+      postcss-modules-extract-imports:
+        specifier: ^3.0.0
+        version: 3.1.0(postcss@8.4.38)
+      postcss-modules-local-by-default:
+        specifier: ^4.0.4
+        version: 4.0.5(postcss@8.4.38)
+      postcss-modules-scope:
+        specifier: ^3.1.1
+        version: 3.2.0(postcss@8.4.38)
+      postcss-modules-values:
+        specifier: ^4.0.0
+        version: 4.0.0(postcss@8.4.38)
+      postcss-value-parser:
+        specifier: ^4.2.0
+        version: 4.2.0
+      qs:
+        specifier: 6.12.1
+        version: 6.12.1
+      rune-ts:
+        specifier: workspace:^
+        version: link:../rune
+      sass-embedded:
+        specifier: ^1.83.4
+        version: 1.83.4
+      semver:
+        specifier: ^7.6.0
+        version: 7.6.0
+      stacktrace-parser:
+        specifier: 0.1.10
+        version: 0.1.10
+      terser-webpack-plugin:
+        specifier: ^5.3.10
+        version: 5.3.10(@swc/core@1.4.8)(webpack@5.91.0(@swc/core@1.4.8))
+      watchpack:
+        specifier: ^2.4.0
+        version: 2.4.1
+      webpack:
+        specifier: ^5.90.3
+        version: 5.91.0(@swc/core@1.4.8)
+      webpack-bundle-analyzer:
+        specifier: 4.10.1
+        version: 4.10.1
+      webpack-dev-server:
+        specifier: ^4.15.2
+        version: 4.15.2(webpack@5.91.0(@swc/core@1.4.8))
+      webpack-manifest-plugin:
+        specifier: ^5.0.0
+        version: 5.0.0(webpack@5.91.0(@swc/core@1.4.8))
+      webpack-node-externals:
+        specifier: 3.0.0
+        version: 3.0.0
+    devDependencies:
+      '@taskr/clear':
+        specifier: ^1.1.0
+        version: 1.1.0
+      '@taskr/esnext':
+        specifier: ^1.1.0
+        version: 1.1.0
+      '@types/express':
+        specifier: ^4.17.21
+        version: 4.17.21
+      '@types/express-serve-static-core':
+        specifier: ^4.17.43
+        version: 4.17.43
+      '@types/morgan':
+        specifier: 1.9.9
+        version: 1.9.9
+      '@types/picomatch':
+        specifier: ^2.3.3
+        version: 2.3.4
+      '@types/semver':
+        specifier: ^7.5.7
+        version: 7.5.8
+      '@types/watchpack':
+        specifier: ^2.4.4
+        version: 2.4.4
+      '@types/webpack-bundle-analyzer':
+        specifier: 4.7.0
+        version: 4.7.0(@swc/core@1.4.8)
+      '@types/webpack-hot-middleware':
+        specifier: 2.25.9
+        version: 2.25.9(@swc/core@1.4.8)
+      '@types/webpack-node-externals':
+        specifier: ^3.0.4
+        version: 3.0.4(@swc/core@1.4.8)
+      '@types/ws':
+        specifier: ^8.5.10
+        version: 8.5.10
+      taskr:
+        specifier: ^1.1.0
+        version: 1.1.0
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
 
 packages:
 
@@ -504,6 +646,9 @@ packages:
   '@fxts/core@0.28.1':
     resolution: {integrity: sha512-4W0fo6s/vCt+5/08zpL/ujZlxavX7GP/tvyMX7saI+4iv4kuDou9BKpXXuNuK3GmGK1oNEfQCYRSQgps7HBK8g==}
 
+  '@fxts/core@1.19.0':
+    resolution: {integrity: sha512-8vWBhYGwn258i5TalQin0uzmAJI9qgq8nXjf1PLd8DHjlcs5bfqyZVT1FHqnBVyAH3ojjfLQ2Zb2+oisG2aTcQ==}
+
   '@fxts/core@1.4.0':
     resolution: {integrity: sha512-1NkDIUUejuaeYCrCsA86clY1si3TP6FIoNYANPfwls2H53kezIqBFfEoWDg+gGUF3kmwIW1fnL0R2O2CloXVEw==}
 
@@ -627,13 +772,6 @@ packages:
     resolution: {integrity: sha512-UKXUQNbO3DOhzLRwHSpa0HnhhCgNODvfoPWv2FCXme8N/ANFfhIPMGuOT+QuKd16+B5yxZ0HdpNlqPvTMS1qfw==}
     cpu: [x64]
     os: [win32]
-
-  '@rune-ts/server@1.0.24':
-    resolution: {integrity: sha512-vF1X0b14evud/K3IJp/wlZG7wNgncSpIQ9EPLnQtOPPqUPlZvzK+5gukDi5em8zbYghXrlEPaIYRH4HLEHniXg==}
-    hasBin: true
-    peerDependencies:
-      mini-css-extract-plugin: ^2.9.2
-      rune-ts: '>=0.8.12'
 
   '@shikijs/core@1.2.0':
     resolution: {integrity: sha512-OlFvx+nyr5C8zpcMBnSGir0YPD6K11uYhouqhNmm1qLiis4GA7SsGtu07r9gKS9omks8RtQqHrJL4S+lqWK01A==}
@@ -789,11 +927,17 @@ packages:
   '@types/minimatch@5.1.2':
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
 
+  '@types/morgan@1.9.9':
+    resolution: {integrity: sha512-iRYSDKVaC6FkGSpEVVIvrRGw0DfJMiQzIn3qr2G5B3C//AWkulhXgaBd7tS9/J79GWSYMTHGs7PfI5b3Y8m+RQ==}
+
   '@types/node-forge@1.3.11':
     resolution: {integrity: sha512-FQx220y22OKNTqaByeBGqHWYz4cl94tpcxeFdvBo3wjG6XPBuZ0BNgNZRV5J5TFmmcsJ4IzsLkmGRiQbnYsBEQ==}
 
   '@types/node@20.11.24':
     resolution: {integrity: sha512-Kza43ewS3xoLgCEpQrsT+xRo/EJej1y0kVYGiLFE1NEODXGzTfwiC6tXTLMQskn1X4/Rjlh0MQUvx9W+L9long==}
+
+  '@types/picomatch@2.3.4':
+    resolution: {integrity: sha512-0so8lU8O5zatZS/2Fi4zrwks+vZv7e0dygrgEZXljODXBig97l4cPQD+9LabXfGJOWwoRkTVz6Q4edZvD12UOA==}
 
   '@types/qs@6.9.14':
     resolution: {integrity: sha512-5khscbd3SwWMhFqylJBLQ0zIu7c1K6Vz0uBIt915BI3zV0q1nfjRQD3RqSBcPaO6PHEF4ov/t9y89fSiyThlPA==}
@@ -824,6 +968,15 @@ packages:
 
   '@types/web-bluetooth@0.0.20':
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
+
+  '@types/webpack-bundle-analyzer@4.7.0':
+    resolution: {integrity: sha512-c5i2ThslSNSG8W891BRvOd/RoCjI2zwph8maD22b1adtSns20j+0azDDMCK06DiVrzTgnwiDl5Ntmu1YRJw8Sg==}
+
+  '@types/webpack-hot-middleware@2.25.9':
+    resolution: {integrity: sha512-fad4T9VfocBjS2fZxlqkGoXoVUAjVp0EEnKBRqPwnhEEDN/FqJoFkSP5t9O1gPH75qsyG2kkT/GSUqSNTn1ZPg==}
+
+  '@types/webpack-node-externals@3.0.4':
+    resolution: {integrity: sha512-8Z3/edqxE3RRlOJwKSgOFxLZRt/i1qFlv/Bi308ZUKo9jh8oGngd9r8GR0ZNKW5AEJq8QNQE3b17CwghTjQ0Uw==}
 
   '@types/ws@8.5.10':
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
@@ -2434,8 +2587,8 @@ packages:
     resolution: {integrity: sha512-vqiC06CuhBTUdZH+RYl8sFrL096vA45Ok5ISO6sE/Mr1jRbGH4Csnhi8f3wKVl7x8mO4Au7Ir9D3Oyv1VYMFJw==}
     engines: {node: '>=12'}
 
-  mini-css-extract-plugin@2.8.1:
-    resolution: {integrity: sha512-/1HDlyFRxWIZPI1ZpgqlZ8jMw/1Dp/dl3P0L1jtZ+zVcHqwPhGwaJwKL00WVgfnBy6PWCde9W65or7IIETImuA==}
+  mini-css-extract-plugin@2.9.4:
+    resolution: {integrity: sha512-ZWYT7ln73Hptxqxk2DxPU9MmapXRhxkJD6tkSR04dnQxm8BGu2hzgKLugK5yySD97u/8yy7Ma7E76k9ZdvtjkQ==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
       webpack: ^5.0.0
@@ -3768,7 +3921,7 @@ snapshots:
   '@babel/code-frame@7.24.2':
     dependencies:
       '@babel/highlight': 7.24.2
-      picocolors: 1.0.0
+      picocolors: 1.1.1
 
   '@babel/code-frame@7.26.2':
     dependencies:
@@ -3850,7 +4003,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.22.20
       chalk: 2.4.2
       js-tokens: 4.0.0
-      picocolors: 1.0.0
+      picocolors: 1.1.1
 
   '@babel/parser@7.26.7':
     dependencies:
@@ -4029,6 +4182,10 @@ snapshots:
     dependencies:
       tslib: 2.6.2
 
+  '@fxts/core@1.19.0':
+    dependencies:
+      tslib: 2.6.2
+
   '@fxts/core@1.4.0':
     dependencies:
       tslib: 2.6.2
@@ -4123,50 +4280,6 @@ snapshots:
 
   '@rollup/rollup-win32-x64-msvc@4.13.0':
     optional: true
-
-  '@rune-ts/server@1.0.24(mini-css-extract-plugin@2.8.1(webpack@5.91.0))(rune-ts@packages+rune)':
-    dependencies:
-      '@swc/core': 1.4.8
-      '@vanilla-extract/webpack-plugin': 2.3.17(webpack@5.91.0(@swc/core@1.4.8))
-      arg: 5.0.2
-      clean-webpack-plugin: 4.0.0(webpack@5.91.0(@swc/core@1.4.8))
-      css-loader: 7.1.2(webpack@5.91.0(@swc/core@1.4.8))
-      dotenv: 16.4.5
-      file-loader: 6.2.0(webpack@5.91.0(@swc/core@1.4.8))
-      http-proxy-middleware: 3.0.0
-      icss-utils: 5.1.0(postcss@8.4.38)
-      mini-css-extract-plugin: 2.8.1(webpack@5.91.0)
-      morgan: 1.10.0
-      picomatch: 4.0.2
-      postcss: 8.4.38
-      postcss-modules-extract-imports: 3.1.0(postcss@8.4.38)
-      postcss-modules-local-by-default: 4.0.5(postcss@8.4.38)
-      postcss-modules-scope: 3.2.0(postcss@8.4.38)
-      postcss-modules-values: 4.0.0(postcss@8.4.38)
-      postcss-value-parser: 4.2.0
-      qs: 6.12.1
-      rune-ts: link:packages/rune
-      sass-embedded: 1.83.4
-      semver: 7.6.0
-      stacktrace-parser: 0.1.10
-      terser-webpack-plugin: 5.3.10(@swc/core@1.4.8)(webpack@5.91.0)
-      watchpack: 2.4.1
-      webpack: 5.91.0(@swc/core@1.4.8)
-      webpack-bundle-analyzer: 4.10.1
-      webpack-dev-server: 4.15.2(webpack@5.91.0(@swc/core@1.4.8))
-      webpack-manifest-plugin: 5.0.0(webpack@5.91.0(@swc/core@1.4.8))
-      webpack-node-externals: 3.0.0
-    transitivePeerDependencies:
-      - '@rspack/core'
-      - '@swc/helpers'
-      - babel-plugin-macros
-      - bufferutil
-      - debug
-      - esbuild
-      - supports-color
-      - uglify-js
-      - utf-8-validate
-      - webpack-cli
 
   '@shikijs/core@1.2.0': {}
 
@@ -4316,6 +4429,10 @@ snapshots:
 
   '@types/minimatch@5.1.2': {}
 
+  '@types/morgan@1.9.9':
+    dependencies:
+      '@types/node': 20.11.24
+
   '@types/node-forge@1.3.11':
     dependencies:
       '@types/node': 20.11.24
@@ -4323,6 +4440,8 @@ snapshots:
   '@types/node@20.11.24':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/picomatch@2.3.4': {}
 
   '@types/qs@6.9.14': {}
 
@@ -4357,6 +4476,38 @@ snapshots:
       '@types/node': 20.11.24
 
   '@types/web-bluetooth@0.0.20': {}
+
+  '@types/webpack-bundle-analyzer@4.7.0(@swc/core@1.4.8)':
+    dependencies:
+      '@types/node': 20.11.24
+      tapable: 2.2.1
+      webpack: 5.91.0(@swc/core@1.4.8)
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+      - webpack-cli
+
+  '@types/webpack-hot-middleware@2.25.9(@swc/core@1.4.8)':
+    dependencies:
+      '@types/connect': 3.4.38
+      tapable: 2.2.1
+      webpack: 5.91.0(@swc/core@1.4.8)
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+      - webpack-cli
+
+  '@types/webpack-node-externals@3.0.4(@swc/core@1.4.8)':
+    dependencies:
+      '@types/node': 20.11.24
+      webpack: 5.91.0(@swc/core@1.4.8)
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+      - webpack-cli
 
   '@types/ws@8.5.10':
     dependencies:
@@ -6146,7 +6297,7 @@ snapshots:
 
   mimic-fn@4.0.0: {}
 
-  mini-css-extract-plugin@2.8.1(webpack@5.91.0):
+  mini-css-extract-plugin@2.9.4(webpack@5.91.0(@swc/core@1.4.8)):
     dependencies:
       schema-utils: 4.2.0
       tapable: 2.2.1
@@ -6422,7 +6573,7 @@ snapshots:
   postcss@8.4.38:
     dependencies:
       nanoid: 3.3.7
-      picocolors: 1.0.0
+      picocolors: 1.1.1
       source-map-js: 1.2.0
 
   preact@10.20.0: {}
@@ -7069,7 +7220,7 @@ snapshots:
       mri: 1.2.0
       tinydate: 1.3.0
 
-  terser-webpack-plugin@5.3.10(@swc/core@1.4.8)(webpack@5.91.0):
+  terser-webpack-plugin@5.3.10(@swc/core@1.4.8)(webpack@5.91.0(@swc/core@1.4.8)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
@@ -7382,7 +7533,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(@swc/core@1.4.8)(webpack@5.91.0)
+      terser-webpack-plugin: 5.3.10(@swc/core@1.4.8)(webpack@5.91.0(@swc/core@1.4.8))
       watchpack: 2.4.1
       webpack-sources: 3.2.3
     transitivePeerDependencies:
