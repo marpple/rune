@@ -19,11 +19,11 @@ export class View<T extends object = object> extends VirtualView<T> {
   }
 
   hydrateFromSSR(element: HTMLElement): this {
-    return this._setElement(element)._makeHtml().hydrate(true);
+    return this._setElement(element)._makeHtml().hydrate();
   }
 
-  protected hydrate(isSSR?: boolean): this {
-    if (isSSR && document.body.contains(this.element())) {
+  protected hydrate(): this {
+    if (document.body.contains(this.element())) {
       this._onMount();
     }
     this.hydrateSubViews()._onRender();
