@@ -1,7 +1,7 @@
 {
   "name": "@rune-ts/docs",
   "private": true,
-  "version": "0.9.6",
+  "version": "0.9.7",
   "scripts": {
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
