@@ -67,7 +67,6 @@ export class View<T extends object = object> extends VirtualView<T> {
     const { startTag, startTagName } = this._matchStartTag(this._currentHtml!);
     const element2 = $.fromHtml(`${startTag}</${startTagName}>`).element();
     const element = this.element();
-    console.log(element);
     let length = element.attributes.length;
     while (--length) {
       const { name } = element.attributes[length];
