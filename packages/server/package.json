@@ -1,0 +1,88 @@
+{
+  "name": "@rune-ts/server",
+  "version": "1.0.27",
+  "description": "Rune is a modern web development tooling for the modern web developer. It's a zero-config build tool that allows you to build modern web applications with ease.",
+  "scripts": {
+    "prepare": "pnpm run build",
+    "dev": "taskr",
+    "types:dev": "tsc --watch",
+    "build": "taskr build",
+    "postbuild": "tsc",
+    "set-global": "pnpm link --global",
+    "release": "pnpm publish --access public --no-git-checks"
+  },
+  "browser": "dist/api/client.js",
+  "main": "dist/api/server.js",
+  "types": "dist/api/server.d.ts",
+  "unpkg": "dist/",
+  "jsdelivr": "dist/",
+  "bin": {
+    "rune": "./dist/bin/rune"
+  },
+  "files": [
+    "compiled/",
+    "dist/",
+    "tsconfig.json",
+    "README.md"
+  ],
+  "taskr": {
+    "requires": [
+      "./taskfile-swc.js",
+      "./taskfile-watch.js"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fxts/core": "^1.19.0",
+    "@swc/core": "^1.4.2",
+    "@vanilla-extract/webpack-plugin": "^2.3.16",
+    "arg": "^5.0.2",
+    "clean-webpack-plugin": "4.0.0",
+    "css-loader": "^7.1.2",
+    "dotenv": "^16.4.5",
+    "file-loader": "6.2.0",
+    "http-proxy-middleware": "^3.0.0",
+    "icss-utils": "^5.1.0",
+    "morgan": "1.10.0",
+    "picomatch": "^4.0.2",
+    "postcss": "^8.4.38",
+    "postcss-modules-extract-imports": "^3.0.0",
+    "postcss-modules-local-by-default": "^4.0.4",
+    "postcss-modules-scope": "^3.1.1",
+    "postcss-modules-values": "^4.0.0",
+    "postcss-value-parser": "^4.2.0",
+    "qs": "6.12.1",
+    "sass-embedded": "^1.83.4",
+    "semver": "^7.6.0",
+    "stacktrace-parser": "0.1.10",
+    "terser-webpack-plugin": "^5.3.10",
+    "watchpack": "^2.4.0",
+    "webpack": "^5.90.3",
+    "webpack-bundle-analyzer": "4.10.1",
+    "webpack-dev-server": "^4.15.2",
+    "webpack-manifest-plugin": "^5.0.0",
+    "webpack-node-externals": "3.0.0"
+  },
+  "peerDependencies": {
+    "mini-css-extract-plugin": "^2.9.2",
+    "rune-ts": ">=0.8.12"
+  },
+  "devDependencies": {
+    "@taskr/clear": "^1.1.0",
+    "@taskr/esnext": "^1.1.0",
+    "@types/express": "^4.17.21",
+    "@types/express-serve-static-core": "^4.17.43",
+    "@types/morgan": "1.9.9",
+    "@types/picomatch": "^2.3.3",
+    "@types/semver": "^7.5.7",
+    "@types/watchpack": "^2.4.4",
+    "@types/webpack-bundle-analyzer": "4.7.0",
+    "@types/webpack-hot-middleware": "2.25.9",
+    "@types/webpack-node-externals": "^3.0.4",
+    "@types/ws": "^8.5.10",
+    "taskr": "^1.1.0",
+    "typescript": "^5.3.3"
+  }
+}

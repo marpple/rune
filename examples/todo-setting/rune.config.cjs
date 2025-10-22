@@ -3,6 +3,7 @@ const { join, resolve } = require('node:path');
  * @type {import('@rune-ts/server').RuneConfigType}
  */
 module.exports = {
+  name: "example-todo-setting",
   port: 5002,
   hostname: 'localhost',
   mode: 'render',

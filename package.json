@@ -43,5 +43,10 @@
   },
   "volta": {
     "node": "20.11.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "rune-ts": "workspace:^"
+    }
   }
 }
