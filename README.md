@@ -1,4 +1,4 @@
-<p><img src="https://raw.githubusercontent.com/marpple/rune/main/docs/img/logo.png" width="50%" alt="rune"></p>
+<p><img src="https://raw.githubusercontent.com/marpple/rune/main/packages/docs/img/logo.png" width="50%" alt="rune"></p>
 
 # Rune - Web API based Front-end SDK
 
