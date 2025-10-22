@@ -19,14 +19,14 @@ export class View<T extends object = object> extends VirtualView<T> {
   }
 
   hydrateFromSSR(element: HTMLElement): this {
-    return this._setElement(element)._makeHtml().hydrate();
+    return this._setElement(element)._makeHtml().hydrate(true);
   }
 
-  protected hydrate(): this {
-    this.hydrateSubViews()._onRender();
-    if (document.body.contains(this.element())) {
+  protected hydrate(isSSR?: boolean): this {
+    if (isSSR && document.body.contains(this.element())) {
       this._onMount();
     }
+    this.hydrateSubViews()._onRender();
     return this;
   }
 
@@ -42,14 +42,22 @@ export class View<T extends object = object> extends VirtualView<T> {
     return this;
   }
 
+  protected override _onUnmount(ev?: InstanceType<typeof ViewUnmounted>): this {
+    if (ev?.isPermanent) {
+      this.removeEventListener(ViewMounted, this._onMount);
+      this.removeEventListener(ViewUnmounted, this._onUnmount);
+    }
+    return super._onUnmount();
+  }
+
   protected override _onRender() {
+    rune.set(this.element(), this, View);
     this.addEventListener(ViewMounted, this._onMount);
     this.addEventListener(ViewUnmounted, this._onUnmount);
 
     this._reservedEnables = (this.constructor as HasReservedEnables)._ReservedEnables.map(
       (ReservedEnable) => new ReservedEnable(this),
     );
-    rune.set(this.element(), this, View);
     super._onRender();
     this.dispatchEvent(ViewRendered, { detail: this });
     return this;
@@ -59,6 +67,7 @@ export class View<T extends object = object> extends VirtualView<T> {
     const { startTag, startTagName } = this._matchStartTag(this._currentHtml!);
     const element2 = $.fromHtml(`${startTag}</${startTagName}>`).element();
     const element = this.element();
+    console.log(element);
     let length = element.attributes.length;
     while (--length) {
       const { name } = element.attributes[length];
