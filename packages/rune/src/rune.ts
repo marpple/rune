@@ -11,7 +11,7 @@ import { ViewMounted, ViewUnmounted } from './ViewEvent';
 type Constructor = new (...args: any) => any;
 
 class Rune {
-  private _weakMap = new WeakMap();
+  private _weakMap = new WeakMap<HTMLElement | EventTarget, Map<Constructor, any>>();
   set(element: HTMLElement | EventTarget, instance: any, Constructor?: Constructor) {
     return this._weakMap.set(
       element,
@@ -23,12 +23,17 @@ class Rune {
     element: HTMLElement | EventTarget,
     Constructor: T,
   ): InstanceType<typeof Constructor> | undefined {
-    const instance = this._getMap(element).get(Constructor);
+    const instance = this._weakMap.get(element)?.get(Constructor);
     return instance === undefined ? instance : (instance as InstanceType<typeof Constructor>);
   }
 
+  delete(element: HTMLElement | EventTarget) {
+    this._weakMap.delete(element);
+    return this;
+  }
+
   private _getMap(element: HTMLElement | EventTarget) {
-    return this._weakMap.get(element) || this._weakMap.set(element, new Map()).get(element);
+    return this._weakMap.get(element) ?? this._weakMap.set(element, new Map()).get(element)!;
   }
 
   getView<T extends Constructor>(
@@ -70,52 +75,97 @@ class Rune {
 
   addMutationObserver(target: HTMLElement) {
     const observer = new MutationObserver((records) => {
+      const removedViewsMap = new Map<string, { element: HTMLElement; view: View }>();
+      const addedViewsMap = new Map<string, { element: HTMLElement; view: View | null }>();
+
       for (const record of records) {
-        for (const addedNode of record.addedNodes) {
-          if (addedNode.nodeType === Node.ELEMENT_NODE) {
-            const subViewElement = addedNode as HTMLElement;
-            if (subViewElement.matches('[data-rune]')) {
-              $(subViewElement)
-                .parentNode()
-                ?.closest('[data-rune]')
-                ?.chain((parentViewElement) => {
-                  const subView = rune.getUnknownView(subViewElement);
-                  if (subView) {
-                    subView.parentView = rune.getUnknownView(parentViewElement)!;
-                    subView.element().dataset.runeParent = subView.parentView.toString();
-                  }
-                });
-              dispatchEvents(ViewMounted, subViewElement);
-            }
-          }
-        }
         for (const removedNode of record.removedNodes) {
-          if (removedNode.nodeType === Node.ELEMENT_NODE) {
-            const subViewElement = removedNode as HTMLElement;
-            if (subViewElement.matches('[data-rune]')) {
-              const subView = rune.getUnknownView(subViewElement);
-              if (subView) {
-                subView.parentView = null;
-                subView.element().dataset.runeParent = '';
-              }
-              dispatchEvents(ViewUnmounted, subViewElement);
+          if (removedNode.nodeType !== Node.ELEMENT_NODE) continue;
+          this.findRuneDescendants(removedNode).forEach((element) => {
+            const view = rune.getUnknownView(element as HTMLElement);
+            if (view) {
+              removedViewsMap.set(view.viewId, { element: element as HTMLElement, view });
             }
-          }
+          });
+        }
+        for (const addedNode of record.addedNodes) {
+          if (addedNode.nodeType !== Node.ELEMENT_NODE) continue;
+          const subViewElement = addedNode as HTMLElement;
+          [subViewElement, ...subViewElement.querySelectorAll('[data-rune]')].forEach((element) => {
+            if (element.matches('[data-rune]')) {
+              const view = rune.getUnknownView(element as HTMLElement);
+              if (view) {
+                addedViewsMap.set(view.viewId, { element: element as HTMLElement, view });
+              }
+            }
+          });
+        }
+      }
+
+      const removedViewIds = new Set(removedViewsMap.keys());
+      const addedViewIds = new Set(addedViewsMap.keys());
+
+      const permanentlyRemovedIds = [...removedViewIds].filter((id) => !addedViewIds.has(id));
+      const temporarilyRemovedIds = [...removedViewIds].filter((id) => addedViewIds.has(id));
+
+      for (const viewId of temporarilyRemovedIds) {
+        const { element: oldElement } = removedViewsMap.get(viewId)!;
+        const { element: newElement } = addedViewsMap.get(viewId)!;
+
+        dispatchEvents(ViewUnmounted, oldElement, false);
+        dispatchEvents(ViewMounted, newElement);
+      }
+
+      for (const viewId of permanentlyRemovedIds) {
+        const { element, view } = removedViewsMap.get(viewId)!;
+        view.parentView = null;
+        view.element().dataset.runeParent = '';
+
+        dispatchEvents(ViewUnmounted, element, true);
+
+        rune.delete(element);
+      }
+
+      for (const [viewId, { element }] of addedViewsMap) {
+        if (!temporarilyRemovedIds.includes(viewId)) {
+          $(element)
+            .parentNode()
+            ?.closest('[data-rune]')
+            ?.chain((parentViewElement) => {
+              const subView = rune.getUnknownView(element);
+              if (subView) {
+                subView.parentView = rune.getUnknownView(parentViewElement)!;
+                subView.element().dataset.runeParent = subView.parentView.toString();
+              }
+            });
+          dispatchEvents(ViewMounted, element);
         }
       }
     });
     observer.observe(target, { childList: true, subtree: true });
   }
+
+  private findRuneDescendants(node: Node): Element[] {
+    let views: Element[] = [];
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const element = node as HTMLElement;
+      if (element.matches('[data-rune]')) {
+        views.push(element);
+      }
+      for (const child of element.childNodes) {
+        views = [this.findRuneDescendants(child), ...views].flat();
+      }
+    }
+    return views;
+  }
 }
 
 export const rune = new Rune();
 
-function dispatchEvents(Event: any, subViewElement: HTMLElement) {
-  [subViewElement, ...subViewElement.querySelectorAll('[data-rune]')]
-    .map((element) => rune.getUnknownView(element))
-    .forEach((subView) => {
-      if (subView) subView.dispatchEvent(Event, { detail: subView });
-    });
+function dispatchEvents(Event: any, subViewElement: HTMLElement, isPermanent?: boolean) {
+  rune.getUnknownView(subViewElement)?.dispatchEvent(Event, {
+    detail: { element: subViewElement, isPermanent },
+  });
 }
 
 if (typeof window !== 'undefined') {

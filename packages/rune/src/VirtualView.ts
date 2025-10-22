@@ -4,11 +4,14 @@ import { join, pipe } from '@fxts/core';
 import { _htmlEscapeJsonString } from './lib/_htmlEscapeJsonString';
 import { rune } from './rune';
 
+let _viewIdCounter = 0;
+
 export class VirtualView<T extends object> extends Base {
   key = '';
   protected _base_name = 'VirtualView';
   private readonly _data: T;
   readonly _args: any[];
+  private readonly _viewId: string;
 
   parentView: VirtualView<object> | null = null;
   subViewsFromTemplate: VirtualView<object>[] = [];
@@ -22,14 +25,19 @@ export class VirtualView<T extends object> extends Base {
     return this._data;
   }
 
-  set data(data: T) {
+  set data(_data: T) {
     throw TypeError("'data' property is readonly.");
+  }
+
+  get viewId(): string {
+    return this._viewId;
   }
 
   constructor(data: T, ...args: any[]) {
     super();
     this._data = data;
     this._args = args;
+    this._viewId = `v${++_viewIdCounter}`;
   }
 
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
