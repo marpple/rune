@@ -94,6 +94,7 @@ class Rune {
           [subViewElement, ...subViewElement.querySelectorAll('[data-rune]')].forEach((element) => {
             if (element.matches('[data-rune]')) {
               const view = rune.getUnknownView(element as HTMLElement);
+              // console.log(view);
               if (view) {
                 addedViewsMap.set(view.viewId, { element: element as HTMLElement, view });
               }
@@ -123,7 +124,7 @@ class Rune {
 
         dispatchEvents(ViewUnmounted, element, true);
 
-        rune.delete(element);
+        // rune.delete(element);
       }
 
       for (const [viewId, { element }] of addedViewsMap) {
