@@ -23,10 +23,10 @@ export class View<T extends object = object> extends VirtualView<T> {
   }
 
   protected hydrate(): this {
+    this.hydrateSubViews()._onRender();
     if (document.body.contains(this.element())) {
       this._onMount();
     }
-    this.hydrateSubViews()._onRender();
     return this;
   }
 
